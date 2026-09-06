@@ -1,8 +1,8 @@
 # AGENTS.md — Hafiz Development Guide
 
 ## Project Status
-- **Current Phase:** Phase 0 (Foundation)
-- **Current Branch:** feat/phase-0-foundation
+- **Current Phase:** Phase 2 (Students & Guardians)
+- **Current Branch:** feat/phase-2-students
 - **Last Updated:** 2026-09-06
 - **Flutter Version:** 3.47.2 stable
 - **Dart Version:** 3.13.2
@@ -67,19 +67,18 @@ supabase db diff
 - Use `mocktail` for mocking
 - Use `ProviderContainer.test()` for Riverpod providers
 
-## Current Sprint — Phase 0: Foundation
+## Current Sprint — Phase 2: Students & Guardians
 
 ### Tasks
-- [x] Flutter project initialization
-- [x] Core theme (colors, typography, spacing)
-- [x] Core widgets library
-- [x] Git branch setup
-- [ ] Localization (AR, EN, FR)
-- [ ] Riverpod + code generation setup
-- [ ] GoRouter configuration
-- [ ] Supabase client setup
-- [ ] Qur'an data seed file
-- [ ] AGENTS.md and PLAN.md
+- [x] Student entity (freezed)
+- [x] Guardian entity (freezed)
+- [x] Student repository abstract + impl
+- [x] Student state management (Riverpod)
+- [x] Student list view
+- [x] Student profile view with tabs
+- [x] Add student wizard
+- [x] Guardian management
+- [ ] Update router with student routes
 
 ## Key Files
 
