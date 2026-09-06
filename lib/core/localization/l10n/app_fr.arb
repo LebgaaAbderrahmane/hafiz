@@ -1,0 +1,270 @@
+{
+  "@@locale": "fr",
+  "appTitle": "Hafiz",
+  "appSubtitle": "Gestion d'école coranique",
+  
+  "general": {
+    "ok": "OK",
+    "cancel": "Annuler",
+    "save": "Enregistrer",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "add": "Ajouter",
+    "search": "Rechercher",
+    "filter": "Filtrer",
+    "loading": "Chargement...",
+    "retry": "Réessayer",
+    "back": "Retour",
+    "next": "Suivant",
+    "done": "Terminé",
+    "yes": "Oui",
+    "no": "Non",
+    "confirm": "Confirmer",
+    "close": "Fermer",
+    "viewAll": "Voir tout",
+    "seeMore": "Voir plus",
+    "seeLess": "Voir moins",
+    "noData": "Aucune donnée disponible",
+    "unknownError": "Une erreur s'est produite",
+    "tryAgain": "Réessayer"
+  },
+  
+  "auth": {
+    "login": "Connexion",
+    "logout": "Déconnexion",
+    "email": "E-mail",
+    "password": "Mot de passe",
+    "forgotPassword": "Mot de passe oublié ?",
+    "resetPassword": "Réinitialiser le mot de passe",
+    "loginButton": "Se connecter",
+    "loginError": "E-mail ou mot de passe invalide",
+    "welcomeBack": "Bon retour",
+    "welcomeMessage": "Connectez-vous pour continuer"
+  },
+  
+  "nav": {
+    "dashboard": "Tableau de bord",
+    "students": "Élèves",
+    "classes": "Classes",
+    "teachers": "Enseignants",
+    "quranProgress": "Progression coranique",
+    "attendance": "Présence",
+    "assessments": "Évaluations",
+    "schedule": "Emploi du temps",
+    "communication": "Communication",
+    "finance": "Finance",
+    "reports": "Rapports",
+    "certificates": "Certificats",
+    "documents": "Documents",
+    "settings": "Paramètres",
+    "today": "Aujourd'hui",
+    "revision": "Révision",
+    "more": "Plus",
+    "home": "Accueil",
+    "progress": "Progression",
+    "messages": "Messages"
+  },
+  
+  "dashboard": {
+    "goodMorning": "Bonjour",
+    "goodAfternoon": "Bon après-midi",
+    "goodEvening": "Bonsoir",
+    "activeStudents": "Élèves actifs",
+    "attendance": "Présence",
+    "memorizationActivity": "Activité de mémorisation",
+    "outstandingFees": "Frais en attente",
+    "studentAttention": "Élèves nécessitant une attention",
+    "todayActivity": "Activité du jour",
+    "progressOverview": "Aperçu de la progression",
+    "teacherWorkload": "Charge de travail des enseignants"
+  },
+  
+  "students": {
+    "title": "Élèves",
+    "addStudent": "Ajouter un élève",
+    "importStudents": "Importer des élèves",
+    "searchStudents": "Rechercher des élèves...",
+    "noStudents": "Aucun élève pour le moment",
+    "addFirstStudent": "Ajoutez votre premier élève",
+    "studentProfile": "Profil de l'élève",
+    "overview": "Aperçu",
+    "quran": "Coran",
+    "revision": "Révision",
+    "assessments": "Évaluations",
+    "schedule": "Emploi du temps",
+    "finance": "Finance",
+    "notes": "Notes"
+  },
+  
+  "teachers": {
+    "title": "Enseignants",
+    "addTeacher": "Ajouter un enseignant",
+    "searchTeachers": "Rechercher des enseignants...",
+    "noTeachers": "Aucun enseignant pour le moment",
+    "teacherProfile": "Profil de l'enseignant",
+    "todayClasses": "Classes d'aujourd'hui",
+    "students": "Élèves",
+    "startClass": "Commencer la classe d'aujourd'hui"
+  },
+  
+  "classes": {
+    "title": "Classes",
+    "addClass": "Ajouter une classe",
+    "noClasses": "Aucune classe pour le moment",
+    "classDetail": "Détail de la classe",
+    "students": "Élèves",
+    "curriculum": "Programme",
+    "progress": "Progression",
+    "schedule": "Emploi du temps"
+  },
+  
+  "quran": {
+    "title": "Progression coranique",
+    "progressMap": "Carte de progression",
+    "selectSurah": "Sélectionner la sourate",
+    "selectAyah": "Sélectionner le verset",
+    "from": "De",
+    "to": "À",
+    "pages": "Pages",
+    "juz": "Juz",
+    "estimatedSize": "Taille estimée",
+    "memorized": "Mémorisé",
+    "inProgress": "En cours",
+    "needsRevision": "Besoin de révision",
+    "weak": "Faible",
+    "notStarted": "Non commencé"
+  },
+  
+  "hifz": {
+    "title": "Mémorisation",
+    "assignNewLesson": "Attribuer une nouvelle leçon",
+    "currentAssignment": "Attribution actuelle",
+    "dueDate": "Date d'échéance",
+    "target": "Objectif",
+    "notes": "Notes",
+    "status": {
+      "assigned": "Attribué",
+      "practiced": "Pratiqué",
+      "submitted": "Soumis",
+      "assessed": "Évalué",
+      "passed": "Réussi",
+      "needsRetry": "Nécessite une nouvelle tentative",
+      "cancelled": "Annulé"
+    }
+  },
+  
+  "tasmi": {
+    "title": "Tasmi'",
+    "startSession": "Commencer la session",
+    "student": "Élève",
+    "passage": "Passage",
+    "sessionType": "Type de session",
+    "types": {
+      "newMemorization": "Nouvelle mémorisation",
+      "revision": "Révision",
+      "comprehensiveRevision": "Révision complète",
+      "exam": "Examen",
+      "placement": "Placement",
+      "competition": "Compétition"
+    },
+    "evaluation": "Évaluation",
+    "pass": "Réussi",
+    "needsRevision": "Besoin de révision",
+    "fail": "Échoué",
+    "accuracy": "Précision",
+    "tajwid": "Tajwid",
+    "fluency": "Fluidité",
+    "pronunciation": "Prononciation",
+    "confidence": "Confiance",
+    "errors": "Erreurs",
+    "teacherNote": "Note de l'enseignant",
+    "result": "Résultat",
+    "nextRevisionDate": "Date de prochaine révision",
+    "nextAssignment": "Prochaine attribution",
+    "saveAndNext": "Enregistrer & Élève suivant"
+  },
+  
+  "attendance": {
+    "title": "Présence",
+    "markAllPresent": "Marquer tous présents",
+    "present": "Présent",
+    "late": "En retard",
+    "absent": "Absent",
+    "excused": "Excusé",
+    "leftEarly": "Parti tôt"
+  },
+  
+  "revision": {
+    "title": "Révision",
+    "dueToday": "Dû aujourd'hui",
+    "overdue": "En retard",
+    "weak": "Faible",
+    "strong": "Fort",
+    "startRevision": "Commencer la révision",
+    "lastReviewed": "Dernière révision",
+    "score": "Score",
+    "status": {
+      "due": "Dû",
+      "completed": "Terminé",
+      "strong": "Fort",
+      "weak": "Faible",
+      "failed": "Échoué",
+      "rescheduled": "Reprogrammé"
+    }
+  },
+  
+  "settings": {
+    "title": "Paramètres",
+    "organization": "Organisation",
+    "branches": "Succursales",
+    "users": "Utilisateurs",
+    "roles": "Rôles",
+    "programs": "Programmes",
+    "curriculum": "Programme",
+    "quran": "Coran",
+    "attendance": "Présence",
+    "assessment": "Évaluation",
+    "notifications": "Notifications",
+    "finance": "Finance",
+    "integrations": "Intégrations",
+    "security": "Sécurité"
+  },
+  
+  "notifications": {
+    "title": "Notifications",
+    "markAllRead": "Tout marquer comme lu",
+    "noNotifications": "Aucune notification",
+    "today": "Aujourd'hui",
+    "earlier": "Plus tôt"
+  },
+  
+  "reports": {
+    "title": "Rapports",
+    "generate": "Générer un rapport",
+    "exportPdf": "Exporter en PDF",
+    "exportExcel": "Exporter en Excel",
+    "exportCsv": "Exporter en CSV",
+    "dateRange": "Période",
+    "categories": {
+      "students": "Élèves",
+      "quran": "Coran",
+      "attendance": "Présence",
+      "teachers": "Enseignants",
+      "classes": "Classes",
+      "assessments": "Évaluations",
+      "finance": "Finance"
+    }
+  },
+  
+  "emptyStates": {
+    "noStudents": "Aucun élève pour le moment",
+    "noStudentsDescription": "Ajoutez votre premier élève pour commencer",
+    "noClasses": "Aucune classe pour le moment",
+    "noClassesDescription": "Créez une classe pour commencer l'organisation",
+    "noTeachers": "Aucun enseignant pour le moment",
+    "noTeachersDescription": "Ajoutez des enseignants à votre organisation",
+    "noSchedule": "Aucune classe programmée",
+    "noNotifications": "Aucune notification",
+    "noReports": "Aucun rapport généré pour le moment"
+  }
+}
