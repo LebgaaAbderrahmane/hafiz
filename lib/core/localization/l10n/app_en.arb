@@ -1,0 +1,276 @@
+{
+  "@@locale": "en",
+  "appTitle": "Hafiz",
+  "appSubtitle": "Qur'an School Management",
+  
+  "general": {
+    "ok": "OK",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "add": "Add",
+    "search": "Search",
+    "filter": "Filter",
+    "loading": "Loading...",
+    "retry": "Retry",
+    "back": "Back",
+    "next": "Next",
+    "done": "Done",
+    "yes": "Yes",
+    "no": "No",
+    "confirm": "Confirm",
+    "close": "Close",
+    "viewAll": "View All",
+    "seeMore": "See More",
+    "seeLess": "See Less",
+    "noData": "No data available",
+    "unknownError": "Something went wrong",
+    "tryAgain": "Try again"
+  },
+  
+  "auth": {
+    "login": "Login",
+    "logout": "Logout",
+    "email": "Email",
+    "password": "Password",
+    "forgotPassword": "Forgot password?",
+    "resetPassword": "Reset Password",
+    "loginButton": "Login",
+    "loginError": "Invalid email or password",
+    "welcomeBack": "Welcome back",
+    "welcomeMessage": "Sign in to continue"
+  },
+  
+  "nav": {
+    "dashboard": "Dashboard",
+    "students": "Students",
+    "classes": "Classes",
+    "teachers": "Teachers",
+    "quranProgress": "Qur'an Progress",
+    "attendance": "Attendance",
+    "assessments": "Assessments",
+    "schedule": "Schedule",
+    "communication": "Communication",
+    "finance": "Finance",
+    "reports": "Reports",
+    "certificates": "Certificates",
+    "documents": "Documents",
+    "settings": "Settings",
+    "today": "Today",
+    "revision": "Revision",
+    "more": "More",
+    "home": "Home",
+    "progress": "Progress",
+    "messages": "Messages"
+  },
+  
+  "dashboard": {
+    "goodMorning": "Good morning",
+    "goodAfternoon": "Good afternoon",
+    "goodEvening": "Good evening",
+    "activeStudents": "Active Students",
+    "attendance": "Attendance",
+    "memorizationActivity": "Memorization Activity",
+    "outstandingFees": "Outstanding Fees",
+    "studentAttention": "Student Attention",
+    "todayActivity": "Today's Activity",
+    "progressOverview": "Progress Overview",
+    "teacherWorkload": "Teacher Workload"
+  },
+  
+  "students": {
+    "title": "Students",
+    "addStudent": "Add Student",
+    "importStudents": "Import Students",
+    "searchStudents": "Search students...",
+    "noStudents": "No students yet",
+    "addFirstStudent": "Add your first student",
+    "studentProfile": "Student Profile",
+    "overview": "Overview",
+    "quran": "Qur'an",
+    "revision": "Revision",
+    "assessments": "Assessments",
+    "schedule": "Schedule",
+    "finance": "Finance",
+    "notes": "Notes"
+  },
+  
+  "teachers": {
+    "title": "Teachers",
+    "addTeacher": "Add Teacher",
+    "searchTeachers": "Search teachers...",
+    "noTeachers": "No teachers yet",
+    "teacherProfile": "Teacher Profile",
+    "todayClasses": "Today's Classes",
+    "students": "Students",
+    "startClass": "Start today's class"
+  },
+  
+  "classes": {
+    "title": "Classes",
+    "addClass": "Add Class",
+    "noClasses": "No classes yet",
+    "classDetail": "Class Detail",
+    "students": "Students",
+    "curriculum": "Curriculum",
+    "progress": "Progress",
+    "schedule": "Schedule"
+  },
+  
+  "quran": {
+    "title": "Qur'an Progress",
+    "progressMap": "Progress Map",
+    "selectSurah": "Select Surah",
+    "selectAyah": "Select Ayah",
+    "from": "From",
+    "to": "To",
+    "pages": "Pages",
+    "juz": "Juz",
+    "estimatedSize": "Estimated size",
+    "memorized": "Memorized",
+    "inProgress": "In Progress",
+    "needsRevision": "Needs Revision",
+    "weak": "Weak",
+    "notStarted": "Not Started"
+  },
+  
+  "hifz": {
+    "title": "Memorization",
+    "assignNewLesson": "Assign New Lesson",
+    "currentAssignment": "Current Assignment",
+    "dueDate": "Due Date",
+    "target": "Target",
+    "notes": "Notes",
+    "status": {
+      "assigned": "Assigned",
+      "practiced": "Practiced",
+      "submitted": "Submitted",
+      "assessed": "Assessed",
+      "passed": "Passed",
+      "needsRetry": "Needs Retry",
+      "cancelled": "Cancelled"
+    }
+  },
+  
+  "tasmi": {
+    "title": "Tasmi'",
+    "startSession": "Start Session",
+    "student": "Student",
+    "passage": "Passage",
+    "sessionType": "Session Type",
+    "types": {
+      "newMemorization": "New Memorization",
+      "revision": "Revision",
+      "comprehensiveRevision": "Comprehensive Revision",
+      "exam": "Exam",
+      "placement": "Placement",
+      "competition": "Competition"
+    },
+    "evaluation": "Evaluation",
+    "pass": "Pass",
+    "needsRevision": "Needs Revision",
+    "fail": "Fail",
+    "accuracy": "Accuracy",
+    "tajwid": "Tajwid",
+    "fluency": "Fluency",
+    "pronunciation": "Pronunciation",
+    "confidence": "Confidence",
+    "errors": "Errors",
+    "teacherNote": "Teacher Note",
+    "result": "Result",
+    "nextRevisionDate": "Next Revision Date",
+    "nextAssignment": "Next Assignment",
+    "saveAndNext": "Save & Next Student"
+  },
+  
+  "attendance": {
+    "title": "Attendance",
+    "markAllPresent": "Mark All Present",
+    "present": "Present",
+    "late": "Late",
+    "absent": "Absent",
+    "excused": "Excused",
+    "leftEarly": "Left Early"
+  },
+  
+  "revision": {
+    "title": "Revision",
+    "dueToday": "Due Today",
+    "overdue": "Overdue",
+    "weak": "Weak",
+    "strong": "Strong",
+    "startRevision": "Start Revision",
+    "lastReviewed": "Last Reviewed",
+    "score": "Score",
+    "status": {
+      "due": "Due",
+      "completed": "Completed",
+      "strong": "Strong",
+      "weak": "Weak",
+      "failed": "Failed",
+      "rescheduled": "Rescheduled"
+    }
+  },
+  
+  "settings": {
+    "title": "Settings",
+    "organization": "Organization",
+    "branches": "Branches",
+    "users": "Users",
+    "roles": "Roles",
+    "programs": "Programs",
+    "curriculum": "Curriculum",
+    "quran": "Qur'an",
+    "attendance": "Attendance",
+    "assessment": "Assessment",
+    "notifications": "Notifications",
+    "finance": "Finance",
+    "integrations": "Integrations",
+    "security": "Security"
+  },
+  
+  "notifications": {
+    "title": "Notifications",
+    "markAllRead": "Mark All as Read",
+    "noNotifications": "No notifications",
+    "today": "Today",
+    "earlier": "Earlier"
+  },
+  
+  "reports": {
+    "title": "Reports",
+    "generate": "Generate Report",
+    "exportPdf": "Export PDF",
+    "exportExcel": "Export Excel",
+    "exportCsv": "Export CSV",
+    "dateRange": "Date Range",
+    "categories": {
+      "students": "Students",
+      "quran": "Qur'an",
+      "attendance": "Attendance",
+      "teachers": "Teachers",
+      "classes": "Classes",
+      "assessments": "Assessments",
+      "finance": "Finance"
+    }
+  },
+  
+  "emptyStates": {
+    "noStudents": "No students yet",
+    "noStudentsDescription": "Add your first student to get started",
+    "noClasses": "No classes yet",
+    "noClassesDescription": "Create a class to start organizing",
+    "noTeachers": "No teachers yet",
+    "noTeachersDescription": "Add teachers to your organization",
+    "noSchedule": "No scheduled classes",
+    "noNotifications": "No notifications",
+    "noReports": "No reports generated yet"
+  },
+  
+  "@general": {
+    "ok": { "description": "OK button" },
+    "cancel": { "description": "Cancel button" },
+    "save": { "description": "Save button" }
+  }
+}
