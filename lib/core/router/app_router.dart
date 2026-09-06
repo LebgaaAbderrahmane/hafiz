@@ -4,6 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../features/auth/presentation/views/login_view.dart';
 import '../../features/auth/presentation/views/forgot_password_view.dart';
 import '../../features/auth/domain/repositories/auth_provider.dart';
+import '../../features/students/presentation/views/student_list_view.dart';
+import '../../features/students/presentation/views/student_profile_view.dart';
+import '../../features/students/presentation/views/add_student_view.dart';
 import '../theme/theme.dart';
 
 /// App Router configuration.
@@ -68,13 +71,18 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: '/students',
             name: 'students',
-            builder: (context, state) => const _PlaceholderPage(title: 'Students'),
+            builder: (context, state) => const StudentListView(),
             routes: [
+              GoRoute(
+                path: 'add',
+                name: 'addStudent',
+                builder: (context, state) => const AddStudentView(),
+              ),
               GoRoute(
                 path: ':id',
                 name: 'studentProfile',
-                builder: (context, state) => _PlaceholderPage(
-                  title: 'Student Profile: ${state.pathParameters['id']}',
+                builder: (context, state) => StudentProfileView(
+                  studentId: state.pathParameters['id']!,
                 ),
               ),
             ],
