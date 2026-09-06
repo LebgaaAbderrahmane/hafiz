@@ -18,7 +18,6 @@ dependencies:
   fl_chart: ^0.70.0
   percent_indicator: ^4.2.0
   cached_network_image: ^3.4.0
-  table_calendar: ^3.2.0
 
   # State Management
   flutter_riverpod: ^2.6.0
@@ -39,17 +38,13 @@ dependencies:
   # Code Generation
   freezed_annotation: ^2.4.0
   json_annotation: ^4.9.0
+  equatable: ^2.0.0
 
   # Utils
-  intl: ^0.19.0
+  intl: ^0.20.3
   image_picker: ^1.1.0
-  file_picker: ^8.0.0
   connectivity_plus: ^6.1.0
   path_provider: ^2.1.0
-
-  # PDF/Export
-  pdf: ^4.2.0
-  printing: ^5.13.0
 
   # Date
   hijri: ^3.0.0
@@ -69,34 +64,13 @@ dev_dependencies:
   # Testing
   mocktail: ^1.0.0
 
-  # Linting
-  custom_lint: ^0.7.0
-  riverpod_lint: ^2.6.0
+  # Linting (add back after analyzer compatibility is resolved)
+  # custom_lint: ^0.7.0
+  # riverpod_lint: ^2.6.0
 
 flutter:
   uses-material-design: true
 
   assets:
     - assets/images/
-    - assets/fonts/
     - assets/data/
-
-  fonts:
-    - family: NotoSansArabic
-      fonts:
-        - asset: assets/fonts/NotoSansArabic-Regular.ttf
-        - asset: assets/fonts/NotoSansArabic-Medium.ttf
-          weight: 500
-        - asset: assets/fonts/NotoSansArabic-SemiBold.ttf
-          weight: 600
-        - asset: assets/fonts/NotoSansArabic-Bold.ttf
-          weight: 700
-    - family: Inter
-      fonts:
-        - asset: assets/fonts/Inter-Regular.ttf
-        - asset: assets/fonts/Inter-Medium.ttf
-          weight: 500
-        - asset: assets/fonts/Inter-SemiBold.ttf
-          weight: 600
-        - asset: assets/fonts/Inter-Bold.ttf
-          weight: 700

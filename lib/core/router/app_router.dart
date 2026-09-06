@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../features/auth/presentation/views/login_view.dart';
+import '../../features/auth/presentation/views/forgot_password_view.dart';
+import '../../features/auth/domain/repositories/auth_provider.dart';
+import '../theme/theme.dart';
 
 /// App Router configuration.
 ///
@@ -9,20 +13,40 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 /// ShellRoute for sidebar navigation (admin).
 /// StatefulShellRoute for bottom navigation (teacher/parent).
 final appRouterProvider = Provider<GoRouter>((ref) {
+  final authState = ref.watch(authStateProvider);
+
   return GoRouter(
     initialLocation: '/login',
     debugLogDiagnostics: true,
+    redirect: (context, state) {
+      final isLoggedIn = authState.valueOrNull != null;
+      final isAuthRoute = state.matchedLocation == '/login' ||
+          state.matchedLocation == '/forgot-password';
+
+      // Redirect to login if not authenticated and not on auth route
+      if (!isLoggedIn && !isAuthRoute) {
+        return '/login';
+      }
+
+      // Redirect to dashboard if authenticated and on auth route
+      if (isLoggedIn && isAuthRoute) {
+        return '/dashboard';
+      }
+
+      return null;
+    },
+    refreshListenable: GoRouterRefreshStream(authState),
     routes: [
       // ── Auth Routes ──
       GoRoute(
         path: '/login',
         name: 'login',
-        builder: (context, state) => const _PlaceholderPage(title: 'Login'),
+        builder: (context, state) => const LoginView(),
       ),
       GoRoute(
         path: '/forgot-password',
         name: 'forgotPassword',
-        builder: (context, state) => const _PlaceholderPage(title: 'Forgot Password'),
+        builder: (context, state) => const ForgotPasswordView(),
       ),
 
       // ── Onboarding ──
@@ -152,14 +176,23 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         ],
       ),
     ],
-    redirect: (context, state) {
-      // TODO: Implement auth guard
-      // final isLoggedIn = ref.read(authStateProvider);
-      // if (!isLoggedIn && state.matchedLocation != '/login') return '/login';
-      return null;
-    },
   );
 });
+
+/// Helper to convert a Stream to a Listenable for go_router's refreshListenable.
+class GoRouterRefreshStream extends ChangeNotifier {
+  GoRouterRefreshStream(Stream<dynamic> stream) {
+    _subscription = stream.asBroadcastStream().listen((_) => notifyListeners());
+  }
+
+  late final dynamic _subscription;
+
+  @override
+  void dispose() {
+    _subscription.cancel();
+    super.dispose();
+  }
+}
 
 // ── Placeholder Pages (to be replaced) ──
 
