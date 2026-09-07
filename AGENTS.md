@@ -1,8 +1,8 @@
 # AGENTS.md — Hafiz Development Guide
 
 ## Project Status
-- **Current Phase:** Phase 3 (Teachers & Classes)
-- **Current Branch:** feat/phase-3-teachers
+- **Current Phase:** Phase 4 (Qur'an Curriculum & Levels)
+- **Current Branch:** feat/phase-4-quran
 - **Last Updated:** 2026-09-06
 - **Flutter Version:** 3.47.2 stable
 - **Dart Version:** 3.13.2
@@ -67,18 +67,17 @@ supabase db diff
 - Use `mocktail` for mocking
 - Use `ProviderContainer.test()` for Riverpod providers
 
-## Current Sprint — Phase 3: Teachers & Classes
+## Current Sprint — Phase 4: Qur'an Curriculum & Levels
 
 ### Tasks
-- [ ] Teacher entity (freezed)
-- [ ] Class entity (freezed)
-- [ ] Teacher repository + providers
-- [ ] Class repository + providers
-- [ ] Teacher list view
-- [ ] Teacher profile view
-- [ ] Class list view
-- [ ] Class detail view
-- [ ] Update router with teacher/class routes
+- [ ] Surah entity (freezed)
+- [ ] Juz/Hizb entities
+- [ ] Memorization plan entity
+- [ ] Curriculum repository + providers
+- [ ] Quran browse view (Surah list, Juz view)
+- [ ] Memorization plan view
+- [ ] Student progress tracking
+- [ ] Update router with Quran routes
 
 ## Key Files
 
