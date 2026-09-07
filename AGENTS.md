@@ -1,8 +1,8 @@
 # AGENTS.md — Hafiz Development Guide
 
 ## Project Status
-- **Current Phase:** Phase 2 (Students & Guardians)
-- **Current Branch:** feat/phase-2-students
+- **Current Phase:** Phase 3 (Teachers & Classes)
+- **Current Branch:** feat/phase-3-teachers
 - **Last Updated:** 2026-09-06
 - **Flutter Version:** 3.47.2 stable
 - **Dart Version:** 3.13.2
@@ -67,18 +67,18 @@ supabase db diff
 - Use `mocktail` for mocking
 - Use `ProviderContainer.test()` for Riverpod providers
 
-## Current Sprint — Phase 2: Students & Guardians
+## Current Sprint — Phase 3: Teachers & Classes
 
 ### Tasks
-- [x] Student entity (freezed)
-- [x] Guardian entity (freezed)
-- [x] Student repository abstract + impl
-- [x] Student state management (Riverpod)
-- [x] Student list view
-- [x] Student profile view with tabs
-- [x] Add student wizard
-- [x] Guardian management
-- [ ] Update router with student routes
+- [ ] Teacher entity (freezed)
+- [ ] Class entity (freezed)
+- [ ] Teacher repository + providers
+- [ ] Class repository + providers
+- [ ] Teacher list view
+- [ ] Teacher profile view
+- [ ] Class list view
+- [ ] Class detail view
+- [ ] Update router with teacher/class routes
 
 ## Key Files
 
