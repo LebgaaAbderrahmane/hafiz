@@ -7,6 +7,10 @@ import '../../features/auth/domain/repositories/auth_provider.dart';
 import '../../features/students/presentation/views/student_list_view.dart';
 import '../../features/students/presentation/views/student_profile_view.dart';
 import '../../features/students/presentation/views/add_student_view.dart';
+import '../../features/teachers/presentation/views/teacher_list_view.dart';
+import '../../features/teachers/presentation/views/teacher_profile_view.dart';
+import '../../features/classes/presentation/views/class_list_view.dart';
+import '../../features/classes/presentation/views/class_detail_view.dart';
 import '../theme/theme.dart';
 
 /// App Router configuration.
@@ -90,12 +94,30 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: '/teachers',
             name: 'teachers',
-            builder: (context, state) => const _PlaceholderPage(title: 'Teachers'),
+            builder: (context, state) => const TeacherListView(),
+            routes: [
+              GoRoute(
+                path: ':id',
+                name: 'teacherProfile',
+                builder: (context, state) => TeacherProfileView(
+                  teacherId: state.pathParameters['id']!,
+                ),
+              ),
+            ],
           ),
           GoRoute(
             path: '/classes',
             name: 'classes',
-            builder: (context, state) => const _PlaceholderPage(title: 'Classes'),
+            builder: (context, state) => const ClassListView(),
+            routes: [
+              GoRoute(
+                path: ':id',
+                name: 'classDetail',
+                builder: (context, state) => ClassDetailView(
+                  classId: state.pathParameters['id']!,
+                ),
+              ),
+            ],
           ),
           GoRoute(
             path: '/attendance',
