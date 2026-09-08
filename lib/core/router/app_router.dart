@@ -14,6 +14,8 @@ import '../../features/classes/presentation/views/class_detail_view.dart';
 import '../../features/quran/presentation/views/quran_browse_view.dart';
 import '../../features/schedule/presentation/views/calendar_view.dart';
 import '../../features/schedule/presentation/views/session_management_view.dart';
+import '../../features/attendance/presentation/views/attendance_marking_view.dart';
+import '../../features/tasmi/presentation/views/tasmi_eval_view.dart';
 import '../theme/theme.dart';
 
 /// App Router configuration.
@@ -125,7 +127,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: '/attendance',
             name: 'attendance',
-            builder: (context, state) => const _PlaceholderPage(title: 'Attendance'),
+            builder: (context, state) => AttendanceMarkingView(
+              sessionId: state.uri.queryParameters['sessionId'] ?? '',
+              classId: state.uri.queryParameters['classId'] ?? '',
+            ),
           ),
           GoRoute(
             path: '/quran-progress',
@@ -135,7 +140,12 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: '/assessments',
             name: 'assessments',
-            builder: (context, state) => const _PlaceholderPage(title: 'Assessments'),
+            builder: (context, state) => TasmiEvalView(
+              studentId: state.uri.queryParameters['studentId'] ?? '',
+              teacherId: state.uri.queryParameters['teacherId'] ?? '',
+              sessionId: state.uri.queryParameters['sessionId'] ?? '',
+              classId: state.uri.queryParameters['classId'],
+            ),
           ),
           GoRoute(
             path: '/schedule',
