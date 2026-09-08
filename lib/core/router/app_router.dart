@@ -12,6 +12,8 @@ import '../../features/teachers/presentation/views/teacher_profile_view.dart';
 import '../../features/classes/presentation/views/class_list_view.dart';
 import '../../features/classes/presentation/views/class_detail_view.dart';
 import '../../features/quran/presentation/views/quran_browse_view.dart';
+import '../../features/schedule/presentation/views/calendar_view.dart';
+import '../../features/schedule/presentation/views/session_management_view.dart';
 import '../theme/theme.dart';
 
 /// App Router configuration.
@@ -138,7 +140,14 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: '/schedule',
             name: 'schedule',
-            builder: (context, state) => const _PlaceholderPage(title: 'Schedule'),
+            builder: (context, state) => const CalendarView(),
+            routes: [
+              GoRoute(
+                path: 'sessions',
+                name: 'sessions',
+                builder: (context, state) => const SessionManagementView(),
+              ),
+            ],
           ),
           GoRoute(
             path: '/reports',
