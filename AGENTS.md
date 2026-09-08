@@ -1,8 +1,8 @@
 # AGENTS.md — Hafiz Development Guide
 
 ## Project Status
-- **Current Phase:** Phase 5 (Schedule & Calendar)
-- **Current Branch:** feat/phase-5-schedule
+- **Current Phase:** Phase 6 (Attendance + Tasmi' Recording)
+- **Current Branch:** feat/phase-6-attendance-tasmi
 - **Last Updated:** 2026-09-06
 - **Flutter Version:** 3.47.2 stable
 - **Dart Version:** 3.13.2
@@ -67,16 +67,17 @@ supabase db diff
 - Use `mocktail` for mocking
 - Use `ProviderContainer.test()` for Riverpod providers
 
-## Current Sprint — Phase 5: Schedule & Calendar
+## Current Sprint — Phase 6: Attendance + Tasmi' Recording
 
 ### Tasks
-- [ ] Schedule entity (freezed)
-- [ ] Session entity (freezed)
-- [ ] TimeSlot entity (freezed)
-- [ ] Schedule repository + providers
-- [ ] Calendar view
-- [ ] Session management view
-- [ ] Update router with schedule routes
+- [ ] Attendance entity (freezed)
+- [ ] Attendance repository + providers
+- [ ] Attendance marking view (rapid)
+- [ ] TasmiSession entity (freezed)
+- [ ] TasmiSession repository + providers
+- [ ] Quick tasmi' eval form (single screen)
+- [ ] HifzAssignment entity + providers
+- [ ] Update router with attendance + tasmi routes
 
 ## Key Files
 
