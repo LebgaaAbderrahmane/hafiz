@@ -70,11 +70,11 @@ supabase db diff
 ## Current Sprint — Phase 8: Guardians + Parent Portal
 
 ### Tasks
-- [ ] Guardian entity (freezed)
-- [ ] Guardian repository + providers
-- [ ] Guardian list and profile views
-- [ ] Parent portal view
-- [ ] Update router with guardian and parent portal routes
+- [x] Guardian entity (freezed)
+- [x] Guardian repository + providers
+- [x] Guardian list and profile views
+- [x] Parent portal view
+- [x] Update router with guardian and parent portal routes
 
 ## Key Files
 

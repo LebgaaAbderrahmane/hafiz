@@ -19,6 +19,9 @@ import '../../features/tasmi/presentation/views/tasmi_eval_view.dart';
 import '../../features/dashboard/presentation/views/owner_dashboard_view.dart';
 import '../../features/dashboard/presentation/views/teacher_dashboard_view.dart';
 import '../../features/revision/presentation/views/revision_tracking_view.dart';
+import '../../features/guardians/presentation/views/guardian_list_view.dart';
+import '../../features/guardians/presentation/views/guardian_profile_view.dart';
+import '../../features/parent_portal/presentation/views/parent_portal_view.dart';
 import '../theme/theme.dart';
 
 /// App Router configuration.
@@ -151,6 +154,25 @@ final appRouterProvider = Provider<GoRouter>((ref) {
               sessionId: state.uri.queryParameters['sessionId'] ?? '',
               classId: state.uri.queryParameters['classId'],
             ),
+          ),
+          GoRoute(
+            path: '/guardians',
+            name: 'guardians',
+            builder: (context, state) => const GuardianListView(),
+            routes: [
+              GoRoute(
+                path: ':id',
+                name: 'guardianProfile',
+                builder: (context, state) => GuardianProfileView(
+                  guardianId: state.pathParameters['id']!,
+                ),
+              ),
+            ],
+          ),
+          GoRoute(
+            path: '/parent-portal',
+            name: 'parentPortal',
+            builder: (context, state) => const ParentPortalView(),
           ),
           GoRoute(
             path: '/schedule',
