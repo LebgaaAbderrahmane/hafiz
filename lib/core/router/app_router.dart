@@ -16,6 +16,9 @@ import '../../features/schedule/presentation/views/calendar_view.dart';
 import '../../features/schedule/presentation/views/session_management_view.dart';
 import '../../features/attendance/presentation/views/attendance_marking_view.dart';
 import '../../features/tasmi/presentation/views/tasmi_eval_view.dart';
+import '../../features/dashboard/presentation/views/owner_dashboard_view.dart';
+import '../../features/dashboard/presentation/views/teacher_dashboard_view.dart';
+import '../../features/revision/presentation/views/revision_tracking_view.dart';
 import '../theme/theme.dart';
 
 /// App Router configuration.
@@ -75,7 +78,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: '/dashboard',
             name: 'dashboard',
-            builder: (context, state) => const _PlaceholderPage(title: 'Dashboard'),
+            builder: (context, state) => const OwnerDashboardView(),
           ),
           GoRoute(
             path: '/students',
@@ -135,7 +138,9 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: '/quran-progress',
             name: 'quranProgress',
-            builder: (context, state) => const QuranBrowseView(),
+            builder: (context, state) => RevisionTrackingView(
+              studentId: state.uri.queryParameters['studentId'] ?? '',
+            ),
           ),
           GoRoute(
             path: '/assessments',

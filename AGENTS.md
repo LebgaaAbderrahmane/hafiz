@@ -70,12 +70,12 @@ supabase db diff
 ## Current Sprint — Phase 7: Revision + Dashboard
 
 ### Tasks
-- [ ] Revision entity (freezed)
-- [ ] Revision repository + providers
-- [ ] Revision tracking view
-- [ ] Owner dashboard view
-- [ ] Teacher dashboard view
-- [ ] Update router with dashboard routes
+- [x] Revision entity (freezed)
+- [x] Revision repository + providers
+- [x] Revision tracking view
+- [x] Owner dashboard view
+- [x] Teacher dashboard view
+- [x] Update router with dashboard routes
 
 ## Key Files
 
