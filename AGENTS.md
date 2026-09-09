@@ -1,8 +1,8 @@
 # AGENTS.md — Hafiz Development Guide
 
 ## Project Status
-- **Current Phase:** Phase 7 (Revision + Dashboard)
-- **Current Branch:** feat/phase-7-revision-dashboard
+- **Current Phase:** Phase 8 (Guardians + Parent Portal)
+- **Current Branch:** feat/phase-8-guardians-parent-portal
 - **Last Updated:** 2026-09-06
 - **Flutter Version:** 3.47.2 stable
 - **Dart Version:** 3.13.2
@@ -67,15 +67,14 @@ supabase db diff
 - Use `mocktail` for mocking
 - Use `ProviderContainer.test()` for Riverpod providers
 
-## Current Sprint — Phase 7: Revision + Dashboard
+## Current Sprint — Phase 8: Guardians + Parent Portal
 
 ### Tasks
-- [x] Revision entity (freezed)
-- [x] Revision repository + providers
-- [x] Revision tracking view
-- [x] Owner dashboard view
-- [x] Teacher dashboard view
-- [x] Update router with dashboard routes
+- [x] Guardian entity (freezed)
+- [x] Guardian repository + providers
+- [x] Guardian list and profile views
+- [x] Parent portal view
+- [x] Update router with guardian and parent portal routes
 
 ## Key Files
 
