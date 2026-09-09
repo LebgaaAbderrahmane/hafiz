@@ -1,8 +1,8 @@
 # AGENTS.md — Hafiz Development Guide
 
 ## Project Status
-- **Current Phase:** Phase 6 (Attendance + Tasmi' Recording)
-- **Current Branch:** feat/phase-6-attendance-tasmi
+- **Current Phase:** Phase 7 (Revision + Dashboard)
+- **Current Branch:** feat/phase-7-revision-dashboard
 - **Last Updated:** 2026-09-06
 - **Flutter Version:** 3.47.2 stable
 - **Dart Version:** 3.13.2
@@ -67,17 +67,15 @@ supabase db diff
 - Use `mocktail` for mocking
 - Use `ProviderContainer.test()` for Riverpod providers
 
-## Current Sprint — Phase 6: Attendance + Tasmi' Recording
+## Current Sprint — Phase 7: Revision + Dashboard
 
 ### Tasks
-- [ ] Attendance entity (freezed)
-- [ ] Attendance repository + providers
-- [ ] Attendance marking view (rapid)
-- [ ] TasmiSession entity (freezed)
-- [ ] TasmiSession repository + providers
-- [ ] Quick tasmi' eval form (single screen)
-- [ ] HifzAssignment entity + providers
-- [ ] Update router with attendance + tasmi routes
+- [x] Revision entity (freezed)
+- [x] Revision repository + providers
+- [x] Revision tracking view
+- [x] Owner dashboard view
+- [x] Teacher dashboard view
+- [x] Update router with dashboard routes
 
 ## Key Files
 
