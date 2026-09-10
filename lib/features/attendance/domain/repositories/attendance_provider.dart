@@ -1,9 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
-import '../domain/entities/attendance.dart';
-import '../domain/repositories/attendance_repository.dart';
-import '../data/repositories/attendance_repository_impl.dart';
-import '../../../core/network/supabase_client.dart';
+import 'package:hafiz/features/attendance/domain/entities/attendance.dart';
+import 'package:hafiz/features/attendance/domain/repositories/attendance_repository.dart';
+import 'package:hafiz/features/attendance/data/repositories/attendance_repository_impl.dart';
+import 'package:hafiz/core/network/supabase_client.dart';
 
 /// Attendance repository provider.
 final attendanceRepositoryProvider = Provider<AttendanceRepository>((ref) {

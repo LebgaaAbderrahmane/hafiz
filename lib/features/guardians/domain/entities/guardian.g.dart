@@ -51,3 +51,6 @@ const _$GuardianTypeEnumMap = {
   GuardianType.grandmother: 'grandmother',
   GuardianType.other: 'other',
 };
+
+_$GuardianImpl _$GuardianFromJson(Map<String, dynamic> json) => _$$GuardianImplFromJson(json);
+Map<String, dynamic> _$GuardianToJson(_$GuardianImpl instance) => _$$GuardianImplToJson(instance);

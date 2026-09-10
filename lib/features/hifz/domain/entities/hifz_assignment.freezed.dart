@@ -363,7 +363,7 @@ class _$HifzAssignmentImpl implements _HifzAssignment {
 
 abstract class _HifzAssignment implements HifzAssignment {
   const factory _HifzAssignment(
-      {required final String id,
+      {required String id,
       required String organizationId,
       required String branchId,
       required String studentId,

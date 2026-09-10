@@ -366,7 +366,7 @@ class _$SchoolClassImpl implements _SchoolClass {
 
 abstract class _SchoolClass implements SchoolClass {
   const factory _SchoolClass(
-      {required final String id,
+      {required String id,
       required String organizationId,
       required String branchId,
       required String name,

@@ -1,9 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
-import '../domain/entities/teacher.dart';
-import '../domain/repositories/teacher_repository.dart';
-import '../data/repositories/teacher_repository_impl.dart';
-import '../../../core/network/supabase_client.dart';
+import 'package:hafiz/features/teachers/domain/entities/teacher.dart';
+import 'package:hafiz/features/teachers/domain/repositories/teacher_repository.dart';
+import 'package:hafiz/features/teachers/data/repositories/teacher_repository_impl.dart';
+import 'package:hafiz/core/network/supabase_client.dart';
 
 /// Teacher repository provider.
 final teacherRepositoryProvider = Provider<TeacherRepository>((ref) {

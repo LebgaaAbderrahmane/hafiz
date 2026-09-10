@@ -55,3 +55,6 @@ const _$ReportFormatEnumMap = {
   ReportFormat.csv: 'csv',
   ReportFormat.excel: 'excel',
 };
+
+_$ReportImpl _$ReportFromJson(Map<String, dynamic> json) => _$$ReportImplFromJson(json);
+Map<String, dynamic> _$ReportToJson(_$ReportImpl instance) => _$$ReportImplToJson(instance);

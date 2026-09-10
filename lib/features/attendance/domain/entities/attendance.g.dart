@@ -49,3 +49,6 @@ const _$AttendanceStatusEnumMap = {
   AttendanceStatus.excused: 'excused',
   AttendanceStatus.leftEarly: 'left_early',
 };
+
+_$AttendanceImpl _$AttendanceFromJson(Map<String, dynamic> json) => _$$AttendanceImplFromJson(json);
+Map<String, dynamic> _$AttendanceToJson(_$AttendanceImpl instance) => _$$AttendanceImplToJson(instance);

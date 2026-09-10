@@ -1,8 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
-import '../domain/entities/revision.dart';
-import '../domain/repositories/revision_repository.dart';
-import '../../data/repositories/revision_repository_impl.dart';
+import 'package:hafiz/features/revision/domain/entities/revision.dart';
+import 'package:hafiz/features/revision/domain/repositories/revision_repository.dart';
+import 'package:hafiz/features/revision/data/repositories/revision_repository_impl.dart';
 
 /// Supabase client provider.
 final supabaseClientProvider = Provider<SupabaseClient>((ref) {

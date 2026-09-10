@@ -70,3 +70,6 @@ const _$SessionStatusEnumMap = {
   SessionStatus.cancelled: 'cancelled',
   SessionStatus.rescheduled: 'rescheduled',
 };
+
+_$SessionImpl _$SessionFromJson(Map<String, dynamic> json) => _$$SessionImplFromJson(json);
+Map<String, dynamic> _$SessionToJson(_$SessionImpl instance) => _$$SessionImplToJson(instance);

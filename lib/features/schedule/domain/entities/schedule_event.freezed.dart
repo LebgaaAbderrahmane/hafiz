@@ -381,7 +381,7 @@ class _$ScheduleEventImpl implements _ScheduleEvent {
 
 abstract class _ScheduleEvent implements ScheduleEvent {
   const factory _ScheduleEvent(
-      {required final String id,
+      {required String id,
       required String organizationId,
       required String branchId,
       required String title,

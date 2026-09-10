@@ -468,7 +468,7 @@ class _TasmiEvalViewState extends ConsumerState<TasmiEvalView> {
         );
         Navigator.of(context).pop();
       }
-    } catch (e) {
+    } catch (e, st) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('خطأ: $e')),

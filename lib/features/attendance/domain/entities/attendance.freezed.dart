@@ -290,7 +290,7 @@ class _$AttendanceImpl implements _Attendance {
 
 abstract class _Attendance implements Attendance {
   const factory _Attendance(
-      {required final String id,
+      {required String id,
       required String organizationId,
       required String branchId,
       required String studentId,

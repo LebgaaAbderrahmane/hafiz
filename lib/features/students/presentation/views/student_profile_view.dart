@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import "package:hafiz/core/localization/app_localizations.dart";
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hafiz/core/localization/localization.dart';
@@ -43,10 +44,10 @@ class _StudentProfile extends StatelessWidget {
           ],
           bottom: TabBar(
             tabs: [
-              Tab(text: context.l.students.tabInfo),
-              Tab(text: context.l.students.tabQuran),
-              Tab(text: context.l.students.tabAttendance),
-              Tab(text: context.l.students.tabPerformance),
+              Tab(text: context.l.tabInfo),
+              Tab(text: context.l.tabQuran),
+              Tab(text: context.l.tabAttendance),
+              Tab(text: context.l.tabPerformance),
             ],
           ),
         ),
@@ -120,46 +121,46 @@ class _InfoTab extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       children: [
         _InfoRow(
-          label: context.l.students.fullName,
+          label: context.l.fullName,
           value: student.fullName,
         ),
         if (student.preferredName != null)
           _InfoRow(
-            label: context.l.students.preferredName,
+            label: context.l.preferredName,
             value: student.preferredName!,
           ),
         if (student.gender != null)
           _InfoRow(
-            label: context.l.students.gender,
+            label: context.l.gender,
             value: student.gender!.displayNameAr,
           ),
         if (student.dateOfBirth != null)
           _InfoRow(
-            label: context.l.students.dateOfBirth,
+            label: context.l.dateOfBirth,
             value: '${student.dateOfBirth!.day}/${student.dateOfBirth!.month}/${student.dateOfBirth!.year}',
           ),
         if (student.nationality != null)
           _InfoRow(
-            label: context.l.students.nationality,
+            label: context.l.nationality,
             value: student.nationality!,
           ),
         if (student.phone != null)
           _InfoRow(
-            label: context.l.students.phone,
+            label: context.l.phone,
             value: student.phone!,
           ),
         if (student.email != null)
           _InfoRow(
-            label: context.l.students.email,
+            label: context.l.email,
             value: student.email!,
           ),
         _InfoRow(
-          label: context.l.students.status,
+          label: context.l.status,
           value: student.status.displayNameAr,
         ),
         if (student.previousQuranEducation != null)
           _InfoRow(
-            label: context.l.students.previousEducation,
+            label: context.l.previousEducation,
             value: student.previousQuranEducation!,
           ),
       ],
@@ -178,19 +179,19 @@ class _QuranTab extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       children: [
         _InfoRow(
-          label: context.l.students.currentQuranLevel,
+          label: context.l.currentQuranLevel,
           value: student.currentQuranLevel ?? '-',
         ),
         _InfoRow(
-          label: context.l.students.readingLevel,
+          label: context.l.readingLevel,
           value: student.readingLevel ?? '-',
         ),
         _InfoRow(
-          label: context.l.students.tajwidLevel,
+          label: context.l.tajwidLevel,
           value: student.tajwidLevel ?? '-',
         ),
         _InfoRow(
-          label: context.l.students.memorizationLevel,
+          label: context.l.memorizationLevel,
           value: student.memorizationLevel ?? '-',
         ),
       ],
@@ -206,7 +207,7 @@ class _AttendanceTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Text(context.l.students.attendanceComingSoon),
+      child: Text(context.l.attendanceComingSoon),
     );
   }
 }
@@ -219,7 +220,7 @@ class _PerformanceTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Text(context.l.students.performanceComingSoon),
+      child: Text(context.l.performanceComingSoon),
     );
   }
 }

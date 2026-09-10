@@ -405,7 +405,7 @@ class _HifzAssignmentFormViewState extends ConsumerState<HifzAssignmentFormView>
           ),
         );
       }
-    } catch (e) {
+    } catch (e, st) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('خطأ: $e'), backgroundColor: AppColors.error),

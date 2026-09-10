@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import "package:hafiz/core/localization/app_localizations.dart";
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hafiz/core/localization/localization.dart';
 import 'package:hafiz/core/widgets/loading.dart';
@@ -21,7 +22,7 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(context.l.schedule.title),
+        title: Text(context.l.title),
       ),
       body: Column(
         children: [
@@ -181,7 +182,7 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
       data: (events) {
         if (events.isEmpty) {
           return Center(
-            child: Text(context.l.schedule.noEvents),
+            child: Text(context.l.noEvents),
           );
         }
         return ListView.builder(

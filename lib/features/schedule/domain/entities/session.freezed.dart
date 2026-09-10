@@ -343,7 +343,7 @@ class _$SessionImpl implements _Session {
 
 abstract class _Session implements Session {
   const factory _Session(
-      {required final String id,
+      {required String id,
       required String organizationId,
       required String branchId,
       required String title,

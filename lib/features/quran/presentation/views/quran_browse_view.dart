@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import "package:hafiz/core/localization/app_localizations.dart";
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hafiz/core/localization/localization.dart';
 import 'package:hafiz/core/widgets/loading.dart';
@@ -20,12 +21,12 @@ class _QuranBrowseViewState extends ConsumerState<QuranBrowseView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(context.l.quran.title),
+        title: Text(context.l.title),
         bottom: TabBar(
           onTap: (index) => setState(() => _currentTab = index),
           tabs: [
-            Tab(text: context.l.quran.tabSurahs),
-            Tab(text: context.l.quran.tabJuzs),
+            Tab(text: context.l.tabSurahs),
+            Tab(text: context.l.tabJuzs),
           ],
         ),
       ),
@@ -108,7 +109,7 @@ class _SurahCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Text(
-              '${surah.totalAyahs} ${context.l.quran.ayahs}',
+              '${surah.totalAyahs} ${context.l.ayahs}',
               style: Theme.of(context).textTheme.bodySmall,
             ),
             const SizedBox(height: 4),
@@ -163,12 +164,12 @@ class _JuzCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Text(
-              '${juz.startPage}-${juz.endPage} ${context.l.quran.pages}',
+              '${juz.startPage}-${juz.endPage} ${context.l.pages}',
               style: Theme.of(context).textTheme.bodySmall,
             ),
             const SizedBox(height: 4),
             Text(
-              '${juz.surahNumbers.length} ${context.l.quran.surahs}',
+              '${juz.surahNumbers.length} ${context.l.surahs}',
               style: Theme.of(context).textTheme.bodySmall,
             ),
           ],

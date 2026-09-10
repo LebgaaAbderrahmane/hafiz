@@ -211,7 +211,7 @@ class _$JuzImpl implements _Juz {
 
 abstract class _Juz implements Juz {
   const factory _Juz(
-      {required final int number,
+      {required int number,
       required String nameArabic,
       required String nameEnglish,
       required int startPage,

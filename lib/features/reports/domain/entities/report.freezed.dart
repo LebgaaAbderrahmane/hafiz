@@ -290,7 +290,7 @@ class _$ReportImpl implements _Report {
 
 abstract class _Report implements Report {
   const factory _Report(
-      {required final String id,
+      {required String id,
       required String organizationId,
       required String branchId,
       required String generatedById,

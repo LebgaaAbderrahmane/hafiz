@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import "package:hafiz/core/localization/app_localizations.dart";
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hafiz/core/localization/localization.dart';
 import 'package:hafiz/core/widgets/badge.dart';
@@ -24,7 +25,7 @@ class _SessionManagementViewState extends ConsumerState<SessionManagementView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(context.l.schedule.sessions),
+        title: Text(context.l.sessions),
       ),
       body: Column(
         children: [
@@ -114,9 +115,9 @@ class _SessionManagementViewState extends ConsumerState<SessionManagementView> {
         if (sessions.isEmpty) {
           return EmptyState(
             icon: Icons.event_available_outlined,
-            title: context.l.schedule.noSessions,
-            message: context.l.schedule.noSessionsMessage,
-            actionLabel: context.l.schedule.addSession,
+            title: context.l.noSessions,
+            message: context.l.noSessionsMessage,
+            actionLabel: context.l.addSession,
             onAction: () {
               // TODO: Navigate to add session
             },

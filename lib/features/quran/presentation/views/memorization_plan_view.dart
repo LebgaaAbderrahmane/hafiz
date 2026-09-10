@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import "package:hafiz/core/localization/app_localizations.dart";
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hafiz/core/localization/localization.dart';
 import 'package:hafiz/core/widgets/badge.dart';
@@ -19,7 +20,7 @@ class MemorizationPlanView extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(context.l.quran.memorizationPlans),
+        title: Text(context.l.memorizationPlans),
       ),
       body: plansAsync.when(
         loading: () => const AppLoading(),
@@ -28,9 +29,9 @@ class MemorizationPlanView extends ConsumerWidget {
           if (plans.isEmpty) {
             return EmptyState(
               icon: Icons.menu_book_outlined,
-              title: context.l.quran.noPlans,
-              message: context.l.quran.noPlansMessage,
-              actionLabel: context.l.quran.createPlan,
+              title: context.l.noPlans,
+              message: context.l.noPlansMessage,
+              actionLabel: context.l.createPlan,
               onAction: () {
                 // TODO: Navigate to create plan
               },
@@ -84,7 +85,7 @@ class _PlanCard extends StatelessWidget {
               _buildPriorityBadge(context),
               const Spacer(),
               Text(
-                '${plan.sessions.length} ${context.l.quran.sessions}',
+                '${plan.sessions.length} ${context.l.sessions}',
                 style: Theme.of(context).textTheme.bodySmall,
               ),
             ],
@@ -136,11 +137,11 @@ class _PlanCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              '${context.l.quran.surah} ${plan.currentSurah}:${plan.currentAyah}',
+              '${context.l.surah} ${plan.currentSurah}:${plan.currentAyah}',
               style: Theme.of(context).textTheme.bodySmall,
             ),
             Text(
-              '${context.l.quran.surah} ${plan.targetSurah}:${plan.targetAyah}',
+              '${context.l.surah} ${plan.targetSurah}:${plan.targetAyah}',
               style: Theme.of(context).textTheme.bodySmall,
             ),
           ],

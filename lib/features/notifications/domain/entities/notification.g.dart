@@ -52,3 +52,6 @@ const _$NotificationTypeEnumMap = {
   NotificationType.system: 'system',
   NotificationType.reminder: 'reminder',
 };
+
+_$AppNotificationImpl _$AppNotificationFromJson(Map<String, dynamic> json) => _$$AppNotificationImplFromJson(json);
+Map<String, dynamic> _$AppNotificationToJson(_$AppNotificationImpl instance) => _$$AppNotificationImplToJson(instance);

@@ -1,6 +1,6 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
-import '../domain/entities/attendance.dart';
-import '../domain/repositories/attendance_repository.dart';
+import 'package:hafiz/features/attendance/domain/entities/attendance.dart';
+import 'package:hafiz/features/attendance/domain/repositories/attendance_repository.dart';
 
 class AttendanceRepositoryImpl implements AttendanceRepository {
   final SupabaseClient _client;

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../../domain/repositories/auth_provider.dart';
-import '../../../core/theme/theme.dart';
-import '../../../core/widgets/widgets.dart';
+import 'package:hafiz/features/auth/domain/repositories/auth_provider.dart';
+import 'package:hafiz/core/theme/theme.dart';
+import 'package:hafiz/core/widgets/widgets.dart';
 
 /// Forgot password screen.
 ///

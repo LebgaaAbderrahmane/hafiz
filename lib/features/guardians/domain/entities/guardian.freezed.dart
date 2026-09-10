@@ -265,7 +265,7 @@ class _$GuardianImpl implements _Guardian {
 
 abstract class _Guardian implements Guardian {
   const factory _Guardian(
-      {required final String id,
+      {required String id,
       required String organizationId,
       required String branchId,
       required String name,

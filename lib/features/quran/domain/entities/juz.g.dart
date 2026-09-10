@@ -27,3 +27,6 @@ Map<String, dynamic> _$$JuzImplToJson(_$JuzImpl instance) => <String, dynamic>{
       'surah_numbers': instance.surahNumbers,
       'total_ayahs': instance.totalAyahs,
     };
+
+_$JuzImpl _$JuzFromJson(Map<String, dynamic> json) => _$$JuzImplFromJson(json);
+Map<String, dynamic> _$JuzToJson(_$JuzImpl instance) => _$$JuzImplToJson(instance);

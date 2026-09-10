@@ -1,6 +1,6 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
-import '../domain/entities/teacher.dart';
-import '../domain/repositories/teacher_repository.dart';
+import 'package:hafiz/features/teachers/domain/entities/teacher.dart';
+import 'package:hafiz/features/teachers/domain/repositories/teacher_repository.dart';
 
 class TeacherRepositoryImpl implements TeacherRepository {
   final SupabaseClient _client;

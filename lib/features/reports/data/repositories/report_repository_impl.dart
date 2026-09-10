@@ -1,6 +1,6 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
-import '../entities/report.dart';
-import '../repositories/report_repository.dart';
+import 'package:hafiz/features/reports/domain/entities/report.dart';
+import 'package:hafiz/features/reports/domain/repositories/report_repository.dart';
 
 class ReportRepositoryImpl implements ReportRepository {
   final SupabaseClient _client;

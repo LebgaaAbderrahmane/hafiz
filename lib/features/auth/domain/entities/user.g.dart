@@ -1,5 +1,7 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
+part of 'user.dart';
+
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
@@ -66,3 +68,9 @@ const _$RoleEnumMap = {
   Role.parent: 'parent',
   Role.student: 'student',
 };
+
+_$AppUserImpl _$AppUserFromJson(Map<String, dynamic> json) => _$$AppUserImplFromJson(json);
+Map<String, dynamic> _$AppUserToJson(_$AppUserImpl instance) => _$$AppUserImplToJson(instance);
+
+_$UserRoleImpl _$UserRoleFromJson(Map<String, dynamic> json) => _$$UserRoleImplFromJson(json);
+Map<String, dynamic> _$UserRoleToJson(_$UserRoleImpl instance) => _$$UserRoleImplToJson(instance);

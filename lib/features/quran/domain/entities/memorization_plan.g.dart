@@ -138,3 +138,6 @@ Map<String, dynamic> _$$MemorizationSessionImplToJson(
       'quality_score': instance.qualityScore,
       'notes': instance.notes,
     };
+
+_$MemorizationPlanImpl _$MemorizationPlanFromJson(Map<String, dynamic> json) => _$$MemorizationPlanImplFromJson(json);
+Map<String, dynamic> _$MemorizationPlanToJson(_$MemorizationPlanImpl instance) => _$$MemorizationPlanImplToJson(instance);

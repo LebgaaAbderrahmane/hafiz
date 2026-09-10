@@ -1,6 +1,6 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
-import '../domain/entities/hifz_assignment.dart';
-import '../domain/repositories/hifz_assignment_repository.dart';
+import 'package:hafiz/features/hifz/domain/entities/hifz_assignment.dart';
+import 'package:hafiz/features/hifz/domain/repositories/hifz_assignment_repository.dart';
 
 class HifzAssignmentRepositoryImpl implements HifzAssignmentRepository {
   final SupabaseClient _client;

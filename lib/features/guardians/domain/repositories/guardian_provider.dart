@@ -1,8 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
-import '../domain/entities/guardian.dart';
-import '../domain/repositories/guardian_repository.dart';
-import '../data/repositories/guardian_repository_impl.dart';
+import 'package:hafiz/features/guardians/domain/entities/guardian.dart';
+import 'package:hafiz/features/guardians/domain/repositories/guardian_repository.dart';
+import 'package:hafiz/features/guardians/data/repositories/guardian_repository_impl.dart';
 
 /// Guardian repository provider.
 final guardianRepositoryProvider = Provider<GuardianRepository>((ref) {

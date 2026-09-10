@@ -247,7 +247,7 @@ class _$SurahImpl implements _Surah {
 
 abstract class _Surah implements Surah {
   const factory _Surah(
-      {required final int number,
+      {required int number,
       required String nameArabic,
       required String nameEnglish,
       required String nameTransliteration,

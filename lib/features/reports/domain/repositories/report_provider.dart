@@ -1,8 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
-import '../domain/entities/report.dart';
-import '../domain/repositories/report_repository.dart';
-import '../data/repositories/report_repository_impl.dart';
+import 'package:hafiz/features/reports/domain/entities/report.dart';
+import 'package:hafiz/features/reports/domain/repositories/report_repository.dart';
+import 'package:hafiz/features/reports/data/repositories/report_repository_impl.dart';
 
 /// Report repository provider.
 final reportRepositoryProvider = Provider<ReportRepository>((ref) {

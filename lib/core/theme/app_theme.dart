@@ -254,7 +254,6 @@ abstract final class AppTheme {
         dataTextStyle: AppTextStyles.body.copyWith(color: AppColors.textPrimary),
         headingRowColor: WidgetStateProperty.all(AppColors.surfaceVariant),
         dataRowColor: WidgetStateProperty.all(AppColors.surface),
-        border: TableBorder.all(color: AppColors.border, width: 1),
         columnSpacing: AppSpacing.lg,
         horizontalMargin: AppSpacing.lg,
       ),
