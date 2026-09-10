@@ -1,15 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:hafiz/core/localization/localization.dart';
-import 'package:hafiz/core/widgets/app_bar.dart';
-import 'package:hafiz/core/widgets/badge.dart';
-import 'package:hafiz/core/widgets/card.dart';
-import 'package:hafiz/core/widgets/empty_state.dart';
-import 'package:hafiz/core/widgets/loading.dart';
-import 'package:hafiz/core/widgets/search_bar.dart' as app;
-import 'package:hafiz/features/teachers/domain/entities/teacher.dart';
-import 'package:hafiz/features/teachers/domain/repositories/teacher_provider.dart';
+import '../../../../core/theme/theme.dart';
+import '../../../../core/widgets/widgets.dart';
+import '../../domain/entities/teacher.dart';
+import '../../domain/repositories/teacher_provider.dart';
 
 class TeacherListView extends ConsumerStatefulWidget {
   const TeacherListView({super.key});
@@ -31,25 +26,31 @@ class _TeacherListViewState extends ConsumerState<TeacherListView> {
 
   @override
   Widget build(BuildContext context) {
-    final teachersAsync = ref.watch(teachersProvider);
+    final teachersAsync = ref.watch(branchTeachersProvider(''));
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(context.l.teachers.title),
+        title: const Text('المعلمون'),
         actions: [
           IconButton(
             icon: const Icon(Icons.add),
-            onPressed: () => context.push('/teachers/add'),
+            onPressed: () {},
           ),
         ],
       ),
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(16),
-            child: app.SearchBar(
+            padding: EdgeInsets.all(AppSpacing.m),
+            child: TextField(
               controller: _searchController,
-              hintText: context.l.teachers.searchHint,
+              decoration: InputDecoration(
+                hintText: 'بحث...',
+                prefixIcon: const Icon(Icons.search),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(AppBorderRadius.m),
+                ),
+              ),
               onChanged: (value) {
                 setState(() => _searchQuery = value);
               },
@@ -58,17 +59,20 @@ class _TeacherListViewState extends ConsumerState<TeacherListView> {
           _buildStatusFilter(),
           Expanded(
             child: teachersAsync.when(
-              loading: () => const AppLoading(),
+              loading: () => const Center(child: CircularProgressIndicator()),
               error: (e, _) => Center(child: Text(e.toString())),
               data: (teachers) {
                 final filtered = _filterTeachers(teachers);
                 if (filtered.isEmpty) {
-                  return EmptyState(
-                    icon: Icons.person_outline,
-                    title: context.l.teachers.emptyTitle,
-                    message: context.l.teachers.emptyMessage,
-                    actionLabel: context.l.teachers.addTeacher,
-                    onAction: () => context.push('/teachers/add'),
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.person_outline, size: 64, color: AppColors.textHint),
+                        Gap.l,
+                        Text('لا يوجد معلمون', style: AppTextStyles.bodyLarge),
+                      ],
+                    ),
                   );
                 }
                 return _buildTeacherList(filtered);
@@ -85,17 +89,17 @@ class _TeacherListViewState extends ConsumerState<TeacherListView> {
       height: 40,
       child: ListView(
         scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        padding: EdgeInsets.symmetric(horizontal: AppSpacing.m),
         children: [
           FilterChip(
-            label: Text(context.l.common.all),
+            label: const Text('الكل'),
             selected: _statusFilter == null,
             onSelected: (_) => setState(() => _statusFilter = null),
           ),
-          const SizedBox(width: 8),
+          Gap.s,
           ...TeacherStatus.values.map(
             (status) => Padding(
-              padding: const EdgeInsets.only(right: 8),
+              padding: EdgeInsets.only(right: AppSpacing.s),
               child: FilterChip(
                 label: Text(status.displayNameAr),
                 selected: _statusFilter == status,
@@ -110,9 +114,9 @@ class _TeacherListViewState extends ConsumerState<TeacherListView> {
 
   Widget _buildTeacherList(List<Teacher> teachers) {
     return RefreshIndicator(
-      onRefresh: () => ref.read(teachersProvider.notifier).refresh(),
+      onRefresh: () async => ref.invalidate(branchTeachersProvider('')),
       child: ListView.builder(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(AppSpacing.m),
         itemCount: teachers.length,
         itemBuilder: (context, index) {
           final teacher = teachers[index];
@@ -151,55 +155,59 @@ class _TeacherCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppCard(
-      onTap: onTap,
-      child: Row(
-        children: [
-          CircleAvatar(
-            radius: 24,
-            backgroundImage: teacher.avatarUrl != null
-                ? NetworkImage(teacher.avatarUrl!)
-                : null,
-            child: teacher.avatarUrl == null
-                ? Text(teacher.fullName[0].toUpperCase())
-                : null,
+    return Card(
+      margin: EdgeInsets.only(bottom: AppSpacing.s),
+      child: ListTile(
+        onTap: onTap,
+        leading: CircleAvatar(
+          radius: 24,
+          backgroundColor: AppColors.primary.withValues(alpha: 0.1),
+          child: Text(
+            teacher.fullName[0].toUpperCase(),
+            style: AppTextStyles.titleMedium.copyWith(color: AppColors.primary),
           ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  teacher.preferredName ?? teacher.fullName,
-                  style: Theme.of(context).textTheme.titleMedium,
+        ),
+        title: Text(
+          teacher.preferredName ?? teacher.fullName,
+          style: AppTextStyles.titleSmall,
+        ),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (teacher.specialization != null)
+              Text(
+                teacher.specialization!,
+                style: AppTextStyles.bodySmall.copyWith(
+                  color: AppColors.textSecondary,
                 ),
-                if (teacher.specialization != null)
-                  Text(
-                    teacher.specialization!,
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
-                const SizedBox(height: 4),
-                _buildStatusBadge(context),
-              ],
-            ),
-          ),
-          const Icon(Icons.chevron_right),
-        ],
+              ),
+            Gap.xs,
+            _buildStatusBadge(context),
+          ],
+        ),
+        trailing: const Icon(Icons.chevron_left),
       ),
     );
   }
 
   Widget _buildStatusBadge(BuildContext context) {
     final color = switch (teacher.status) {
-      TeacherStatus.active => Colors.green,
-      TeacherStatus.onLeave => Colors.orange,
-      TeacherStatus.inactive => Colors.grey,
-      TeacherStatus.terminated => Colors.red,
+      TeacherStatus.active => AppColors.success,
+      TeacherStatus.onLeave => AppColors.warning,
+      TeacherStatus.inactive => AppColors.textHint,
+      TeacherStatus.terminated => AppColors.error,
     };
 
-    return AppBadge(
-      label: teacher.status.displayNameAr,
-      color: color,
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(AppBorderRadius.s),
+      ),
+      child: Text(
+        teacher.status.displayNameAr,
+        style: AppTextStyles.labelSmall.copyWith(color: color),
+      ),
     );
   }
 }

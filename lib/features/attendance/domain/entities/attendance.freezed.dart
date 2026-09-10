@@ -56,8 +56,8 @@ class _$AttendanceCopyWithImpl<$Res, $Val extends Attendance>
     implements $AttendanceCopyWith<$Res> {
   _$AttendanceCopyWithImpl(this._value, this._then);
 
-  final $Val _value;
-  final $Res Function($Val) _then;
+  $Val _value;
+  $Res Function($Val) _then;
 
   @pragma('vm:prefer-inline')
   @override
@@ -198,31 +198,31 @@ class _$AttendanceImpl implements _Attendance {
       this.updatedAt});
 
   @override
-  final String id;
+  String id;
   @override
-  final String organizationId;
+  String organizationId;
   @override
-  final String branchId;
+  String branchId;
   @override
-  final String studentId;
+  String studentId;
   @override
-  final String sessionId;
+  String sessionId;
   @override
-  final String classId;
+  String classId;
   @override
-  final AttendanceStatus status;
+  AttendanceStatus status;
   @override
-  final String? checkInTime;
+  String? checkInTime;
   @override
-  final String? checkOutTime;
+  String? checkOutTime;
   @override
-  final String? notes;
+  String? notes;
   @override
-  final String? markedBy;
+  String? markedBy;
   @override
-  final DateTime createdAt;
+  DateTime createdAt;
   @override
-  final DateTime? updatedAt;
+  DateTime? updatedAt;
 
   @override
   String toString() {
@@ -291,18 +291,18 @@ class _$AttendanceImpl implements _Attendance {
 abstract class _Attendance implements Attendance {
   const factory _Attendance(
       {required final String id,
-      required final String organizationId,
-      required final String branchId,
-      required final String studentId,
-      required final String sessionId,
-      required final String classId,
-      required final AttendanceStatus status,
-      final String? checkInTime,
-      final String? checkOutTime,
-      final String? notes,
-      final String? markedBy,
-      required final DateTime createdAt,
-      final DateTime? updatedAt}) = _$AttendanceImpl;
+      required String organizationId,
+      required String branchId,
+      required String studentId,
+      required String sessionId,
+      required String classId,
+      required AttendanceStatus status,
+      String? checkInTime,
+      String? checkOutTime,
+      String? notes,
+      String? markedBy,
+      required DateTime createdAt,
+      DateTime? updatedAt}) = _$AttendanceImpl;
 
   @override
   String get id;

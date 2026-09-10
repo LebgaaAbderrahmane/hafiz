@@ -69,8 +69,8 @@ class _$RevisionCopyWithImpl<$Res, $Val extends Revision>
     implements $RevisionCopyWith<$Res> {
   _$RevisionCopyWithImpl(this._value, this._then);
 
-  final $Val _value;
-  final $Res Function($Val) _then;
+  $Val _value;
+  $Res Function($Val) _then;
 
   @pragma('vm:prefer-inline')
   @override
@@ -273,45 +273,45 @@ class _$RevisionImpl implements _Revision {
       this.updatedAt});
 
   @override
-  final String id;
+  String id;
   @override
-  final String organizationId;
+  String organizationId;
   @override
-  final String branchId;
+  String branchId;
   @override
-  final String studentId;
+  String studentId;
   @override
-  final String teacherId;
+  String teacherId;
   @override
-  final String? classId;
+  String? classId;
   @override
-  final int surahNumber;
+  int surahNumber;
   @override
-  final int startAyah;
+  int startAyah;
   @override
-  final int endAyah;
+  int endAyah;
   @override
-  final RevisionStatus status;
+  RevisionStatus status;
   @override
-  final RevisionPriority priority;
+  RevisionPriority priority;
   @override
-  final DateTime? dueDate;
+  DateTime? dueDate;
   @override
-  final DateTime? completedDate;
+  DateTime? completedDate;
   @override
-  final int? qualityScore;
+  int? qualityScore;
   @override
-  final int? reviewCount;
+  int? reviewCount;
   @override
-  final DateTime? lastReviewedAt;
+  DateTime? lastReviewedAt;
   @override
-  final DateTime? nextReviewAt;
+  DateTime? nextReviewAt;
   @override
-  final String? notes;
+  String? notes;
   @override
-  final DateTime createdAt;
+  DateTime createdAt;
   @override
-  final DateTime? updatedAt;
+  DateTime? updatedAt;
 
   @override
   String toString() {
@@ -402,25 +402,25 @@ class _$RevisionImpl implements _Revision {
 abstract class _Revision implements Revision {
   const factory _Revision(
       {required final String id,
-      required final String organizationId,
-      required final String branchId,
-      required final String studentId,
-      required final String teacherId,
-      final String? classId,
-      required final int surahNumber,
-      required final int startAyah,
-      required final int endAyah,
-      required final RevisionStatus status,
-      required final RevisionPriority priority,
-      final DateTime? dueDate,
-      final DateTime? completedDate,
-      final int? qualityScore,
-      final int? reviewCount,
-      final DateTime? lastReviewedAt,
-      final DateTime? nextReviewAt,
-      final String? notes,
-      required final DateTime createdAt,
-      final DateTime? updatedAt}) = _$RevisionImpl;
+      required String organizationId,
+      required String branchId,
+      required String studentId,
+      required String teacherId,
+      String? classId,
+      required int surahNumber,
+      required int startAyah,
+      required int endAyah,
+      required RevisionStatus status,
+      required RevisionPriority priority,
+      DateTime? dueDate,
+      DateTime? completedDate,
+      int? qualityScore,
+      int? reviewCount,
+      DateTime? lastReviewedAt,
+      DateTime? nextReviewAt,
+      String? notes,
+      required DateTime createdAt,
+      DateTime? updatedAt}) = _$RevisionImpl;
 
   @override
   String get id;

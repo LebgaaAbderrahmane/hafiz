@@ -1,59 +1,22 @@
-import 'package:dartz/dartz.dart';
-import 'package:hafiz/core/errors/failures.dart';
-import 'package:hafiz/features/teachers/domain/entities/teacher.dart';
+import '../entities/teacher.dart';
 
+/// Abstract repository for teacher operations.
 abstract class TeacherRepository {
-  Future<Either<Failure, List<Teacher>>> getTeachers({
-    required String organizationId,
-    String? branchId,
-    TeacherStatus? status,
-    String? search,
-    int limit = 50,
-    int offset = 0,
-  });
-
-  Future<Either<Failure, Teacher>> getTeacher(String id);
-
-  Future<Either<Failure, Teacher>> createTeacher({
-    required String organizationId,
+  /// Get all teachers for a branch.
+  Future<List<Teacher>> getBranchTeachers({
     required String branchId,
-    required String userId,
-    required String fullName,
-    String? employeeId,
-    String? preferredName,
-    Gender? gender,
-    DateTime? dateOfBirth,
-    String? nationality,
-    String? phone,
-    String? email,
-    String? specialization,
-    List<String>? qualifications,
-    List<String>? certifications,
-    List<String>? languagesSpoken,
+    String? search,
   });
 
-  Future<Either<Failure, Teacher>> updateTeacher(
-    String id, {
-    String? fullName,
-    String? preferredName,
-    Gender? gender,
-    DateTime? dateOfBirth,
-    String? nationality,
-    String? phone,
-    String? email,
-    String? specialization,
-    List<String>? qualifications,
-    List<String>? certifications,
-    List<String>? languagesSpoken,
-    TeacherStatus? status,
-    String? notes,
-  });
+  /// Get a single teacher by ID.
+  Future<Teacher?> getTeacherById(String teacherId);
 
-  Future<Either<Failure, void>> deleteTeacher(String id);
+  /// Create a new teacher.
+  Future<Teacher> createTeacher(Teacher teacher);
 
-  Future<Either<Failure, List<Teacher>>> searchTeachers(
-    String query, {
-    required String organizationId,
-    String? branchId,
-  });
+  /// Update an existing teacher.
+  Future<Teacher> updateTeacher(Teacher teacher);
+
+  /// Delete a teacher.
+  Future<void> deleteTeacher(String teacherId);
 }

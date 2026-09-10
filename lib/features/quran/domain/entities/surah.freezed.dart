@@ -48,8 +48,8 @@ class _$SurahCopyWithImpl<$Res, $Val extends Surah>
     implements $SurahCopyWith<$Res> {
   _$SurahCopyWithImpl(this._value, this._then);
 
-  final $Val _value;
-  final $Res Function($Val) _then;
+  $Val _value;
+  $Res Function($Val) _then;
 
   @pragma('vm:prefer-inline')
   @override
@@ -171,25 +171,25 @@ class _$SurahImpl implements _Surah {
       this.description});
 
   @override
-  final int number;
+  int number;
   @override
-  final String nameArabic;
+  String nameArabic;
   @override
-  final String nameEnglish;
+  String nameEnglish;
   @override
-  final String nameTransliteration;
+  String nameTransliteration;
   @override
-  final int totalAyahs;
+  int totalAyahs;
   @override
-  final RevelationType revelationType;
+  RevelationType revelationType;
   @override
-  final int juz;
+  int juz;
   @override
-  final int? hizb;
+  int? hizb;
   @override
-  final int? page;
+  int? page;
   @override
-  final String? description;
+  String? description;
 
   @override
   String toString() {
@@ -248,15 +248,15 @@ class _$SurahImpl implements _Surah {
 abstract class _Surah implements Surah {
   const factory _Surah(
       {required final int number,
-      required final String nameArabic,
-      required final String nameEnglish,
-      required final String nameTransliteration,
-      required final int totalAyahs,
-      required final RevelationType revelationType,
-      required final int juz,
-      final int? hizb,
-      final int? page,
-      final String? description}) = _$SurahImpl;
+      required String nameArabic,
+      required String nameEnglish,
+      required String nameTransliteration,
+      required int totalAyahs,
+      required RevelationType revelationType,
+      required int juz,
+      int? hizb,
+      int? page,
+      String? description}) = _$SurahImpl;
 
   @override
   int get number;

@@ -66,8 +66,8 @@ class _$SchoolClassCopyWithImpl<$Res, $Val extends SchoolClass>
     implements $SchoolClassCopyWith<$Res> {
   _$SchoolClassCopyWithImpl(this._value, this._then);
 
-  final $Val _value;
-  final $Res Function($Val) _then;
+  $Val _value;
+  $Res Function($Val) _then;
 
   @pragma('vm:prefer-inline')
   @override
@@ -230,7 +230,7 @@ class _$SchoolClassImpl implements _SchoolClass {
       this.roomId,
       this.teacherId,
       required this.level,
-      final List<String> daysOfWeek = const [],
+      List<String> daysOfWeek = const [],
       this.startTime,
       this.endTime,
       this.maxCapacity = 30,
@@ -243,22 +243,22 @@ class _$SchoolClassImpl implements _SchoolClass {
       : _daysOfWeek = daysOfWeek;
 
   @override
-  final String id;
+  String id;
   @override
-  final String organizationId;
+  String organizationId;
   @override
-  final String branchId;
+  String branchId;
   @override
-  final String name;
+  String name;
   @override
-  final String? description;
+  String? description;
   @override
-  final String? roomId;
+  String? roomId;
   @override
-  final String? teacherId;
+  String? teacherId;
   @override
-  final ClassLevel level;
-  final List<String> _daysOfWeek;
+  ClassLevel level;
+  List<String> _daysOfWeek;
   @override
   @JsonKey()
   List<String> get daysOfWeek {
@@ -267,25 +267,25 @@ class _$SchoolClassImpl implements _SchoolClass {
   }
 
   @override
-  final String? startTime;
+  String? startTime;
   @override
-  final String? endTime;
-  @override
-  @JsonKey()
-  final int maxCapacity;
+  String? endTime;
   @override
   @JsonKey()
-  final ClassStatus status;
+  int maxCapacity;
   @override
-  final DateTime? startDate;
+  @JsonKey()
+  ClassStatus status;
   @override
-  final DateTime? endDate;
+  DateTime? startDate;
   @override
-  final String? notes;
+  DateTime? endDate;
   @override
-  final DateTime createdAt;
+  String? notes;
   @override
-  final DateTime? updatedAt;
+  DateTime createdAt;
+  @override
+  DateTime? updatedAt;
 
   @override
   String toString() {
@@ -367,23 +367,23 @@ class _$SchoolClassImpl implements _SchoolClass {
 abstract class _SchoolClass implements SchoolClass {
   const factory _SchoolClass(
       {required final String id,
-      required final String organizationId,
-      required final String branchId,
-      required final String name,
-      final String? description,
-      final String? roomId,
-      final String? teacherId,
-      required final ClassLevel level,
-      final List<String> daysOfWeek,
-      final String? startTime,
-      final String? endTime,
-      final int maxCapacity,
-      final ClassStatus status,
-      final DateTime? startDate,
-      final DateTime? endDate,
-      final String? notes,
-      required final DateTime createdAt,
-      final DateTime? updatedAt}) = _$SchoolClassImpl;
+      required String organizationId,
+      required String branchId,
+      required String name,
+      String? description,
+      String? roomId,
+      String? teacherId,
+      required ClassLevel level,
+      List<String> daysOfWeek,
+      String? startTime,
+      String? endTime,
+      int maxCapacity,
+      ClassStatus status,
+      DateTime? startDate,
+      DateTime? endDate,
+      String? notes,
+      required DateTime createdAt,
+      DateTime? updatedAt}) = _$SchoolClassImpl;
 
   @override
   String get id;

@@ -58,4 +58,9 @@ abstract final class AppColors {
   static const Color late = Color(0xFFD4A843);
   static const Color absent = Color(0xFFD44343);
   static const Color excused = Color(0xFF4A90D9);
+
+  // ── Utilities ──
+  static const Color black = Color(0xFF000000);
+  static const Color white = Color(0xFFFFFFFF);
+  static const Color textHint = Color(0xFF9E9E9E);
 }

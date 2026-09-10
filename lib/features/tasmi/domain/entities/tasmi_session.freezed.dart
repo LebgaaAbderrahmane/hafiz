@@ -448,28 +448,28 @@ class _$TasmiSessionImpl implements _TasmiSession {
 
 abstract class _TasmiSession implements TasmiSession {
   const factory _TasmiSession(
-      {required final String id,
-      required final String organizationId,
-      required final String branchId,
-      required final String studentId,
-      required final String teacherId,
-      required final String sessionId,
-      final String? classId,
-      required final int startSurah,
-      required final int startAyah,
-      required final int endSurah,
-      required final int endAyah,
-      required final TasmiSessionType sessionType,
-      required final TasmiOutcome outcome,
-      final int? accuracyScore,
-      final int? tajwidScore,
-      final int? fluencyScore,
-      final int? overallRating,
-      final List<TasmiError> errors,
-      final String? teacherNotes,
-      required final DateTime recordedAt,
-      required final DateTime createdAt,
-      final DateTime? updatedAt}) = _$TasmiSessionImpl;
+      {required String id,
+      required String organizationId,
+      required String branchId,
+      required String studentId,
+      required String teacherId,
+      required String sessionId,
+      String? classId,
+      required int startSurah,
+      required int startAyah,
+      required int endSurah,
+      required int endAyah,
+      required TasmiSessionType sessionType,
+      required TasmiOutcome outcome,
+      int? accuracyScore,
+      int? tajwidScore,
+      int? fluencyScore,
+      int? overallRating,
+      List<TasmiError> errors,
+      String? teacherNotes,
+      required DateTime recordedAt,
+      required DateTime createdAt,
+      DateTime? updatedAt}) = _$TasmiSessionImpl;
 
   @override
   String get id;
@@ -715,13 +715,13 @@ class _$TasmiErrorImpl implements _TasmiError {
 
 abstract class _TasmiError implements TasmiError {
   const factory _TasmiError(
-      {required final String id,
-      required final int surahNumber,
-      required final int ayahNumber,
-      final String? wordLocation,
-      required final ErrorType errorType,
-      final ErrorSeverity? severity,
-      final String? notes}) = _$TasmiErrorImpl;
+      {required String id,
+      required int surahNumber,
+      required int ayahNumber,
+      String? wordLocation,
+      required ErrorType errorType,
+      ErrorSeverity? severity,
+      String? notes}) = _$TasmiErrorImpl;
 
   @override
   String get id;

@@ -70,8 +70,8 @@ class _$StudentCopyWithImpl<$Res, $Val extends Student>
     implements $StudentCopyWith<$Res> {
   _$StudentCopyWithImpl(this._value, this._then);
 
-  final $Val _value;
-  final $Res Function($Val) _then;
+  $Val _value;
+  $Res Function($Val) _then;
 
   @pragma('vm:prefer-inline')
   @override
@@ -285,49 +285,49 @@ class _$StudentImpl implements _Student {
   });
 
   @override
-  final String id;
+  String id;
   @override
-  final String organizationId;
+  String organizationId;
   @override
-  final String branchId;
+  String branchId;
   @override
-  final String? studentId;
+  String? studentId;
   @override
-  final String fullName;
+  String fullName;
   @override
-  final String? preferredName;
+  String? preferredName;
   @override
-  final Gender? gender;
+  Gender? gender;
   @override
-  final DateTime? dateOfBirth;
+  DateTime? dateOfBirth;
   @override
-  final String? avatarUrl;
+  String? avatarUrl;
   @override
-  final String? nationality;
-  @override
-  @JsonKey()
-  final String language;
-  @override
-  final String? phone;
-  @override
-  final String? email;
+  String? nationality;
   @override
   @JsonKey()
-  final StudentStatus status;
+  String language;
   @override
-  final String? previousQuranEducation;
+  String? phone;
   @override
-  final String? currentQuranLevel;
+  String? email;
   @override
-  final String? readingLevel;
+  @JsonKey()
+  StudentStatus status;
   @override
-  final String? tajwidLevel;
+  String? previousQuranEducation;
   @override
-  final String? memorizationLevel;
+  String? currentQuranLevel;
   @override
-  final DateTime createdAt;
+  String? readingLevel;
   @override
-  final DateTime? updatedAt;
+  String? tajwidLevel;
+  @override
+  String? memorizationLevel;
+  @override
+  DateTime createdAt;
+  @override
+  DateTime? updatedAt;
 
   @override
   String toString() {
@@ -418,27 +418,27 @@ class _$StudentImpl implements _Student {
 
 abstract class _Student implements Student {
   const factory _Student({
-    required final String id,
-    required final String organizationId,
-    required final String branchId,
-    final String? studentId,
-    required final String fullName,
-    final String? preferredName,
-    final Gender? gender,
-    final DateTime? dateOfBirth,
-    final String? avatarUrl,
-    final String? nationality,
-    final String language,
-    final String? phone,
-    final String? email,
-    final StudentStatus status,
-    final String? previousQuranEducation,
-    final String? currentQuranLevel,
-    final String? readingLevel,
-    final String? tajwidLevel,
-    final String? memorizationLevel,
-    required final DateTime createdAt,
-    final DateTime? updatedAt,
+    required String id,
+    required String organizationId,
+    required String branchId,
+    String? studentId,
+    required String fullName,
+    String? preferredName,
+    Gender? gender,
+    DateTime? dateOfBirth,
+    String? avatarUrl,
+    String? nationality,
+    String language,
+    String? phone,
+    String? email,
+    StudentStatus status,
+    String? previousQuranEducation,
+    String? currentQuranLevel,
+    String? readingLevel,
+    String? tajwidLevel,
+    String? memorizationLevel,
+    required DateTime createdAt,
+    DateTime? updatedAt,
   }) = _$StudentImpl;
 
   @override

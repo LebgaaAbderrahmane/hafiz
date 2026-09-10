@@ -66,8 +66,8 @@ class _$ScheduleEventCopyWithImpl<$Res, $Val extends ScheduleEvent>
     implements $ScheduleEventCopyWith<$Res> {
   _$ScheduleEventCopyWithImpl(this._value, this._then);
 
-  final $Val _value;
-  final $Res Function($Val) _then;
+  $Val _value;
+  $Res Function($Val) _then;
 
   @pragma('vm:prefer-inline')
   @override
@@ -239,8 +239,8 @@ class _$ScheduleEventImpl implements _ScheduleEvent {
       this.location,
       this.classId,
       this.teacherId,
-      final List<String> studentIds = const [],
-      final List<String> recurrenceDays = const [],
+      List<String> studentIds = const [],
+      List<String> recurrenceDays = const [],
       this.recurrenceEndDate,
       this.status = EventStatus.scheduled,
       this.notes,
@@ -250,28 +250,28 @@ class _$ScheduleEventImpl implements _ScheduleEvent {
         _recurrenceDays = recurrenceDays;
 
   @override
-  final String id;
+  String id;
   @override
-  final String organizationId;
+  String organizationId;
   @override
-  final String branchId;
+  String branchId;
   @override
-  final String title;
+  String title;
   @override
-  final String? description;
+  String? description;
   @override
-  final EventType eventType;
+  EventType eventType;
   @override
-  final DateTime startTime;
+  DateTime startTime;
   @override
-  final DateTime endTime;
+  DateTime endTime;
   @override
-  final String? location;
+  String? location;
   @override
-  final String? classId;
+  String? classId;
   @override
-  final String? teacherId;
-  final List<String> _studentIds;
+  String? teacherId;
+  List<String> _studentIds;
   @override
   @JsonKey()
   List<String> get studentIds {
@@ -279,7 +279,7 @@ class _$ScheduleEventImpl implements _ScheduleEvent {
     return EqualUnmodifiableListView(_studentIds);
   }
 
-  final List<String> _recurrenceDays;
+  List<String> _recurrenceDays;
   @override
   @JsonKey()
   List<String> get recurrenceDays {
@@ -288,16 +288,16 @@ class _$ScheduleEventImpl implements _ScheduleEvent {
   }
 
   @override
-  final String? recurrenceEndDate;
+  String? recurrenceEndDate;
   @override
   @JsonKey()
-  final EventStatus status;
+  EventStatus status;
   @override
-  final String? notes;
+  String? notes;
   @override
-  final DateTime createdAt;
+  DateTime createdAt;
   @override
-  final DateTime? updatedAt;
+  DateTime? updatedAt;
 
   @override
   String toString() {
@@ -382,23 +382,23 @@ class _$ScheduleEventImpl implements _ScheduleEvent {
 abstract class _ScheduleEvent implements ScheduleEvent {
   const factory _ScheduleEvent(
       {required final String id,
-      required final String organizationId,
-      required final String branchId,
-      required final String title,
-      final String? description,
-      required final EventType eventType,
-      required final DateTime startTime,
-      required final DateTime endTime,
-      final String? location,
-      final String? classId,
-      final String? teacherId,
-      final List<String> studentIds,
-      final List<String> recurrenceDays,
-      final String? recurrenceEndDate,
-      final EventStatus status,
-      final String? notes,
-      required final DateTime createdAt,
-      final DateTime? updatedAt}) = _$ScheduleEventImpl;
+      required String organizationId,
+      required String branchId,
+      required String title,
+      String? description,
+      required EventType eventType,
+      required DateTime startTime,
+      required DateTime endTime,
+      String? location,
+      String? classId,
+      String? teacherId,
+      List<String> studentIds,
+      List<String> recurrenceDays,
+      String? recurrenceEndDate,
+      EventStatus status,
+      String? notes,
+      required DateTime createdAt,
+      DateTime? updatedAt}) = _$ScheduleEventImpl;
 
   @override
   String get id;

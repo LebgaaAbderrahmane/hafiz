@@ -6,7 +6,7 @@ part of 'teacher.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$TeacherImpl _$$TeacherImplFromJson(Map<String, dynamic> json) =>
+_$TeacherImpl _$TeacherImplFromJson(Map<String, dynamic> json) =>
     _$TeacherImpl(
       id: json['id'] as String,
       organizationId: json['organization_id'] as String,
