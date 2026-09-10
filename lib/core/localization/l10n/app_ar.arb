@@ -1,0 +1,270 @@
+{
+  "@@locale": "ar",
+  "appTitle": "حافظ",
+  "appSubtitle": "نظام إدارة مدرسة القرآن الكريم",
+  
+  "general": {
+    "ok": "موافق",
+    "cancel": "إلغاء",
+    "save": "حفظ",
+    "delete": "حذف",
+    "edit": "تعديل",
+    "add": "إضافة",
+    "search": "بحث",
+    "filter": "تصفية",
+    "loading": "جاري التحميل...",
+    "retry": "إعادة المحاولة",
+    "back": "رجوع",
+    "next": "التالي",
+    "done": "تم",
+    "yes": "نعم",
+    "no": "لا",
+    "confirm": "تأكيد",
+    "close": "إغلاق",
+    "viewAll": "عرض الكل",
+    "seeMore": "عرض المزيد",
+    "seeLess": "عرض أقل",
+    "noData": "لا توجد بيانات",
+    "unknownError": "حدث خطأ ما",
+    "tryAgain": "حاول مرة أخرى"
+  },
+  
+  "auth": {
+    "login": "تسجيل الدخول",
+    "logout": "تسجيل الخروج",
+    "email": "البريد الإلكتروني",
+    "password": "كلمة المرور",
+    "forgotPassword": "نسيت كلمة المرور؟",
+    "resetPassword": "إعادة تعيين كلمة المرور",
+    "loginButton": "تسجيل الدخول",
+    "loginError": "البريد الإلكتروني أو كلمة المرور غير صحيحة",
+    "welcomeBack": "مرحباً بعودتك",
+    "welcomeMessage": "سجّل دخولك للمتابعة"
+  },
+  
+  "nav": {
+    "dashboard": "لوحة التحكم",
+    "students": "الطلاب",
+    "classes": "الفصول",
+    "teachers": "المعلمون",
+    "quranProgress": "تقدم القرآن",
+    "attendance": "الحضور",
+    "assessments": "التقييمات",
+    "schedule": "الجدول",
+    "communication": "التواصل",
+    "finance": "المالية",
+    "reports": "التقارير",
+    "certificates": "الشهادات",
+    "documents": "المستندات",
+    "settings": "الإعدادات",
+    "today": "اليوم",
+    "revision": "المراجعة",
+    "more": "المزيد",
+    "home": "الرئيسية",
+    "progress": "التقدم",
+    "messages": "الرسائل"
+  },
+  
+  "dashboard": {
+    "goodMorning": "صباح الخير",
+    "goodAfternoon": "مساء الخير",
+    "goodEvening": "مساء الخير",
+    "activeStudents": "الطلاب النشطون",
+    "attendance": "الحضور",
+    "memorizationActivity": "نشاط الحفظ",
+    "outstandingFees": "الرسوم المستحقة",
+    "studentAttention": "طلاب يحتاجون اهتمام",
+    "todayActivity": "نشاط اليوم",
+    "progressOverview": "نظرة عامة على التقدم",
+    "teacherWorkload": "عبء عمل المعلمين"
+  },
+  
+  "students": {
+    "title": "الطلاب",
+    "addStudent": "إضافة طالب",
+    "importStudents": "استيراد طلاب",
+    "searchStudents": "بحث في الطلاب...",
+    "noStudents": "لا يوجد طلاب بعد",
+    "addFirstStudent": "أضف طالبك الأول",
+    "studentProfile": "ملف الطالب",
+    "overview": "نظرة عامة",
+    "quran": "القرآن",
+    "revision": "المراجعة",
+    "assessments": "التقييمات",
+    "schedule": "الجدول",
+    "finance": "المالية",
+    "notes": "ملاحظات"
+  },
+  
+  "teachers": {
+    "title": "المعلمون",
+    "addTeacher": "إضافة معلم",
+    "searchTeachers": "بحث في المعلمين...",
+    "noTeachers": "لا يوجد معلمون بعد",
+    "teacherProfile": "ملف المعلم",
+    "todayClasses": "فصول اليوم",
+    "students": "الطلاب",
+    "startClass": "ابدأ فصل اليوم"
+  },
+  
+  "classes": {
+    "title": "الفصول",
+    "addClass": "إضافة فصل",
+    "noClasses": "لا توجد فصول بعد",
+    "classDetail": "تفاصيل الفصل",
+    "students": "الطلاب",
+    "curriculum": "المنهج",
+    "progress": "التقدم",
+    "schedule": "الجدول"
+  },
+  
+  "quran": {
+    "title": "تقدم القرآن",
+    "progressMap": "خريطة التقدم",
+    "selectSurah": "اختر السورة",
+    "selectAyah": "اختر الآية",
+    "from": "من",
+    "to": "إلى",
+    "pages": "الصفحات",
+    "juz": "الجزء",
+    "estimatedSize": "الحجم المقدر",
+    "memorized": "محفوظ",
+    "inProgress": "قيد التنفيذ",
+    "needsRevision": "يحتاج مراجعة",
+    "weak": "ضعيف",
+    "notStarted": "لم يبدأ"
+  },
+  
+  "hifz": {
+    "title": "الحفظ",
+    "assignNewLesson": "تعيين درس جديد",
+    "currentAssignment": "التعيين الحالي",
+    "dueDate": "تاريخ الاستحقاق",
+    "target": "الهدف",
+    "notes": "ملاحظات",
+    "status": {
+      "assigned": "تم التعيين",
+      "practiced": "تم التدريب",
+      "submitted": "تم التسليم",
+      "assessed": "تم التقييم",
+      "passed": "نجح",
+      "needsRetry": "يحتاج إعادة",
+      "cancelled": "تم الإلغاء"
+    }
+  },
+  
+  "tasmi": {
+    "title": "التمعيين",
+    "startSession": "بدء الجلسة",
+    "student": "الطالب",
+    "passage": "المقطع",
+    "sessionType": "نوع الجلسة",
+    "types": {
+      "newMemorization": "حفظ جديد",
+      "revision": "مراجعة",
+      "comprehensiveRevision": "مراجعة شاملة",
+      "exam": "امتحان",
+      "placement": "تقييم",
+      "competition": "مسابقة"
+    },
+    "evaluation": "التقييم",
+    "pass": "نجح",
+    "needsRevision": "يحتاج مراجعة",
+    "fail": "لم ينجح",
+    "accuracy": "الدقة",
+    "tajwid": "التجويد",
+    "fluency": "الطلاقة",
+    "pronunciation": "النطق",
+    "confidence": "الثقة",
+    "errors": "الأخطاء",
+    "teacherNote": "ملاحظة المعلم",
+    "result": "النتيجة",
+    "nextRevisionDate": "تاريخ المراجعة القادمة",
+    "nextAssignment": "التعيين التالي",
+    "saveAndNext": "حفظ والطالب التالي"
+  },
+  
+  "attendance": {
+    "title": "الحضور",
+    "markAllPresent": "تحديد الكل حاضر",
+    "present": "حاضر",
+    "late": "متأخر",
+    "absent": "غائب",
+    "excused": "بعذر",
+    "leftEarly": "غادر مبكراً"
+  },
+  
+  "revision": {
+    "title": "المراجعة",
+    "dueToday": "مستحق اليوم",
+    "overdue": "متأخر",
+    "weak": "ضعيف",
+    "strong": "قوي",
+    "startRevision": "بدء المراجعة",
+    "lastReviewed": "آخر مراجعة",
+    "score": "الدرجة",
+    "status": {
+      "due": "مستحق",
+      "completed": "مكتمل",
+      "strong": "قوي",
+      "weak": "ضعيف",
+      "failed": "فشل",
+      "rescheduled": "تمت إعادة الجدولة"
+    }
+  },
+  
+  "settings": {
+    "title": "الإعدادات",
+    "organization": "المؤسسة",
+    "branches": "الفروع",
+    "users": "المستخدمون",
+    "roles": "الأدوار",
+    "programs": "البرامج",
+    "curriculum": "المنهج",
+    "quran": "القرآن",
+    "attendance": "الحضور",
+    "assessment": "التقييم",
+    "notifications": "الإشعارات",
+    "finance": "المالية",
+    "integrations": "التكامل",
+    "security": "الأمان"
+  },
+  
+  "notifications": {
+    "title": "الإشعارات",
+    "markAllRead": "تحديد الكل كمقروء",
+    "noNotifications": "لا توجد إشعارات",
+    "today": "اليوم",
+    "earlier": "سابقاً"
+  },
+  
+  "reports": {
+    "title": "التقارير",
+    "generate": "إنشاء تقرير",
+    "exportPdf": "تصدير PDF",
+    "exportExcel": "تصدير Excel",
+    "exportCsv": "تصدير CSV",
+    "dateRange": "نطاق التاريخ",
+    "categories": {
+      "students": "الطلاب",
+      "quran": "القرآن",
+      "attendance": "الحضور",
+      "teachers": "المعلمون",
+      "classes": "الفصول",
+      "assessments": "التقييمات",
+      "finance": "المالية"
+    }
+  },
+  
+  "emptyStates": {
+    "noStudents": "لا يوجد طلاب بعد",
+    "noStudentsDescription": "أضف طالبك الأول للبدء",
+    "noClasses": "لا توجد فصول بعد",
+    "noClassesDescription": "أنشئ فصلاً لبدء التنظيم",
+    "noTeachers": "لا يوجد معلمون بعد",
+    "noTeachersDescription": "أضف معلمين إلى مؤسستك",
+    "noSchedule": "لا توجد فصول مجدولة",
+    "noNotifications": "لا توجد إشعارات",
+    "noReports": "لم يتم إنشاء تقارير بعد"
+  }
+}
