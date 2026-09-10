@@ -1,8 +1,8 @@
 # AGENTS.md — Hafiz Development Guide
 
 ## Project Status
-- **Current Phase:** Phase 9 (Reports + Settings)
-- **Current Branch:** feat/phase-9-reports-settings
+- **Current Phase:** Phase 10 (Notifications + Polish)
+- **Current Branch:** feat/phase-10-notifications-polish
 - **Last Updated:** 2026-09-06
 - **Flutter Version:** 3.47.2 stable
 - **Dart Version:** 3.13.2
@@ -67,14 +67,14 @@ supabase db diff
 - Use `mocktail` for mocking
 - Use `ProviderContainer.test()` for Riverpod providers
 
-## Current Sprint — Phase 9: Reports + Settings
+## Current Sprint — Phase 10: Notifications + Polish
 
 ### Tasks
-- [x] Reports entity (freezed)
-- [x] Reports repository + providers
-- [x] Reports view
-- [x] Settings view
-- [x] Update router with reports and settings routes
+- [ ] Notification entity (freezed)
+- [ ] Notification repository + providers
+- [ ] Notification view
+- [ ] Add loading states and error handling polish
+- [ ] Update router with notification routes
 
 ## Key Files
 
