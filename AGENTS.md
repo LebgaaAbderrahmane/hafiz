@@ -70,10 +70,10 @@ supabase db diff
 ## Current Sprint — Phase 11: Hifz Assignment Management
 
 ### Tasks
-- [ ] HifzAssignment repository + providers
-- [ ] Hifz assignment list view
-- [ ] Hifz assignment create/edit view
-- [ ] Update router with hifz assignment routes
+- [x] HifzAssignment repository + providers
+- [x] Hifz assignment list view
+- [x] Hifz assignment create/edit view
+- [x] Update router with hifz assignment routes
 
 ## Key Files
 
