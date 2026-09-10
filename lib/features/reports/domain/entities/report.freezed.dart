@@ -52,8 +52,8 @@ class _$ReportCopyWithImpl<$Res, $Val extends Report>
     implements $ReportCopyWith<$Res> {
   _$ReportCopyWithImpl(this._value, this._then);
 
-  final $Val _value;
-  final $Res Function($Val) _then;
+  $Val _value;
+  $Res Function($Val) _then;
 
   @pragma('vm:prefer-inline')
   @override
@@ -181,8 +181,8 @@ class _$ReportImpl implements _Report {
       required this.generatedById,
       required this.type,
       required this.title,
-      final Map<String, dynamic>? parameters,
-      final Map<String, dynamic>? data,
+      Map<String, dynamic>? parameters,
+      Map<String, dynamic>? data,
       this.format,
       this.filePath,
       this.generatedAt,
@@ -191,43 +191,43 @@ class _$ReportImpl implements _Report {
         _data = data;
 
   @override
-  final String id;
+  String id;
   @override
-  final String organizationId;
+  String organizationId;
   @override
-  final String branchId;
+  String branchId;
   @override
-  final String generatedById;
+  String generatedById;
   @override
-  final ReportType type;
+  ReportType type;
   @override
-  final String title;
-  final Map<String, dynamic>? _parameters;
+  String title;
+  Map<String, dynamic>? _parameters;
   @override
   Map<String, dynamic>? get parameters {
-    final value = _parameters;
+    value = _parameters;
     if (value == null) return null;
     if (_parameters is EqualUnmodifiableMapView) return _parameters;
     return EqualUnmodifiableMapView(value);
   }
 
-  final Map<String, dynamic>? _data;
+  Map<String, dynamic>? _data;
   @override
   Map<String, dynamic>? get data {
-    final value = _data;
+    value = _data;
     if (value == null) return null;
     if (_data is EqualUnmodifiableMapView) return _data;
     return EqualUnmodifiableMapView(value);
   }
 
   @override
-  final ReportFormat? format;
+  ReportFormat? format;
   @override
-  final String? filePath;
+  String? filePath;
   @override
-  final DateTime? generatedAt;
+  DateTime? generatedAt;
   @override
-  final DateTime createdAt;
+  DateTime createdAt;
 
   @override
   String toString() {
@@ -291,17 +291,17 @@ class _$ReportImpl implements _Report {
 abstract class _Report implements Report {
   const factory _Report(
       {required final String id,
-      required final String organizationId,
-      required final String branchId,
-      required final String generatedById,
-      required final ReportType type,
-      required final String title,
-      final Map<String, dynamic>? parameters,
-      final Map<String, dynamic>? data,
-      final ReportFormat? format,
-      final String? filePath,
-      final DateTime? generatedAt,
-      required final DateTime createdAt}) = _$ReportImpl;
+      required String organizationId,
+      required String branchId,
+      required String generatedById,
+      required ReportType type,
+      required String title,
+      Map<String, dynamic>? parameters,
+      Map<String, dynamic>? data,
+      ReportFormat? format,
+      String? filePath,
+      DateTime? generatedAt,
+      required DateTime createdAt}) = _$ReportImpl;
 
   @override
   String get id;

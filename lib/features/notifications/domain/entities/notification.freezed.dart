@@ -54,8 +54,8 @@ class _$AppNotificationCopyWithImpl<$Res, $Val extends AppNotification>
     implements $AppNotificationCopyWith<$Res> {
   _$AppNotificationCopyWithImpl(this._value, this._then);
 
-  final $Val _value;
-  final $Res Function($Val) _then;
+  $Val _value;
+  $Res Function($Val) _then;
 
   @pragma('vm:prefer-inline')
   @override
@@ -175,7 +175,7 @@ class _$AppNotificationImpl implements _AppNotification {
       required this.type,
       required this.title,
       required this.body,
-      final Map<String, dynamic>? data,
+      Map<String, dynamic>? data,
       this.actionUrl,
       this.isRead = false,
       this.readAt,
@@ -183,37 +183,37 @@ class _$AppNotificationImpl implements _AppNotification {
       : _data = data;
 
   @override
-  final String id;
+  String id;
   @override
-  final String organizationId;
+  String organizationId;
   @override
-  final String branchId;
+  String branchId;
   @override
-  final String userId;
+  String userId;
   @override
-  final NotificationType type;
+  NotificationType type;
   @override
-  final String title;
+  String title;
   @override
-  final String body;
-  final Map<String, dynamic>? _data;
+  String body;
+  Map<String, dynamic>? _data;
   @override
   Map<String, dynamic>? get data {
-    final value = _data;
+    value = _data;
     if (value == null) return null;
     if (_data is EqualUnmodifiableMapView) return _data;
     return EqualUnmodifiableMapView(value);
   }
 
   @override
-  final String? actionUrl;
+  String? actionUrl;
   @override
   @JsonKey()
-  final bool isRead;
+  bool isRead;
   @override
-  final DateTime? readAt;
+  DateTime? readAt;
   @override
-  final DateTime createdAt;
+  DateTime createdAt;
 
   @override
   String toString() {
@@ -278,17 +278,17 @@ class _$AppNotificationImpl implements _AppNotification {
 abstract class _AppNotification implements AppNotification {
   const factory _AppNotification(
       {required final String id,
-      required final String organizationId,
-      required final String branchId,
-      required final String userId,
-      required final NotificationType type,
-      required final String title,
-      required final String body,
-      final Map<String, dynamic>? data,
-      final String? actionUrl,
-      final bool isRead,
-      final DateTime? readAt,
-      required final DateTime createdAt}) = _$AppNotificationImpl;
+      required String organizationId,
+      required String branchId,
+      required String userId,
+      required NotificationType type,
+      required String title,
+      required String body,
+      Map<String, dynamic>? data,
+      String? actionUrl,
+      bool isRead,
+      DateTime? readAt,
+      required DateTime createdAt}) = _$AppNotificationImpl;
 
   @override
   String get id;

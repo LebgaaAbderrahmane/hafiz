@@ -6,7 +6,7 @@ part of 'tasmi_session.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$TasmiSessionImpl _$$TasmiSessionImplFromJson(Map<String, dynamic> json) =>
+_$TasmiSessionImpl _$TasmiSessionFromJson(Map<String, dynamic> json) =>
     _$TasmiSessionImpl(
       id: json['id'] as String,
       organizationId: json['organization_id'] as String,
@@ -80,7 +80,7 @@ const _$TasmiOutcomeEnumMap = {
   TasmiOutcome.fail: 'fail',
 };
 
-_$TasmiErrorImpl _$$TasmiErrorImplFromJson(Map<String, dynamic> json) =>
+_$TasmiErrorImpl _$TasmiErrorFromJson(Map<String, dynamic> json) =>
     _$TasmiErrorImpl(
       id: json['id'] as String,
       surahNumber: (json['surah_number'] as num).toInt(),

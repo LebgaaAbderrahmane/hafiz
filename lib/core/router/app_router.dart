@@ -25,6 +25,8 @@ import '../../features/parent_portal/presentation/views/parent_portal_view.dart'
 import '../../features/reports/presentation/views/reports_view.dart';
 import '../../features/settings/presentation/views/settings_view.dart';
 import '../../features/notifications/presentation/views/notification_view.dart';
+import '../../features/hifz/presentation/views/hifz_assignment_list_view.dart';
+import '../../features/hifz/presentation/views/hifz_assignment_form_view.dart';
 import '../theme/theme.dart';
 
 /// App Router configuration.
@@ -201,6 +203,25 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                 path: 'sessions',
                 name: 'sessions',
                 builder: (context, state) => const SessionManagementView(),
+              ),
+            ],
+          ),
+          GoRoute(
+            path: '/hifz/assignments',
+            name: 'hifzAssignments',
+            builder: (context, state) => const HifzAssignmentListView(),
+            routes: [
+              GoRoute(
+                path: 'create',
+                name: 'createHifzAssignment',
+                builder: (context, state) => const HifzAssignmentFormView(),
+              ),
+              GoRoute(
+                path: ':id/edit',
+                name: 'editHifzAssignment',
+                builder: (context, state) => HifzAssignmentFormView(
+                  assignmentId: state.pathParameters['id'],
+                ),
               ),
             ],
           ),

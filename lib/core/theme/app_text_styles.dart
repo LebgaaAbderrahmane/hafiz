@@ -158,4 +158,14 @@ abstract final class AppTextStyles {
     height: 2.0,
     color: AppColors.textPrimary,
   );
+
+  // ── Aliases ──
+  static const TextStyle headlineLarge = h1;
+  static const TextStyle headlineMedium = h2;
+  static const TextStyle headlineSmall = h3;
+  static const TextStyle titleLarge = bodyLarge;
+  static const TextStyle titleMedium = body;
+  static const TextStyle titleSmall = bodySmall;
+  static const TextStyle bodyMedium = body;
+  static const TextStyle labelSmall = caption;
 }

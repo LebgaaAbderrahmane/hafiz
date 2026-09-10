@@ -1,9 +1,9 @@
 # AGENTS.md — Hafiz Development Guide
 
 ## Project Status
-- **Current Phase:** Phase 10 (Notifications + Polish)
-- **Current Branch:** feat/phase-10-notifications-polish
-- **Last Updated:** 2026-09-06
+- **Current Phase:** Phase 11 (Hifz Assignment Management)
+- **Current Branch:** feat/phase-11-hifz-assignment
+- **Last Updated:** 2026-09-10
 - **Flutter Version:** 3.47.2 stable
 - **Dart Version:** 3.13.2
 
@@ -67,14 +67,13 @@ supabase db diff
 - Use `mocktail` for mocking
 - Use `ProviderContainer.test()` for Riverpod providers
 
-## Current Sprint — Phase 10: Notifications + Polish
+## Current Sprint — Phase 11: Hifz Assignment Management
 
 ### Tasks
-- [x] Notification entity (freezed)
-- [x] Notification repository + providers
-- [x] Notification view
-- [x] Add loading states and error handling polish
-- [x] Update router with notification routes
+- [x] HifzAssignment repository + providers
+- [x] Hifz assignment list view
+- [x] Hifz assignment create/edit view
+- [x] Update router with hifz assignment routes
 
 ## Key Files
 

@@ -62,8 +62,8 @@ class _$SessionCopyWithImpl<$Res, $Val extends Session>
     implements $SessionCopyWith<$Res> {
   _$SessionCopyWithImpl(this._value, this._then);
 
-  final $Val _value;
-  final $Res Function($Val) _then;
+  $Val _value;
+  $Res Function($Val) _then;
 
   @pragma('vm:prefer-inline')
   @override
@@ -217,7 +217,7 @@ class _$SessionImpl implements _Session {
       required this.endTime,
       required this.classId,
       required this.teacherId,
-      final List<String> studentIds = const [],
+      List<String> studentIds = const [],
       this.location,
       this.status = SessionStatus.scheduled,
       this.notes,
@@ -226,28 +226,28 @@ class _$SessionImpl implements _Session {
       : _studentIds = studentIds;
 
   @override
-  final String id;
+  String id;
   @override
-  final String organizationId;
+  String organizationId;
   @override
-  final String branchId;
+  String branchId;
   @override
-  final String title;
+  String title;
   @override
-  final String? description;
+  String? description;
   @override
-  final SessionType type;
+  SessionType type;
   @override
-  final DateTime date;
+  DateTime date;
   @override
-  final String startTime;
+  String startTime;
   @override
-  final String endTime;
+  String endTime;
   @override
-  final String classId;
+  String classId;
   @override
-  final String teacherId;
-  final List<String> _studentIds;
+  String teacherId;
+  List<String> _studentIds;
   @override
   @JsonKey()
   List<String> get studentIds {
@@ -256,16 +256,16 @@ class _$SessionImpl implements _Session {
   }
 
   @override
-  final String? location;
+  String? location;
   @override
   @JsonKey()
-  final SessionStatus status;
+  SessionStatus status;
   @override
-  final String? notes;
+  String? notes;
   @override
-  final DateTime createdAt;
+  DateTime createdAt;
   @override
-  final DateTime? updatedAt;
+  DateTime? updatedAt;
 
   @override
   String toString() {
@@ -344,22 +344,22 @@ class _$SessionImpl implements _Session {
 abstract class _Session implements Session {
   const factory _Session(
       {required final String id,
-      required final String organizationId,
-      required final String branchId,
-      required final String title,
-      final String? description,
-      required final SessionType type,
-      required final DateTime date,
-      required final String startTime,
-      required final String endTime,
-      required final String classId,
-      required final String teacherId,
-      final List<String> studentIds,
-      final String? location,
-      final SessionStatus status,
-      final String? notes,
-      required final DateTime createdAt,
-      final DateTime? updatedAt}) = _$SessionImpl;
+      required String organizationId,
+      required String branchId,
+      required String title,
+      String? description,
+      required SessionType type,
+      required DateTime date,
+      required String startTime,
+      required String endTime,
+      required String classId,
+      required String teacherId,
+      List<String> studentIds,
+      String? location,
+      SessionStatus status,
+      String? notes,
+      required DateTime createdAt,
+      DateTime? updatedAt}) = _$SessionImpl;
 
   @override
   String get id;

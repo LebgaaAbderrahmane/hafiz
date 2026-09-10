@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hafiz/core/localization/localization.dart';
-import 'package:hafiz/core/widgets/button.dart';
-import 'package:hafiz/core/widgets/loading.dart';
-import 'package:hafiz/core/widgets/text_field.dart';
-import 'package:hafiz/features/tasmi/domain/entities/tasmi_session.dart';
-import 'package:hafiz/features/tasmi/domain/repositories/tasmi_provider.dart';
+import '../../../../core/theme/theme.dart';
+import '../../../../core/widgets/widgets.dart';
+import '../../domain/entities/tasmi_session.dart';
+import '../../domain/repositories/tasmi_provider.dart';
 
 /// Quick Tasmi' Evaluation Form.
 ///
 /// Single screen for teacher to record tasmi' result after in-person recitation.
 /// Designed for speed: outcome buttons are large and prominent.
 class TasmiEvalView extends ConsumerStatefulWidget {
+  final String studentId;
+  final String teacherId;
+  final String sessionId;
+  final String? classId;
+
   const TasmiEvalView({
     super.key,
     required this.studentId,
@@ -20,31 +23,21 @@ class TasmiEvalView extends ConsumerStatefulWidget {
     this.classId,
   });
 
-  final String studentId;
-  final String teacherId;
-  final String sessionId;
-  final String? classId;
-
   @override
   ConsumerState<TasmiEvalView> createState() => _TasmiEvalViewState();
 }
 
 class _TasmiEvalViewState extends ConsumerState<TasmiEvalView> {
-  // Passage selection
   int _startSurah = 1;
   int _startAyah = 1;
   int _endSurah = 1;
-  int _endAyah = 7;
-
-  // Evaluation
+  int _endAyah = 1;
   TasmiSessionType _sessionType = TasmiSessionType.newMemorization;
   TasmiOutcome? _outcome;
   int? _accuracyScore;
   int? _tajwidScore;
   int? _fluencyScore;
   String? _teacherNotes;
-
-  // Errors
   final List<TasmiError> _errors = [];
   bool _showErrors = false;
 
@@ -54,33 +47,37 @@ class _TasmiEvalViewState extends ConsumerState<TasmiEvalView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(context.l.tasmi.recordEvaluation),
+        title: const Text('تسجيل التسميع'),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            _buildPassageSection(),
-            const SizedBox(height: 24),
-            _buildSessionTypeSection(),
-            const SizedBox(height: 24),
-            _buildOutcomeSection(),
-            const SizedBox(height: 24),
-            if (_outcome != null) ...[
-              _buildScoresSection(),
-              const SizedBox(height: 24),
-              _buildErrorsToggle(),
-              if (_showErrors) ...[
-                const SizedBox(height: 16),
-                _buildErrorsSection(),
+      body: LoadingOverlay(
+        isLoading: _saving,
+        message: 'جاري الحفظ...',
+        child: SingleChildScrollView(
+          padding: EdgeInsets.all(AppSpacing.l),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _buildPassageSection(),
+              Gap.l,
+              _buildSessionTypeSection(),
+              Gap.l,
+              _buildOutcomeSection(),
+              Gap.l,
+              if (_outcome != null) ...[
+                _buildScoresSection(),
+                Gap.l,
+                _buildErrorsToggle(),
+                if (_showErrors) ...[
+                  Gap.m,
+                  _buildErrorsSection(),
+                ],
+                Gap.l,
+                _buildNotesSection(),
+                Gap.l,
+                _buildSaveButton(),
               ],
-              const SizedBox(height: 24),
-              _buildNotesSection(),
-              const SizedBox(height: 24),
-              _buildSaveButton(),
             ],
-          ],
+          ),
         ),
       ),
     );
@@ -89,23 +86,20 @@ class _TasmiEvalViewState extends ConsumerState<TasmiEvalView> {
   Widget _buildPassageSection() {
     return Card(
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(AppSpacing.m),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              context.l.tasmi.passage,
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-            const SizedBox(height: 16),
+            Text('القرآن', style: AppTextStyles.titleMedium),
+            Gap.m,
             Row(
               children: [
                 Expanded(
                   child: DropdownButtonFormField<int>(
                     value: _startSurah,
-                    decoration: InputDecoration(
-                      labelText: context.l.tasmi.fromSurah,
-                      border: const OutlineInputBorder(),
+                    decoration: const InputDecoration(
+                      labelText: 'من سورة',
+                      border: OutlineInputBorder(),
                     ),
                     items: List.generate(
                       114,
@@ -117,13 +111,13 @@ class _TasmiEvalViewState extends ConsumerState<TasmiEvalView> {
                     onChanged: (v) => setState(() => _startSurah = v ?? 1),
                   ),
                 ),
-                const SizedBox(width: 8),
+                Gap.s,
                 Expanded(
                   child: DropdownButtonFormField<int>(
                     value: _startAyah,
-                    decoration: InputDecoration(
-                      labelText: context.l.tasmi.fromAyah,
-                      border: const OutlineInputBorder(),
+                    decoration: const InputDecoration(
+                      labelText: 'من آية',
+                      border: OutlineInputBorder(),
                     ),
                     items: List.generate(
                       10,
@@ -137,15 +131,15 @@ class _TasmiEvalViewState extends ConsumerState<TasmiEvalView> {
                 ),
               ],
             ),
-            const SizedBox(height: 12),
+            Gap.m,
             Row(
               children: [
                 Expanded(
                   child: DropdownButtonFormField<int>(
                     value: _endSurah,
-                    decoration: InputDecoration(
-                      labelText: context.l.tasmi.toSurah,
-                      border: const OutlineInputBorder(),
+                    decoration: const InputDecoration(
+                      labelText: 'إلى سورة',
+                      border: OutlineInputBorder(),
                     ),
                     items: List.generate(
                       114,
@@ -157,13 +151,13 @@ class _TasmiEvalViewState extends ConsumerState<TasmiEvalView> {
                     onChanged: (v) => setState(() => _endSurah = v ?? 1),
                   ),
                 ),
-                const SizedBox(width: 8),
+                Gap.s,
                 Expanded(
                   child: DropdownButtonFormField<int>(
                     value: _endAyah,
-                    decoration: InputDecoration(
-                      labelText: context.l.tasmi.toAyah,
-                      border: const OutlineInputBorder(),
+                    decoration: const InputDecoration(
+                      labelText: 'إلى آية',
+                      border: OutlineInputBorder(),
                     ),
                     items: List.generate(
                       10,
@@ -186,18 +180,15 @@ class _TasmiEvalViewState extends ConsumerState<TasmiEvalView> {
   Widget _buildSessionTypeSection() {
     return Card(
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(AppSpacing.m),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              context.l.tasmi.sessionType,
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-            const SizedBox(height: 12),
+            Text('نوع الحصة', style: AppTextStyles.titleMedium),
+            Gap.m,
             Wrap(
-              spacing: 8,
-              runSpacing: 8,
+              spacing: AppSpacing.s,
+              runSpacing: AppSpacing.s,
               children: TasmiSessionType.values.map((type) {
                 final isSelected = _sessionType == type;
                 return ChoiceChip(
@@ -216,15 +207,12 @@ class _TasmiEvalViewState extends ConsumerState<TasmiEvalView> {
   Widget _buildOutcomeSection() {
     return Card(
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(AppSpacing.m),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              context.l.tasmi.outcome,
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-            const SizedBox(height: 16),
+            Text('النتيجة', style: AppTextStyles.titleMedium),
+            Gap.m,
             Row(
               children: TasmiOutcome.values.map((outcome) {
                 final isSelected = _outcome == outcome;
@@ -232,16 +220,16 @@ class _TasmiEvalViewState extends ConsumerState<TasmiEvalView> {
 
                 return Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 4),
+                    padding: EdgeInsets.symmetric(horizontal: AppSpacing.xs),
                     child: GestureDetector(
                       onTap: () => setState(() => _outcome = outcome),
                       child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 24),
+                        padding: EdgeInsets.symmetric(vertical: AppSpacing.xl),
                         decoration: BoxDecoration(
                           color: isSelected
-                              ? color.withOpacity(0.15)
+                              ? color.withValues(alpha: 0.15)
                               : Colors.transparent,
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(AppBorderRadius.m),
                           border: Border.all(
                             color: isSelected
                                 ? color
@@ -256,7 +244,7 @@ class _TasmiEvalViewState extends ConsumerState<TasmiEvalView> {
                               color: color,
                               size: 32,
                             ),
-                            const SizedBox(height: 8),
+                            Gap.s,
                             Text(
                               outcome.displayNameAr,
                               style: TextStyle(
@@ -290,27 +278,24 @@ class _TasmiEvalViewState extends ConsumerState<TasmiEvalView> {
   Widget _buildScoresSection() {
     return Card(
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(AppSpacing.m),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              context.l.tasmi.scores,
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-            const SizedBox(height: 16),
+            Text('الدرجات', style: AppTextStyles.titleMedium),
+            Gap.m,
             _buildScoreSlider(
-              label: context.l.tasmi.accuracy,
+              label: 'الدقة',
               value: _accuracyScore,
               onChanged: (v) => setState(() => _accuracyScore = v),
             ),
             _buildScoreSlider(
-              label: context.l.tasmi.tajwid,
+              label: 'التجويد',
               value: _tajwidScore,
               onChanged: (v) => setState(() => _tajwidScore = v),
             ),
             _buildScoreSlider(
-              label: context.l.tasmi.fluency,
+              label: 'الطلاقة',
               value: _fluencyScore,
               onChanged: (v) => setState(() => _fluencyScore = v),
             ),
@@ -335,9 +320,7 @@ class _TasmiEvalViewState extends ConsumerState<TasmiEvalView> {
             Text(
               value != null ? '$value/10' : '-',
               style: TextStyle(
-                color: value != null
-                    ? Theme.of(context).colorScheme.primary
-                    : null,
+                color: value != null ? AppColors.primary : null,
               ),
             ),
           ],
@@ -359,8 +342,8 @@ class _TasmiEvalViewState extends ConsumerState<TasmiEvalView> {
       icon: Icon(_showErrors ? Icons.expand_less : Icons.expand_more),
       label: Text(
         _showErrors
-            ? context.l.tasmi.hideErrors
-            : '${context.l.tasmi.addErrors} (${_errors.length})',
+            ? 'إخفاء الأخطاء'
+            : 'إضافة أخطاء (${_errors.length})',
       ),
     );
   }
@@ -368,18 +351,15 @@ class _TasmiEvalViewState extends ConsumerState<TasmiEvalView> {
   Widget _buildErrorsSection() {
     return Card(
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(AppSpacing.m),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              context.l.tasmi.errors,
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-            const SizedBox(height: 12),
+            Text('الأخطاء', style: AppTextStyles.titleMedium),
+            Gap.m,
             Wrap(
-              spacing: 8,
-              runSpacing: 8,
+              spacing: AppSpacing.s,
+              runSpacing: AppSpacing.s,
               children: ErrorType.values.map((type) {
                 return ActionChip(
                   label: Text(type.displayNameAr),
@@ -388,14 +368,14 @@ class _TasmiEvalViewState extends ConsumerState<TasmiEvalView> {
               }).toList(),
             ),
             if (_errors.isNotEmpty) ...[
-              const SizedBox(height: 16),
+              Gap.m,
               ...(_errors.asMap().entries.map((entry) {
                 final index = entry.key;
                 final error = entry.value;
                 return ListTile(
                   dense: true,
                   title: Text(error.errorType.displayNameAr),
-                  subtitle: Text('Surah ${error.surahNumber}:${error.ayahNumber}'),
+                  subtitle: Text('سورة ${error.surahNumber}:${error.ayahNumber}'),
                   trailing: IconButton(
                     icon: const Icon(Icons.delete_outline, size: 20),
                     onPressed: () {
@@ -426,9 +406,12 @@ class _TasmiEvalViewState extends ConsumerState<TasmiEvalView> {
   Widget _buildNotesSection() {
     return Card(
       child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: AppTextField(
-          label: context.l.tasmi.teacherNotes,
+        padding: EdgeInsets.all(AppSpacing.m),
+        child: TextField(
+          decoration: const InputDecoration(
+            labelText: 'ملاحظات المعلم',
+            border: OutlineInputBorder(),
+          ),
           maxLines: 3,
           onChanged: (v) => _teacherNotes = v,
         ),
@@ -437,9 +420,9 @@ class _TasmiEvalViewState extends ConsumerState<TasmiEvalView> {
   }
 
   Widget _buildSaveButton() {
-    return AppButton(
-      label: _saving ? context.l.common.saving : context.l.tasmi.saveAndNext,
+    return ElevatedButton(
       onPressed: _saving || _outcome == null ? null : _save,
+      child: Text(_saving ? 'جاري الحفظ...' : 'حفظ وتسجيل'),
     );
   }
 
@@ -447,46 +430,50 @@ class _TasmiEvalViewState extends ConsumerState<TasmiEvalView> {
     setState(() => _saving = true);
 
     try {
-      final result = await ref.read(tasmiRepositoryProvider).createSession(
-            studentId: widget.studentId,
-            teacherId: widget.teacherId,
-            sessionId: widget.sessionId,
-            classId: widget.classId,
-            startSurah: _startSurah,
-            startAyah: _startAyah,
-            endSurah: _endSurah,
-            endAyah: _endAyah,
-            sessionType: _sessionType,
-            outcome: _outcome!,
-            accuracyScore: _accuracyScore,
-            tajwidScore: _tajwidScore,
-            fluencyScore: _fluencyScore,
-            teacherNotes: _teacherNotes,
-          );
-
-      result.fold(
-        (failure) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(failure.toString())),
-          );
-        },
-        (session) async {
-          // Save errors if any
-          if (_errors.isNotEmpty) {
-            await ref.read(tasmiRepositoryProvider).addErrors(
-                  session.id,
-                  errors: _errors,
-                );
-          }
-
-          if (mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(context.l.tasmi.saved)),
-            );
-            Navigator.of(context).pop();
-          }
-        },
+      final session = TasmiSession(
+        id: '',
+        organizationId: '',
+        branchId: '',
+        studentId: widget.studentId,
+        teacherId: widget.teacherId,
+        sessionId: widget.sessionId,
+        classId: widget.classId,
+        startSurah: _startSurah,
+        startAyah: _startAyah,
+        endSurah: _endSurah,
+        endAyah: _endAyah,
+        sessionType: _sessionType,
+        outcome: _outcome!,
+        accuracyScore: _accuracyScore,
+        tajwidScore: _tajwidScore,
+        fluencyScore: _fluencyScore,
+        teacherNotes: _teacherNotes,
+        recordedAt: DateTime.now(),
+        createdAt: DateTime.now(),
       );
+
+      final repo = ref.read(tasmiRepositoryProvider);
+      await repo.createSession(session);
+
+      if (_errors.isNotEmpty) {
+        await repo.addErrors(
+          sessionId: session.id,
+          errors: _errors,
+        );
+      }
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('تم الحفظ بنجاح')),
+        );
+        Navigator.of(context).pop();
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('خطأ: $e')),
+        );
+      }
     } finally {
       if (mounted) setState(() => _saving = false);
     }

@@ -1,79 +1,67 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hafiz/features/auth/domain/repositories/auth_provider.dart';
-import 'package:hafiz/features/teachers/data/repositories/teacher_repository_impl.dart';
-import 'package:hafiz/features/teachers/domain/entities/teacher.dart';
-import 'package:hafiz/features/teachers/domain/repositories/teacher_repository.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import '../domain/entities/teacher.dart';
+import '../domain/repositories/teacher_repository.dart';
+import '../data/repositories/teacher_repository_impl.dart';
+import '../../../core/network/supabase_client.dart';
 
 /// Teacher repository provider.
 final teacherRepositoryProvider = Provider<TeacherRepository>((ref) {
-  return TeacherRepositoryImpl();
+  final client = ref.watch(supabaseClientProvider);
+  return TeacherRepositoryImpl(client);
 });
 
-/// Teachers list provider.
-final teachersProvider =
-    AsyncNotifierProvider.autoDispose<TeachersNotifier, List<Teacher>>(
-        TeachersNotifier.new);
+/// Branch teachers provider.
+final branchTeachersProvider =
+    FutureProvider.autoDispose.family<List<Teacher>, String>((ref, branchId) async {
+  final repo = ref.watch(teacherRepositoryProvider);
+  return repo.getBranchTeachers(branchId: branchId);
+});
 
-/// Teachers notifier.
-class TeachersNotifier extends AutoDisposeAsyncNotifier<List<Teacher>> {
-  @override
-  Future<List<Teacher>> build() async {
-    final user = ref.watch(currentUserProvider);
-    if (user == null) return [];
+/// Teacher notifier for CRUD operations.
+class TeacherNotifier extends StateNotifier<AsyncValue<void>> {
+  final TeacherRepository _repository;
 
-    final result = await ref.read(teacherRepositoryProvider).getTeachers(
-          organizationId: user.id,
-        );
+  TeacherNotifier(this._repository) : super(const AsyncValue.data(null));
 
-    return result.fold(
-      (failure) => throw failure,
-      (teachers) => teachers,
-    );
-  }
-
-  /// Refresh teachers list.
-  Future<void> refresh() async {
+  Future<Teacher> createTeacher(Teacher teacher) async {
     state = const AsyncValue.loading();
-    state = await AsyncValue.guard(() => build());
+    try {
+      final created = await _repository.createTeacher(teacher);
+      state = const AsyncValue.data(null);
+      return created;
+    } catch (e, st) {
+      state = AsyncValue.error(e, st);
+      rethrow;
+    }
   }
 
-  /// Load more teachers.
-  Future<void> loadMore() async {
-    final current = state.valueOrNull ?? [];
-    final user = ref.read(currentUserProvider);
-    if (user == null) return;
-
-    final result = await ref.read(teacherRepositoryProvider).getTeachers(
-          organizationId: user.id,
-          offset: current.length,
-        );
-
-    result.fold(
-      (failure) => state = AsyncError(failure, StackTrace.current),
-      (teachers) => state = AsyncData([...current, ...teachers]),
-    );
+  Future<void> updateTeacher(Teacher teacher) async {
+    state = const AsyncValue.loading();
+    try {
+      await _repository.updateTeacher(teacher);
+      state = const AsyncValue.data(null);
+    } catch (e, st) {
+      state = AsyncValue.error(e, st);
+      rethrow;
+    }
   }
 
-  /// Delete teacher.
-  Future<void> deleteTeacher(String id) async {
-    final result =
-        await ref.read(teacherRepositoryProvider).deleteTeacher(id);
-    result.fold(
-      (failure) => throw failure,
-      (_) {
-        final current = state.valueOrNull ?? [];
-        state = AsyncData(current.where((t) => t.id != id).toList());
-      },
-    );
+  Future<void> deleteTeacher(String teacherId) async {
+    state = const AsyncValue.loading();
+    try {
+      await _repository.deleteTeacher(teacherId);
+      state = const AsyncValue.data(null);
+    } catch (e, st) {
+      state = AsyncValue.error(e, st);
+      rethrow;
+    }
   }
 }
 
-/// Single teacher provider.
-final teacherProvider =
-    FutureProvider.autoDispose.family<Teacher, String>((ref, id) async {
-  final result = await ref.read(teacherRepositoryProvider).getTeacher(id);
-  return result.fold(
-    (failure) => throw failure,
-    (teacher) => teacher,
-  );
+/// Teacher notifier provider.
+final teacherNotifierProvider =
+    StateNotifierProvider<TeacherNotifier, AsyncValue<void>>((ref) {
+  final repo = ref.watch(teacherRepositoryProvider);
+  return TeacherNotifier(repo);
 });

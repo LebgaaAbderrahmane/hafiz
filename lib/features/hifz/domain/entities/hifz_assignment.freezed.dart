@@ -66,8 +66,8 @@ class _$HifzAssignmentCopyWithImpl<$Res, $Val extends HifzAssignment>
     implements $HifzAssignmentCopyWith<$Res> {
   _$HifzAssignmentCopyWithImpl(this._value, this._then);
 
-  final $Val _value;
-  final $Res Function($Val) _then;
+  $Val _value;
+  $Res Function($Val) _then;
 
   @pragma('vm:prefer-inline')
   @override
@@ -246,41 +246,41 @@ class _$HifzAssignmentImpl implements _HifzAssignment {
       this.completedAt});
 
   @override
-  final String id;
+  String id;
   @override
-  final String organizationId;
+  String organizationId;
   @override
-  final String branchId;
+  String branchId;
   @override
-  final String studentId;
+  String studentId;
   @override
-  final String teacherId;
+  String teacherId;
   @override
-  final String? classId;
+  String? classId;
   @override
-  final int startSurah;
+  int startSurah;
   @override
-  final int startAyah;
+  int startAyah;
   @override
-  final int endSurah;
+  int endSurah;
   @override
-  final int endAyah;
+  int endAyah;
   @override
-  final AssignmentType type;
+  AssignmentType type;
   @override
-  final AssignmentStatus status;
+  AssignmentStatus status;
   @override
-  final DateTime? dueDate;
+  DateTime? dueDate;
   @override
-  final String? notes;
+  String? notes;
   @override
-  final int? qualityTarget;
+  int? qualityTarget;
   @override
-  final DateTime createdAt;
+  DateTime createdAt;
   @override
-  final DateTime? updatedAt;
+  DateTime? updatedAt;
   @override
-  final DateTime? completedAt;
+  DateTime? completedAt;
 
   @override
   String toString() {
@@ -364,23 +364,23 @@ class _$HifzAssignmentImpl implements _HifzAssignment {
 abstract class _HifzAssignment implements HifzAssignment {
   const factory _HifzAssignment(
       {required final String id,
-      required final String organizationId,
-      required final String branchId,
-      required final String studentId,
-      required final String teacherId,
-      final String? classId,
-      required final int startSurah,
-      required final int startAyah,
-      required final int endSurah,
-      required final int endAyah,
-      required final AssignmentType type,
-      required final AssignmentStatus status,
-      final DateTime? dueDate,
-      final String? notes,
-      final int? qualityTarget,
-      required final DateTime createdAt,
-      final DateTime? updatedAt,
-      final DateTime? completedAt}) = _$HifzAssignmentImpl;
+      required String organizationId,
+      required String branchId,
+      required String studentId,
+      required String teacherId,
+      String? classId,
+      required int startSurah,
+      required int startAyah,
+      required int endSurah,
+      required int endAyah,
+      required AssignmentType type,
+      required AssignmentStatus status,
+      DateTime? dueDate,
+      String? notes,
+      int? qualityTarget,
+      required DateTime createdAt,
+      DateTime? updatedAt,
+      DateTime? completedAt}) = _$HifzAssignmentImpl;
 
   @override
   String get id;

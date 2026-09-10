@@ -53,8 +53,8 @@ class _$GuardianCopyWithImpl<$Res, $Val extends Guardian>
     implements $GuardianCopyWith<$Res> {
   _$GuardianCopyWithImpl(this._value, this._then);
 
-  final $Val _value;
-  final $Res Function($Val) _then;
+  $Val _value;
+  $Res Function($Val) _then;
 
   @pragma('vm:prefer-inline')
   @override
@@ -181,29 +181,29 @@ class _$GuardianImpl implements _Guardian {
       this.updatedAt});
 
   @override
-  final String id;
+  String id;
   @override
-  final String organizationId;
+  String organizationId;
   @override
-  final String branchId;
+  String branchId;
   @override
-  final String name;
+  String name;
   @override
-  final String phone;
+  String phone;
   @override
-  final String? email;
+  String? email;
   @override
-  final String? address;
+  String? address;
   @override
-  final String? occupation;
+  String? occupation;
   @override
-  final GuardianType? type;
+  GuardianType? type;
   @override
-  final String? notes;
+  String? notes;
   @override
-  final DateTime createdAt;
+  DateTime createdAt;
   @override
-  final DateTime? updatedAt;
+  DateTime? updatedAt;
 
   @override
   String toString() {
@@ -266,17 +266,17 @@ class _$GuardianImpl implements _Guardian {
 abstract class _Guardian implements Guardian {
   const factory _Guardian(
       {required final String id,
-      required final String organizationId,
-      required final String branchId,
-      required final String name,
-      required final String phone,
-      final String? email,
-      final String? address,
-      final String? occupation,
-      final GuardianType? type,
-      final String? notes,
-      required final DateTime createdAt,
-      final DateTime? updatedAt}) = _$GuardianImpl;
+      required String organizationId,
+      required String branchId,
+      required String name,
+      required String phone,
+      String? email,
+      String? address,
+      String? occupation,
+      GuardianType? type,
+      String? notes,
+      required DateTime createdAt,
+      DateTime? updatedAt}) = _$GuardianImpl;
 
   @override
   String get id;

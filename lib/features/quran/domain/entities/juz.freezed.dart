@@ -42,8 +42,8 @@ class _$JuzCopyWithImpl<$Res, $Val extends Juz>
     implements $JuzCopyWith<$Res> {
   _$JuzCopyWithImpl(this._value, this._then);
 
-  final $Val _value;
-  final $Res Function($Val) _then;
+  $Val _value;
+  $Res Function($Val) _then;
 
   @pragma('vm:prefer-inline')
   @override
@@ -137,21 +137,21 @@ class _$JuzImpl implements _Juz {
       required this.nameEnglish,
       required this.startPage,
       required this.endPage,
-      required final List<int> surahNumbers,
+      required List<int> surahNumbers,
       required this.totalAyahs})
       : _surahNumbers = surahNumbers;
 
   @override
-  final int number;
+  int number;
   @override
-  final String nameArabic;
+  String nameArabic;
   @override
-  final String nameEnglish;
+  String nameEnglish;
   @override
-  final int startPage;
+  int startPage;
   @override
-  final int endPage;
-  final List<int> _surahNumbers;
+  int endPage;
+  List<int> _surahNumbers;
   @override
   List<int> get surahNumbers {
     if (_surahNumbers is EqualUnmodifiableListView) return _surahNumbers;
@@ -159,7 +159,7 @@ class _$JuzImpl implements _Juz {
   }
 
   @override
-  final int totalAyahs;
+  int totalAyahs;
 
   @override
   String toString() {
@@ -212,12 +212,12 @@ class _$JuzImpl implements _Juz {
 abstract class _Juz implements Juz {
   const factory _Juz(
       {required final int number,
-      required final String nameArabic,
-      required final String nameEnglish,
-      required final int startPage,
-      required final int endPage,
-      required final List<int> surahNumbers,
-      required final int totalAyahs}) = _$JuzImpl;
+      required String nameArabic,
+      required String nameEnglish,
+      required int startPage,
+      required int endPage,
+      required List<int> surahNumbers,
+      required int totalAyahs}) = _$JuzImpl;
 
   @override
   int get number;

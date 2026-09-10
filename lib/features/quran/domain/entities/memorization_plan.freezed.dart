@@ -65,8 +65,8 @@ class _$MemorizationPlanCopyWithImpl<$Res, $Val extends MemorizationPlan>
     implements $MemorizationPlanCopyWith<$Res> {
   _$MemorizationPlanCopyWithImpl(this._value, this._then);
 
-  final $Val _value;
-  final $Res Function($Val) _then;
+  $Val _value;
+  $Res Function($Val) _then;
 
   @pragma('vm:prefer-inline')
   @override
@@ -242,8 +242,8 @@ class _$MemorizationPlanImpl implements _MemorizationPlan {
       required this.currentAyah,
       required this.targetSurah,
       required this.targetAyah,
-      final List<MemorizationCheckpoint> checkpoints = const [],
-      final List<MemorizationSession> sessions = const [],
+      List<MemorizationCheckpoint> checkpoints = const [],
+      List<MemorizationSession> sessions = const [],
       this.notes,
       required this.createdAt,
       this.updatedAt,
@@ -252,35 +252,35 @@ class _$MemorizationPlanImpl implements _MemorizationPlan {
         _sessions = sessions;
 
   @override
-  final String id;
+  String id;
   @override
-  final String studentId;
+  String studentId;
   @override
-  final String teacherId;
+  String teacherId;
   @override
-  final String organizationId;
+  String organizationId;
   @override
-  final String? classId;
+  String? classId;
   @override
-  final MemorizationStatus status;
+  MemorizationStatus status;
   @override
-  final MemorizationPriority priority;
+  MemorizationPriority priority;
   @override
-  final int currentSurah;
+  int currentSurah;
   @override
-  final int currentAyah;
+  int currentAyah;
   @override
-  final int targetSurah;
+  int targetSurah;
   @override
-  final int targetAyah;
-  final List<MemorizationCheckpoint> _checkpoints;
+  int targetAyah;
+  List<MemorizationCheckpoint> _checkpoints;
   @override
   List<MemorizationCheckpoint> get checkpoints {
     if (_checkpoints is EqualUnmodifiableListView) return _checkpoints;
     return EqualUnmodifiableListView(_checkpoints);
   }
 
-  final List<MemorizationSession> _sessions;
+  List<MemorizationSession> _sessions;
   @override
   List<MemorizationSession> get sessions {
     if (_sessions is EqualUnmodifiableListView) return _sessions;
@@ -288,13 +288,13 @@ class _$MemorizationPlanImpl implements _MemorizationPlan {
   }
 
   @override
-  final String? notes;
+  String? notes;
   @override
-  final DateTime createdAt;
+  DateTime createdAt;
   @override
-  final DateTime? updatedAt;
+  DateTime? updatedAt;
   @override
-  final DateTime? completedAt;
+  DateTime? completedAt;
 
   @override
   String toString() {
@@ -376,22 +376,22 @@ class _$MemorizationPlanImpl implements _MemorizationPlan {
 abstract class _MemorizationPlan implements MemorizationPlan {
   const factory _MemorizationPlan(
       {required final String id,
-      required final String studentId,
-      required final String teacherId,
-      required final String organizationId,
-      final String? classId,
-      required final MemorizationStatus status,
-      required final MemorizationPriority priority,
-      required final int currentSurah,
-      required final int currentAyah,
-      required final int targetSurah,
-      required final int targetAyah,
-      final List<MemorizationCheckpoint> checkpoints,
-      final List<MemorizationSession> sessions,
-      final String? notes,
-      required final DateTime createdAt,
-      final DateTime? updatedAt,
-      final DateTime? completedAt}) = _$MemorizationPlanImpl;
+      required String studentId,
+      required String teacherId,
+      required String organizationId,
+      String? classId,
+      required MemorizationStatus status,
+      required MemorizationPriority priority,
+      required int currentSurah,
+      required int currentAyah,
+      required int targetSurah,
+      required int targetAyah,
+      List<MemorizationCheckpoint> checkpoints,
+      List<MemorizationSession> sessions,
+      String? notes,
+      required DateTime createdAt,
+      DateTime? updatedAt,
+      DateTime? completedAt}) = _$MemorizationPlanImpl;
 
   @override
   String get id;
@@ -474,8 +474,8 @@ class _$MemorizationCheckpointCopyWithImpl<$Res,
     implements $MemorizationCheckpointCopyWith<$Res> {
   _$MemorizationCheckpointCopyWithImpl(this._value, this._then);
 
-  final $Val _value;
-  final $Res Function($Val) _then;
+  $Val _value;
+  $Res Function($Val) _then;
 
   @pragma('vm:prefer-inline')
   @override
@@ -587,21 +587,21 @@ class _$MemorizationCheckpointImpl implements _MemorizationCheckpoint {
       this.completedAt});
 
   @override
-  final String id;
+  String id;
   @override
-  final int surahNumber;
+  int surahNumber;
   @override
-  final int startAyah;
+  int startAyah;
   @override
-  final int endAyah;
+  int endAyah;
   @override
-  final CheckpointStatus status;
+  CheckpointStatus status;
   @override
-  final int? qualityScore;
+  int? qualityScore;
   @override
-  final String? teacherNotes;
+  String? teacherNotes;
   @override
-  final DateTime? completedAt;
+  DateTime? completedAt;
 
   @override
   String toString() {
@@ -649,13 +649,13 @@ class _$MemorizationCheckpointImpl implements _MemorizationCheckpoint {
 abstract class _MemorizationCheckpoint implements MemorizationCheckpoint {
   const factory _MemorizationCheckpoint(
       {required final String id,
-      required final int surahNumber,
-      required final int startAyah,
-      required final int endAyah,
-      required final CheckpointStatus status,
-      final int? qualityScore,
-      final String? teacherNotes,
-      final DateTime? completedAt}) = _$MemorizationCheckpointImpl;
+      required int surahNumber,
+      required int startAyah,
+      required int endAyah,
+      required CheckpointStatus status,
+      int? qualityScore,
+      String? teacherNotes,
+      DateTime? completedAt}) = _$MemorizationCheckpointImpl;
 
   @override
   String get id;
@@ -721,8 +721,8 @@ class _$MemorizationSessionCopyWithImpl<$Res, $Val extends MemorizationSession>
     implements $MemorizationSessionCopyWith<$Res> {
   _$MemorizationSessionCopyWithImpl(this._value, this._then);
 
-  final $Val _value;
-  final $Res Function($Val) _then;
+  $Val _value;
+  $Res Function($Val) _then;
 
   @pragma('vm:prefer-inline')
   @override
@@ -833,23 +833,23 @@ class _$MemorizationSessionImpl implements _MemorizationSession {
       this.notes});
 
   @override
-  final String id;
+  String id;
   @override
-  final DateTime date;
+  DateTime date;
   @override
-  final int durationMinutes;
+  int durationMinutes;
   @override
-  final String fromSurah;
+  String fromSurah;
   @override
-  final int fromAyah;
+  int fromAyah;
   @override
-  final String toSurah;
+  String toSurah;
   @override
-  final int toAyah;
+  int toAyah;
   @override
-  final int? qualityScore;
+  int? qualityScore;
   @override
-  final String? notes;
+  String? notes;
 
   @override
   String toString() {
@@ -897,14 +897,14 @@ class _$MemorizationSessionImpl implements _MemorizationSession {
 abstract class _MemorizationSession implements MemorizationSession {
   const factory _MemorizationSession(
       {required final String id,
-      required final DateTime date,
-      required final int durationMinutes,
-      required final String fromSurah,
-      required final int fromAyah,
-      required final String toSurah,
-      required final int toAyah,
-      final int? qualityScore,
-      final String? notes}) = _$MemorizationSessionImpl;
+      required DateTime date,
+      required int durationMinutes,
+      required String fromSurah,
+      required int fromAyah,
+      required String toSurah,
+      required int toAyah,
+      int? qualityScore,
+      String? notes}) = _$MemorizationSessionImpl;
 
   @override
   String get id;

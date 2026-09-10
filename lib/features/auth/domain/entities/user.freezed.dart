@@ -62,8 +62,8 @@ class _$AppUserCopyWithImpl<$Res, $Val extends AppUser>
     implements $AppUserCopyWith<$Res> {
   _$AppUserCopyWithImpl(this._value, this._then);
 
-  final $Val _value;
-  final $Res Function($Val) _then;
+  $Val _value;
+  $Res Function($Val) _then;
 
   @pragma('vm:prefer-inline')
   @override
@@ -180,27 +180,27 @@ class _$AppUserImpl implements _AppUser {
   });
 
   @override
-  final String id;
+  String id;
   @override
-  final String email;
+  String email;
   @override
-  final String? phone;
+  String? phone;
   @override
-  final String fullName;
+  String fullName;
   @override
-  final String? preferredName;
+  String? preferredName;
   @override
-  final String? avatarUrl;
-  @override
-  @JsonKey()
-  final String language;
+  String? avatarUrl;
   @override
   @JsonKey()
-  final bool isActive;
+  String language;
   @override
-  final DateTime createdAt;
+  @JsonKey()
+  bool isActive;
   @override
-  final DateTime? updatedAt;
+  DateTime createdAt;
+  @override
+  DateTime? updatedAt;
 
   @override
   String toString() {
@@ -244,16 +244,16 @@ class _$AppUserImpl implements _AppUser {
 
 abstract class _AppUser implements AppUser {
   const factory _AppUser({
-    required final String id,
-    required final String email,
-    final String? phone,
-    required final String fullName,
-    final String? preferredName,
-    final String? avatarUrl,
-    final String language,
-    final bool isActive,
-    required final DateTime createdAt,
-    final DateTime? updatedAt,
+    required String id,
+    required String email,
+    String? phone,
+    required String fullName,
+    String? preferredName,
+    String? avatarUrl,
+    String language,
+    bool isActive,
+    required DateTime createdAt,
+    DateTime? updatedAt,
   }) = _$AppUserImpl;
 
   @override
@@ -316,8 +316,8 @@ class _$UserRoleCopyWithImpl<$Res, $Val extends UserRole>
     implements $UserRoleCopyWith<$Res> {
   _$UserRoleCopyWithImpl(this._value, this._then);
 
-  final $Val _value;
-  final $Res Function($Val) _then;
+  $Val _value;
+  $Res Function($Val) _then;
 
   @pragma('vm:prefer-inline')
   @override
@@ -406,17 +406,17 @@ class _$UserRoleImpl implements _UserRole {
   });
 
   @override
-  final String id;
+  String id;
   @override
-  final String userId;
+  String userId;
   @override
-  final String organizationId;
+  String organizationId;
   @override
-  final String? branchId;
+  String? branchId;
   @override
-  final Role role;
+  Role role;
   @override
-  final DateTime createdAt;
+  DateTime createdAt;
 
   @override
   String toString() {
@@ -452,12 +452,12 @@ class _$UserRoleImpl implements _UserRole {
 
 abstract class _UserRole implements UserRole {
   const factory _UserRole({
-    required final String id,
-    required final String userId,
-    required final String organizationId,
-    final String? branchId,
-    required final Role role,
-    required final DateTime createdAt,
+    required String id,
+    required String userId,
+    required String organizationId,
+    String? branchId,
+    required Role role,
+    required DateTime createdAt,
   }) = _$UserRoleImpl;
 
   @override
