@@ -1,8 +1,8 @@
 # AGENTS.md — Hafiz Development Guide
 
 ## Project Status
-- **Current Phase:** Phase 8 (Guardians + Parent Portal)
-- **Current Branch:** feat/phase-8-guardians-parent-portal
+- **Current Phase:** Phase 9 (Reports + Settings)
+- **Current Branch:** feat/phase-9-reports-settings
 - **Last Updated:** 2026-09-06
 - **Flutter Version:** 3.47.2 stable
 - **Dart Version:** 3.13.2
@@ -67,14 +67,14 @@ supabase db diff
 - Use `mocktail` for mocking
 - Use `ProviderContainer.test()` for Riverpod providers
 
-## Current Sprint — Phase 8: Guardians + Parent Portal
+## Current Sprint — Phase 9: Reports + Settings
 
 ### Tasks
-- [x] Guardian entity (freezed)
-- [x] Guardian repository + providers
-- [x] Guardian list and profile views
-- [x] Parent portal view
-- [x] Update router with guardian and parent portal routes
+- [x] Reports entity (freezed)
+- [x] Reports repository + providers
+- [x] Reports view
+- [x] Settings view
+- [x] Update router with reports and settings routes
 
 ## Key Files
 
