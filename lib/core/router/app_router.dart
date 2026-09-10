@@ -24,6 +24,7 @@ import '../../features/guardians/presentation/views/guardian_profile_view.dart';
 import '../../features/parent_portal/presentation/views/parent_portal_view.dart';
 import '../../features/reports/presentation/views/reports_view.dart';
 import '../../features/settings/presentation/views/settings_view.dart';
+import '../../features/notifications/presentation/views/notification_view.dart';
 import '../theme/theme.dart';
 
 /// App Router configuration.
@@ -185,6 +186,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             path: '/settings',
             name: 'settings',
             builder: (context, state) => const SettingsView(),
+          ),
+          GoRoute(
+            path: '/notifications',
+            name: 'notifications',
+            builder: (context, state) => const NotificationView(),
           ),
           GoRoute(
             path: '/schedule',

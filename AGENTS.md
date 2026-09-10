@@ -70,11 +70,11 @@ supabase db diff
 ## Current Sprint — Phase 10: Notifications + Polish
 
 ### Tasks
-- [ ] Notification entity (freezed)
-- [ ] Notification repository + providers
-- [ ] Notification view
-- [ ] Add loading states and error handling polish
-- [ ] Update router with notification routes
+- [x] Notification entity (freezed)
+- [x] Notification repository + providers
+- [x] Notification view
+- [x] Add loading states and error handling polish
+- [x] Update router with notification routes
 
 ## Key Files
 
