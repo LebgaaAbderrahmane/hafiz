@@ -166,7 +166,7 @@ class __$$AppUserImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$AppUserImpl implements _AppUser {
-  const _$AppUserImpl({
+  _$AppUserImpl({
     required this.id,
     required this.email,
     this.phone,
@@ -243,7 +243,7 @@ class _$AppUserImpl implements _AppUser {
 }
 
 abstract class _AppUser implements AppUser {
-  const factory _AppUser({
+  factory _AppUser({
     required String id,
     required String email,
     String? phone,
@@ -396,7 +396,7 @@ class __$$UserRoleImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$UserRoleImpl implements _UserRole {
-  const _$UserRoleImpl({
+  _$UserRoleImpl({
     required this.id,
     required this.userId,
     required this.organizationId,
@@ -451,7 +451,7 @@ class _$UserRoleImpl implements _UserRole {
 }
 
 abstract class _UserRole implements UserRole {
-  const factory _UserRole({
+  factory _UserRole({
     required String id,
     required String userId,
     required String organizationId,

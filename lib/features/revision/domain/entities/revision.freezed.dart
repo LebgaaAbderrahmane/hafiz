@@ -250,7 +250,7 @@ class __$$RevisionImplCopyWithImpl<$Res>
 
 /// @nodoc
 class _$RevisionImpl implements _Revision {
-  const _$RevisionImpl(
+  _$RevisionImpl(
       {required this.id,
       required this.organizationId,
       required this.branchId,
@@ -400,7 +400,7 @@ class _$RevisionImpl implements _Revision {
 }
 
 abstract class _Revision implements Revision {
-  const factory _Revision(
+  factory _Revision(
       {required String id,
       required String organizationId,
       required String branchId,

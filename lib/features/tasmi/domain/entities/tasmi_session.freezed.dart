@@ -277,7 +277,7 @@ class __$$TasmiSessionImplCopyWithImpl<$Res>
 
 /// @nodoc
 class _$TasmiSessionImpl implements _TasmiSession {
-  const _$TasmiSessionImpl(
+  _$TasmiSessionImpl(
       {required this.id,
       required this.organizationId,
       required this.branchId,
@@ -447,7 +447,7 @@ class _$TasmiSessionImpl implements _TasmiSession {
 }
 
 abstract class _TasmiSession implements TasmiSession {
-  const factory _TasmiSession(
+  factory _TasmiSession(
       {required String id,
       required String organizationId,
       required String branchId,
@@ -714,7 +714,7 @@ class _$TasmiErrorImpl implements _TasmiError {
 }
 
 abstract class _TasmiError implements TasmiError {
-  const factory _TasmiError(
+  factory _TasmiError(
       {required String id,
       required int surahNumber,
       required int ayahNumber,

@@ -166,7 +166,7 @@ class __$$GuardianImplCopyWithImpl<$Res>
 
 /// @nodoc
 class _$GuardianImpl implements _Guardian {
-  const _$GuardianImpl(
+  _$GuardianImpl(
       {required this.id,
       required this.organizationId,
       required this.branchId,
@@ -264,7 +264,7 @@ class _$GuardianImpl implements _Guardian {
 }
 
 abstract class _Guardian implements Guardian {
-  const factory _Guardian(
+  factory _Guardian(
       {required String id,
       required String organizationId,
       required String branchId,

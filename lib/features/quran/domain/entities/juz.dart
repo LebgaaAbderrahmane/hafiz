@@ -8,7 +8,7 @@ part 'juz.g.dart';
 /// Represents a Juz (part) of the Qur'an.
 @freezed
 abstract class Juz with _$Juz {
-  const factory Juz({
+  factory Juz({
     required int number,
     required String nameArabic,
     required String nameEnglish,

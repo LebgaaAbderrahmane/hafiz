@@ -64,7 +64,7 @@ class NotificationView extends ConsumerWidget {
                 _buildNotificationTile(context, ref, notifications[index]),
           );
         },
-        loading: const Center(child: CircularProgressIndicator()),
+        loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, st) => Center(child: Text('Error: $e')),
       ),
     );

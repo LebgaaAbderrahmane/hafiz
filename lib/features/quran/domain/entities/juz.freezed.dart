@@ -131,7 +131,7 @@ class __$$JuzImplCopyWithImpl<$Res>
 
 /// @nodoc
 class _$JuzImpl implements _Juz {
-  const _$JuzImpl(
+  _$JuzImpl(
       {required this.number,
       required this.nameArabic,
       required this.nameEnglish,
@@ -210,7 +210,7 @@ class _$JuzImpl implements _Juz {
 }
 
 abstract class _Juz implements Juz {
-  const factory _Juz(
+  factory _Juz(
       {required int number,
       required String nameArabic,
       required String nameEnglish,

@@ -182,7 +182,7 @@ class __$$AttendanceImplCopyWithImpl<$Res>
 
 /// @nodoc
 class _$AttendanceImpl implements _Attendance {
-  const _$AttendanceImpl(
+  _$AttendanceImpl(
       {required this.id,
       required this.organizationId,
       required this.branchId,
@@ -289,7 +289,7 @@ class _$AttendanceImpl implements _Attendance {
 }
 
 abstract class _Attendance implements Attendance {
-  const factory _Attendance(
+  factory _Attendance(
       {required String id,
       required String organizationId,
       required String branchId,

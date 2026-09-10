@@ -8,7 +8,7 @@ part 'surah.g.dart';
 /// Represents a Surah (chapter) of the Qur'an.
 @freezed
 abstract class Surah with _$Surah {
-  const factory Surah({
+  factory Surah({
     required int number,
     required String nameArabic,
     required String nameEnglish,

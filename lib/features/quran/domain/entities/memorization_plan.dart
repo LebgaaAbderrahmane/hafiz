@@ -8,7 +8,7 @@ part 'memorization_plan.g.dart';
 /// Represents a student's Qur'an memorization plan.
 @freezed
 abstract class MemorizationPlan with _$MemorizationPlan {
-  const factory MemorizationPlan({
+  factory MemorizationPlan({
     required String id,
     required String studentId,
     required String teacherId,
@@ -35,7 +35,7 @@ abstract class MemorizationPlan with _$MemorizationPlan {
 /// Memorization checkpoint.
 @freezed
 abstract class MemorizationCheckpoint with _$MemorizationCheckpoint {
-  const factory MemorizationCheckpoint({
+  factory MemorizationCheckpoint({
     required String id,
     required int surahNumber,
     required int startAyah,
@@ -53,7 +53,7 @@ abstract class MemorizationCheckpoint with _$MemorizationCheckpoint {
 /// Memorization session.
 @freezed
 abstract class MemorizationSession with _$MemorizationSession {
-  const factory MemorizationSession({
+  factory MemorizationSession({
     required String id,
     required DateTime date,
     required int durationMinutes,

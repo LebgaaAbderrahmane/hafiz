@@ -230,7 +230,7 @@ class __$$MemorizationPlanImplCopyWithImpl<$Res>
 
 /// @nodoc
 class _$MemorizationPlanImpl implements _MemorizationPlan {
-  const _$MemorizationPlanImpl(
+  _$MemorizationPlanImpl(
       {required this.id,
       required this.studentId,
       required this.teacherId,
@@ -374,7 +374,7 @@ class _$MemorizationPlanImpl implements _MemorizationPlan {
 }
 
 abstract class _MemorizationPlan implements MemorizationPlan {
-  const factory _MemorizationPlan(
+  factory _MemorizationPlan(
       {required String id,
       required String studentId,
       required String teacherId,
@@ -647,7 +647,7 @@ class _$MemorizationCheckpointImpl implements _MemorizationCheckpoint {
 }
 
 abstract class _MemorizationCheckpoint implements MemorizationCheckpoint {
-  const factory _MemorizationCheckpoint(
+  factory _MemorizationCheckpoint(
       {required String id,
       required int surahNumber,
       required int startAyah,
@@ -895,7 +895,7 @@ class _$MemorizationSessionImpl implements _MemorizationSession {
 }
 
 abstract class _MemorizationSession implements MemorizationSession {
-  const factory _MemorizationSession(
+  factory _MemorizationSession(
       {required String id,
       required DateTime date,
       required int durationMinutes,

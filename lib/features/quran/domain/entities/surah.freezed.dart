@@ -158,7 +158,7 @@ class __$$SurahImplCopyWithImpl<$Res>
 
 /// @nodoc
 class _$SurahImpl implements _Surah {
-  const _$SurahImpl(
+  _$SurahImpl(
       {required this.number,
       required this.nameArabic,
       required this.nameEnglish,
@@ -246,7 +246,7 @@ class _$SurahImpl implements _Surah {
 }
 
 abstract class _Surah implements Surah {
-  const factory _Surah(
+  factory _Surah(
       {required int number,
       required String nameArabic,
       required String nameEnglish,

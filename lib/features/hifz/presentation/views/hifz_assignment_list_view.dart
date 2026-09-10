@@ -98,7 +98,7 @@ class _HifzAssignmentListViewState extends ConsumerState<HifzAssignmentListView>
                 _buildAssignmentCard(context, ref, filtered[index]),
           );
         },
-        loading: const Center(child: CircularProgressIndicator()),
+        loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, st) => Center(child: Text('خطأ: $e')),
       ),
       floatingActionButton: FloatingActionButton(

@@ -48,7 +48,7 @@ class AppTextField extends StatelessWidget {
   final int? minLines;
   final int? maxLength;
   final ValueChanged<String>? onChanged;
-  final Value<String>? onFieldSubmitted;
+  final ValueChanged<String>? onFieldSubmitted;
   final String? Function(String?)? validator;
   final bool autofocus;
   final EdgeInsetsGeometry? contentPadding;

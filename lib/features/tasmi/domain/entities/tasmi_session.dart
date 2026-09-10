@@ -9,7 +9,7 @@ part 'tasmi_session.g.dart';
 /// Teacher listens to student reciting, then records the evaluation.
 @freezed
 abstract class TasmiSession with _$TasmiSession {
-  const factory TasmiSession({
+  factory TasmiSession({
     required String id,
     required String organizationId,
     required String branchId,
@@ -41,7 +41,7 @@ abstract class TasmiSession with _$TasmiSession {
 /// Tasmi error.
 @freezed
 abstract class TasmiError with _$TasmiError {
-  const factory TasmiError({
+  factory TasmiError({
     required String id,
     required int surahNumber,
     required int ayahNumber,

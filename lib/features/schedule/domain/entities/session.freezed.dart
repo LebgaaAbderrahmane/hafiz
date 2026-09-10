@@ -205,7 +205,7 @@ class __$$SessionImplCopyWithImpl<$Res>
 
 /// @nodoc
 class _$SessionImpl implements _Session {
-  const _$SessionImpl(
+  _$SessionImpl(
       {required this.id,
       required this.organizationId,
       required this.branchId,
@@ -342,7 +342,7 @@ class _$SessionImpl implements _Session {
 }
 
 abstract class _Session implements Session {
-  const factory _Session(
+  factory _Session(
       {required String id,
       required String organizationId,
       required String branchId,

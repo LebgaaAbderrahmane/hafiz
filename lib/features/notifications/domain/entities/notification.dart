@@ -8,7 +8,7 @@ part 'notification.g.dart';
 /// Represents an in-app notification.
 @freezed
 abstract class AppNotification with _$AppNotification {
-  const factory AppNotification({
+  factory AppNotification({
     required String id,
     required String organizationId,
     required String branchId,

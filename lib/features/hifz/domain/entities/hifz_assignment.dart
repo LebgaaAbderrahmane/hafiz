@@ -8,7 +8,7 @@ part 'hifz_assignment.g.dart';
 /// Represents a memorization assignment given to a student.
 @freezed
 abstract class HifzAssignment with _$HifzAssignment {
-  const factory HifzAssignment({
+  factory HifzAssignment({
     required String id,
     required String organizationId,
     required String branchId,

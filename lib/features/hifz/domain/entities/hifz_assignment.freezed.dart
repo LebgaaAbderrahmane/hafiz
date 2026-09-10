@@ -225,7 +225,7 @@ class __$$HifzAssignmentImplCopyWithImpl<$Res>
 
 /// @nodoc
 class _$HifzAssignmentImpl implements _HifzAssignment {
-  const _$HifzAssignmentImpl(
+  _$HifzAssignmentImpl(
       {required this.id,
       required this.organizationId,
       required this.branchId,
@@ -362,7 +362,7 @@ class _$HifzAssignmentImpl implements _HifzAssignment {
 }
 
 abstract class _HifzAssignment implements HifzAssignment {
-  const factory _HifzAssignment(
+  factory _HifzAssignment(
       {required String id,
       required String organizationId,
       required String branchId,

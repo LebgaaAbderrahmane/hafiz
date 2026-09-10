@@ -1,282 +1,82 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../features/auth/presentation/views/login_view.dart';
-import '../../features/auth/presentation/views/forgot_password_view.dart';
-import '../../features/auth/domain/repositories/auth_provider.dart';
-import '../../features/students/presentation/views/student_list_view.dart';
-import '../../features/students/presentation/views/student_profile_view.dart';
-import '../../features/students/presentation/views/add_student_view.dart';
-import '../../features/teachers/presentation/views/teacher_list_view.dart';
-import '../../features/teachers/presentation/views/teacher_profile_view.dart';
-import '../../features/classes/presentation/views/class_list_view.dart';
-import '../../features/classes/presentation/views/class_detail_view.dart';
-import '../../features/quran/presentation/views/quran_browse_view.dart';
-import '../../features/schedule/presentation/views/calendar_view.dart';
-import '../../features/schedule/presentation/views/session_management_view.dart';
-import '../../features/attendance/presentation/views/attendance_marking_view.dart';
-import '../../features/tasmi/presentation/views/tasmi_eval_view.dart';
-import '../../features/dashboard/presentation/views/owner_dashboard_view.dart';
-import '../../features/dashboard/presentation/views/teacher_dashboard_view.dart';
-import '../../features/revision/presentation/views/revision_tracking_view.dart';
-import '../../features/guardians/presentation/views/guardian_list_view.dart';
-import '../../features/guardians/presentation/views/guardian_profile_view.dart';
-import '../../features/parent_portal/presentation/views/parent_portal_view.dart';
-import '../../features/reports/presentation/views/reports_view.dart';
-import '../../features/settings/presentation/views/settings_view.dart';
-import '../../features/notifications/presentation/views/notification_view.dart';
-import '../../features/hifz/presentation/views/hifz_assignment_list_view.dart';
-import '../../features/hifz/presentation/views/hifz_assignment_form_view.dart';
-import '../theme/theme.dart';
+import 'package:hafiz/features/auth/presentation/views/login_view.dart';
+import 'package:hafiz/features/auth/presentation/views/forgot_password_view.dart';
+import 'package:hafiz/features/auth/domain/repositories/auth_provider.dart';
+import 'package:hafiz/features/hifz/presentation/views/hifz_assignment_list_view.dart';
+import 'package:hafiz/features/hifz/presentation/views/hifz_assignment_form_view.dart';
+import 'package:hafiz/features/notifications/presentation/views/notification_view.dart';
+import 'package:hafiz/features/settings/presentation/views/settings_view.dart';
+import 'package:hafiz/core/theme/theme.dart';
 
-/// App Router configuration.
-///
-/// Uses go_router for declarative routing.
-/// Auth guard via redirect.
-/// ShellRoute for sidebar navigation (admin).
-/// StatefulShellRoute for bottom navigation (teacher/parent).
 final appRouterProvider = Provider<GoRouter>((ref) {
   final authState = ref.watch(authStateProvider);
   final authStream = ref.watch(authRepositoryProvider).authStateChanges;
 
   return GoRouter(
     initialLocation: '/login',
-    debugLogDiagnostics: true,
     redirect: (context, state) {
       final isLoggedIn = authState.valueOrNull != null;
       final isAuthRoute = state.matchedLocation == '/login' ||
           state.matchedLocation == '/forgot-password';
 
-      if (!isLoggedIn && !isAuthRoute) {
-        return '/login';
-      }
-
-      if (isLoggedIn && isAuthRoute) {
-        return '/dashboard';
-      }
-
+      if (!isLoggedIn && !isAuthRoute) return '/login';
+      if (isLoggedIn && isAuthRoute) return '/dashboard';
       return null;
     },
     refreshListenable: GoRouterRefreshStream(authStream),
     routes: [
-      // ── Auth Routes ──
       GoRoute(
         path: '/login',
-        name: 'login',
         builder: (context, state) => const LoginView(),
       ),
       GoRoute(
         path: '/forgot-password',
-        name: 'forgotPassword',
         builder: (context, state) => const ForgotPasswordView(),
       ),
-
-      // ── Onboarding ──
-      GoRoute(
-        path: '/onboarding',
-        name: 'onboarding',
-        builder: (context, state) => const _PlaceholderPage(title: 'Onboarding'),
-      ),
-
-      // ── Admin Shell (Sidebar) ──
       ShellRoute(
         builder: (context, state, child) => _AdminShell(child: child),
         routes: [
           GoRoute(
             path: '/dashboard',
-            name: 'dashboard',
-            builder: (context, state) => const OwnerDashboardView(),
+            builder: (context, state) => const _PlaceholderPage(title: 'لوحة التحكم'),
           ),
           GoRoute(
             path: '/students',
-            name: 'students',
-            builder: (context, state) => const StudentListView(),
-            routes: [
-              GoRoute(
-                path: 'add',
-                name: 'addStudent',
-                builder: (context, state) => const AddStudentView(),
-              ),
-              GoRoute(
-                path: ':id',
-                name: 'studentProfile',
-                builder: (context, state) => StudentProfileView(
-                  studentId: state.pathParameters['id']!,
-                ),
-              ),
-            ],
+            builder: (context, state) => const _PlaceholderPage(title: 'الطلاب'),
           ),
           GoRoute(
             path: '/teachers',
-            name: 'teachers',
-            builder: (context, state) => const TeacherListView(),
-            routes: [
-              GoRoute(
-                path: ':id',
-                name: 'teacherProfile',
-                builder: (context, state) => TeacherProfileView(
-                  teacherId: state.pathParameters['id']!,
-                ),
-              ),
-            ],
+            builder: (context, state) => const _PlaceholderPage(title: 'المعلمون'),
           ),
           GoRoute(
             path: '/classes',
-            name: 'classes',
-            builder: (context, state) => const ClassListView(),
-            routes: [
-              GoRoute(
-                path: ':id',
-                name: 'classDetail',
-                builder: (context, state) => ClassDetailView(
-                  classId: state.pathParameters['id']!,
-                ),
-              ),
-            ],
-          ),
-          GoRoute(
-            path: '/attendance',
-            name: 'attendance',
-            builder: (context, state) => AttendanceMarkingView(
-              sessionId: state.uri.queryParameters['sessionId'] ?? '',
-              classId: state.uri.queryParameters['classId'] ?? '',
-            ),
-          ),
-          GoRoute(
-            path: '/quran-progress',
-            name: 'quranProgress',
-            builder: (context, state) => RevisionTrackingView(
-              studentId: state.uri.queryParameters['studentId'] ?? '',
-            ),
-          ),
-          GoRoute(
-            path: '/assessments',
-            name: 'assessments',
-            builder: (context, state) => TasmiEvalView(
-              studentId: state.uri.queryParameters['studentId'] ?? '',
-              teacherId: state.uri.queryParameters['teacherId'] ?? '',
-              sessionId: state.uri.queryParameters['sessionId'] ?? '',
-              classId: state.uri.queryParameters['classId'],
-            ),
-          ),
-          GoRoute(
-            path: '/guardians',
-            name: 'guardians',
-            builder: (context, state) => const GuardianListView(),
-            routes: [
-              GoRoute(
-                path: ':id',
-                name: 'guardianProfile',
-                builder: (context, state) => GuardianProfileView(
-                  guardianId: state.pathParameters['id']!,
-                ),
-              ),
-            ],
-          ),
-          GoRoute(
-            path: '/parent-portal',
-            name: 'parentPortal',
-            builder: (context, state) => const ParentPortalView(),
-          ),
-          GoRoute(
-            path: '/reports',
-            name: 'reports',
-            builder: (context, state) => const ReportsView(),
-          ),
-          GoRoute(
-            path: '/settings',
-            name: 'settings',
-            builder: (context, state) => const SettingsView(),
-          ),
-          GoRoute(
-            path: '/notifications',
-            name: 'notifications',
-            builder: (context, state) => const NotificationView(),
-          ),
-          GoRoute(
-            path: '/schedule',
-            name: 'schedule',
-            builder: (context, state) => const CalendarView(),
-            routes: [
-              GoRoute(
-                path: 'sessions',
-                name: 'sessions',
-                builder: (context, state) => const SessionManagementView(),
-              ),
-            ],
+            builder: (context, state) => const _PlaceholderPage(title: 'الفصول'),
           ),
           GoRoute(
             path: '/hifz/assignments',
-            name: 'hifzAssignments',
             builder: (context, state) => const HifzAssignmentListView(),
             routes: [
               GoRoute(
                 path: 'create',
-                name: 'createHifzAssignment',
                 builder: (context, state) => const HifzAssignmentFormView(),
               ),
               GoRoute(
                 path: ':id/edit',
-                name: 'editHifzAssignment',
                 builder: (context, state) => HifzAssignmentFormView(
                   assignmentId: state.pathParameters['id'],
                 ),
               ),
             ],
           ),
-        ],
-      ),
-
-      // ── Teacher Shell (Bottom Nav) ──
-      ShellRoute(
-        builder: (context, state, child) => _TeacherShell(child: child),
-        routes: [
           GoRoute(
-            path: '/teacher/today',
-            name: 'teacherToday',
-            builder: (context, state) => const _PlaceholderPage(title: 'Today'),
+            path: '/notifications',
+            builder: (context, state) => const NotificationView(),
           ),
           GoRoute(
-            path: '/teacher/students',
-            name: 'teacherStudents',
-            builder: (context, state) => const _PlaceholderPage(title: 'My Students'),
-          ),
-          GoRoute(
-            path: '/teacher/attendance',
-            name: 'teacherAttendance',
-            builder: (context, state) => const _PlaceholderPage(title: 'Attendance'),
-          ),
-          GoRoute(
-            path: '/teacher/revision',
-            name: 'teacherRevision',
-            builder: (context, state) => const _PlaceholderPage(title: 'Revision'),
-          ),
-        ],
-      ),
-
-      // ── Parent Shell (Bottom Nav) ──
-      ShellRoute(
-        builder: (context, state, child) => _ParentShell(child: child),
-        routes: [
-          GoRoute(
-            path: '/parent/home',
-            name: 'parentHome',
-            builder: (context, state) => const _PlaceholderPage(title: 'Home'),
-          ),
-          GoRoute(
-            path: '/parent/progress',
-            name: 'parentProgress',
-            builder: (context, state) => const _PlaceholderPage(title: 'Progress'),
-          ),
-          GoRoute(
-            path: '/parent/schedule',
-            name: 'parentSchedule',
-            builder: (context, state) => const _PlaceholderPage(title: 'Schedule'),
-          ),
-          GoRoute(
-            path: '/parent/messages',
-            name: 'parentMessages',
-            builder: (context, state) => const _PlaceholderPage(title: 'Messages'),
+            path: '/settings',
+            builder: (context, state) => const SettingsView(),
           ),
         ],
       ),
@@ -284,14 +84,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
   );
 });
 
-/// Helper to convert a Stream to a Listenable for go_router's refreshListenable.
 class GoRouterRefreshStream extends ChangeNotifier {
   GoRouterRefreshStream(Stream<dynamic> stream) {
     _subscription = stream.asBroadcastStream().listen((_) => notifyListeners());
   }
-
   late final dynamic _subscription;
-
   @override
   void dispose() {
     _subscription.cancel();
@@ -299,83 +96,65 @@ class GoRouterRefreshStream extends ChangeNotifier {
   }
 }
 
-// ── Placeholder Pages (to be replaced) ──
-
 class _PlaceholderPage extends StatelessWidget {
   const _PlaceholderPage({required this.title});
   final String title;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(title)),
       body: Center(
-        child: Text(title, style: Theme.of(context).textTheme.headlineMedium),
+        child: Text(title, style: AppTextStyles.headlineMedium),
       ),
     );
   }
 }
 
-// ── Shell Layouts ──
-
 class _AdminShell extends StatelessWidget {
   const _AdminShell({required this.child});
   final Widget child;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Row(
         children: [
-          // TODO: Replace with AppSidebar widget
           Container(
             width: 248,
-            color: Theme.of(context).colorScheme.surface,
-            child: const Center(child: Text('Sidebar')),
+            color: AppColors.surface,
+            child: Column(
+              children: [
+                const SizedBox(height: 48),
+                Text('حفيظ', style: AppTextStyles.headlineMedium.copyWith(color: AppColors.primary)),
+                const SizedBox(height: 32),
+                _navItem(context, 'لوحة التحكم', '/dashboard', Icons.dashboard),
+                _navItem(context, 'الطلاب', '/students', Icons.people),
+                _navItem(context, 'المعلمون', '/teachers', Icons.person),
+                _navItem(context, 'الفصول', '/classes', Icons.class_),
+                _navItem(context, 'تعيينات الحفظ', '/hifz/assignments', Icons.book),
+                _navItem(context, 'الإشعارات', '/notifications', Icons.notifications),
+                _navItem(context, 'الإعدادات', '/settings', Icons.settings),
+              ],
+            ),
           ),
           Expanded(child: child),
         ],
       ),
     );
   }
-}
 
-class _TeacherShell extends StatelessWidget {
-  const _TeacherShell({required this.child});
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: child,
-      bottomNavigationBar: BottomNavigationBar(
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.today), label: 'Today'),
-          BottomNavigationBarItem(icon: Icon(Icons.people), label: 'Students'),
-          BottomNavigationBarItem(icon: Icon(Icons.check_circle), label: 'Attendance'),
-          BottomNavigationBarItem(icon: Icon(Icons.replay), label: 'Revision'),
-        ],
+  Widget _navItem(BuildContext context, String title, String path, IconData icon) {
+    final isSelected = GoRouterState.of(context).matchedLocation == path;
+    return ListTile(
+      leading: Icon(icon, color: isSelected ? AppColors.primary : AppColors.textSecondary),
+      title: Text(
+        title,
+        style: AppTextStyles.bodyMedium.copyWith(
+          color: isSelected ? AppColors.primary : AppColors.textPrimary,
+          fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+        ),
       ),
-    );
-  }
-}
-
-class _ParentShell extends StatelessWidget {
-  const _ParentShell({required this.child});
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: child,
-      bottomNavigationBar: BottomNavigationBar(
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.trending_up), label: 'Progress'),
-          BottomNavigationBarItem(icon: Icon(Icons.calendar_today), label: 'Schedule'),
-          BottomNavigationBarItem(icon: Icon(Icons.message), label: 'Messages'),
-        ],
-      ),
+      selected: isSelected,
+      onTap: () => context.go(path),
     );
   }
 }
