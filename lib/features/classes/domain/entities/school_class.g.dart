@@ -74,3 +74,6 @@ const _$ClassStatusEnumMap = {
   ClassStatus.completed: 'completed',
   ClassStatus.cancelled: 'cancelled',
 };
+
+_$SchoolClassImpl _$SchoolClassFromJson(Map<String, dynamic> json) => _$$SchoolClassImplFromJson(json);
+Map<String, dynamic> _$SchoolClassToJson(_$SchoolClassImpl instance) => _$$SchoolClassImplToJson(instance);

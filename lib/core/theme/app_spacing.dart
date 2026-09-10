@@ -6,8 +6,11 @@ import 'package:flutter/material.dart';
 /// Use EdgeInsetsDirectional for RTL support.
 abstract final class AppSpacing {
   static const double xs = 4;
+  static const double s = 8;
   static const double sm = 8;
+  static const double m = 12;
   static const double md = 12;
+  static const double l = 16;
   static const double lg = 16;
   static const double xl = 20;
   static const double xxl = 24;

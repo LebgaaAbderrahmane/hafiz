@@ -25,7 +25,7 @@ class TeacherDashboardView extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Header
-              _buildHeader(context, currentUser?.name ?? 'المعلم'),
+              _buildHeader(context, currentUser?.fullName ?? 'المعلم'),
               Gap.l,
 
               // Today's schedule

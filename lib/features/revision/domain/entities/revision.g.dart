@@ -79,3 +79,6 @@ const _$RevisionPriorityEnumMap = {
   RevisionPriority.high: 'high',
   RevisionPriority.urgent: 'urgent',
 };
+
+_$RevisionImpl _$RevisionFromJson(Map<String, dynamic> json) => _$$RevisionImplFromJson(json);
+Map<String, dynamic> _$RevisionToJson(_$RevisionImpl instance) => _$$RevisionImplToJson(instance);

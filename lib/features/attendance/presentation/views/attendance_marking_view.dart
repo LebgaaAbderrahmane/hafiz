@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import "package:hafiz/core/localization/app_localizations.dart";
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hafiz/core/localization/localization.dart';
 import 'package:hafiz/core/widgets/button.dart';
@@ -20,7 +21,7 @@ class AttendanceMarkingView extends ConsumerStatefulWidget {
   });
 
   final String sessionId;
-  final String.classId;
+  final String classId;
 
   @override
   ConsumerState<AttendanceMarkingView> createState() =>
@@ -41,7 +42,7 @@ class _AttendanceMarkingViewState
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(context.l.attendance.markAttendance),
+        title: Text(context.l.markAttendance),
         actions: [
           _buildSummaryChip(),
         ],
@@ -55,7 +56,7 @@ class _AttendanceMarkingViewState
               error: (e, _) => Center(child: Text(e.toString())),
               data: (students) {
                 if (students.isEmpty) {
-                  return Center(child: Text(context.l.attendance.noStudents));
+                  return Center(child: Text(context.l.noStudents));
                 }
                 return attendanceAsync.when(
                   loading: () => const AppLoading(),
@@ -89,7 +90,7 @@ class _AttendanceMarkingViewState
       padding: const EdgeInsets.all(8),
       child: Center(
         child: Text(
-          '$present/$total ${context.l.attendance.present}',
+          '$present/$total ${context.l.present}',
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
       ),
@@ -154,7 +155,7 @@ class _AttendanceMarkingViewState
     return Padding(
       padding: const EdgeInsets.all(16),
       child: AppButton(
-        label: _saving ? context.l.common.saving : context.l.common.save,
+        label: _saving ? context.l.saving : context.l.save,
         onPressed: _saving ? null : _save,
       ),
     );
@@ -173,11 +174,11 @@ class _AttendanceMarkingViewState
       if (mounted) {
         ref.invalidate(sessionAttendanceProvider(widget.sessionId));
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(context.l.attendance.saved)),
+          SnackBar(content: Text(context.l.saved)),
         );
         Navigator.of(context).pop();
       }
-    } catch (e) {
+    } catch (e, st) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(e.toString())),

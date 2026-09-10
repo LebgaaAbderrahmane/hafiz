@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import "package:hafiz/core/localization/app_localizations.dart";
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hafiz/core/localization/localization.dart';
@@ -43,9 +44,9 @@ class _ClassDetail extends StatelessWidget {
           ],
           bottom: TabBar(
             tabs: [
-              Tab(text: context.l.classes.tabInfo),
-              Tab(text: context.l.classes.tabStudents),
-              Tab(text: context.l.classes.tabSchedule),
+              Tab(text: context.l.tabInfo),
+              Tab(text: context.l.tabStudents),
+              Tab(text: context.l.tabSchedule),
             ],
           ),
         ),
@@ -117,56 +118,56 @@ class _InfoTab extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       children: [
         _InfoRow(
-          label: context.l.classes.name,
+          label: context.l.name,
           value: schoolClass.name,
         ),
         if (schoolClass.description != null)
           _InfoRow(
-            label: context.l.classes.description,
+            label: context.l.description,
             value: schoolClass.description!,
           ),
         _InfoRow(
-          label: context.l.classes.level,
+          label: context.l.level,
           value: schoolClass.level.displayNameAr,
         ),
         _InfoRow(
-          label: context.l.classes.maxCapacity,
+          label: context.l.maxCapacity,
           value: '${schoolClass.maxCapacity}',
         ),
         _InfoRow(
-          label: context.l.classes.status,
+          label: context.l.status,
           value: schoolClass.status.displayNameAr,
         ),
         if (schoolClass.daysOfWeek.isNotEmpty)
           _InfoRow(
-            label: context.l.classes.daysOfWeek,
+            label: context.l.daysOfWeek,
             value: schoolClass.daysOfWeek.join(', '),
           ),
         if (schoolClass.startTime != null)
           _InfoRow(
-            label: context.l.classes.startTime,
+            label: context.l.startTime,
             value: schoolClass.startTime!,
           ),
         if (schoolClass.endTime != null)
           _InfoRow(
-            label: context.l.classes.endTime,
+            label: context.l.endTime,
             value: schoolClass.endTime!,
           ),
         if (schoolClass.startDate != null)
           _InfoRow(
-            label: context.l.classes.startDate,
+            label: context.l.startDate,
             value:
                 '${schoolClass.startDate!.day}/${schoolClass.startDate!.month}/${schoolClass.startDate!.year}',
           ),
         if (schoolClass.endDate != null)
           _InfoRow(
-            label: context.l.classes.endDate,
+            label: context.l.endDate,
             value:
                 '${schoolClass.endDate!.day}/${schoolClass.endDate!.month}/${schoolClass.endDate!.year}',
           ),
         if (schoolClass.notes != null)
           _InfoRow(
-            label: context.l.classes.notes,
+            label: context.l.notes,
             value: schoolClass.notes!,
           ),
       ],
@@ -182,7 +183,7 @@ class _StudentsTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Text(context.l.classes.studentsComingSoon),
+      child: Text(context.l.studentsComingSoon),
     );
   }
 }
@@ -195,7 +196,7 @@ class _ScheduleTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Text(context.l.classes.scheduleComingSoon),
+      child: Text(context.l.scheduleComingSoon),
     );
   }
 }

@@ -375,7 +375,7 @@ class _$MemorizationPlanImpl implements _MemorizationPlan {
 
 abstract class _MemorizationPlan implements MemorizationPlan {
   const factory _MemorizationPlan(
-      {required final String id,
+      {required String id,
       required String studentId,
       required String teacherId,
       required String organizationId,
@@ -648,7 +648,7 @@ class _$MemorizationCheckpointImpl implements _MemorizationCheckpoint {
 
 abstract class _MemorizationCheckpoint implements MemorizationCheckpoint {
   const factory _MemorizationCheckpoint(
-      {required final String id,
+      {required String id,
       required int surahNumber,
       required int startAyah,
       required int endAyah,
@@ -896,7 +896,7 @@ class _$MemorizationSessionImpl implements _MemorizationSession {
 
 abstract class _MemorizationSession implements MemorizationSession {
   const factory _MemorizationSession(
-      {required final String id,
+      {required String id,
       required DateTime date,
       required int durationMinutes,
       required String fromSurah,

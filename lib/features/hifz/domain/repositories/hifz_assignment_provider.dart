@@ -1,9 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
-import '../domain/entities/hifz_assignment.dart';
-import '../domain/repositories/hifz_assignment_repository.dart';
-import '../data/repositories/hifz_assignment_repository_impl.dart';
-import '../../../core/network/supabase_client.dart';
+import 'package:hafiz/features/hifz/domain/entities/hifz_assignment.dart';
+import 'package:hafiz/features/hifz/domain/repositories/hifz_assignment_repository.dart';
+import 'package:hafiz/features/hifz/data/repositories/hifz_assignment_repository_impl.dart';
+import 'package:hafiz/core/network/supabase_client.dart';
 
 /// Hifz assignment repository provider.
 final hifzAssignmentRepositoryProvider = Provider<HifzAssignmentRepository>((ref) {

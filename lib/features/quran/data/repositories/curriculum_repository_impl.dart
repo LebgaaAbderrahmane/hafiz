@@ -17,8 +17,8 @@ class CurriculumRepositoryImpl implements CurriculumRepository {
           .order('number', ascending: true);
       final surahs = data.map((json) => Surah.fromJson(json)).toList();
       return Right(surahs);
-    } on SupabaseException catch (e) {
-      return Left(ServerFailure(message: e.message));
+    } catch (e, st) {
+      return Left(ServerFailure(message: e.toString()));
     }
   }
 
@@ -31,8 +31,8 @@ class CurriculumRepositoryImpl implements CurriculumRepository {
           .eq('number', number)
           .single();
       return Right(Surah.fromJson(data));
-    } on SupabaseException catch (e) {
-      return Left(ServerFailure(message: e.message));
+    } catch (e, st) {
+      return Left(ServerFailure(message: e.toString()));
     }
   }
 
@@ -45,8 +45,8 @@ class CurriculumRepositoryImpl implements CurriculumRepository {
           .order('number', ascending: true);
       final juzs = data.map((json) => Juz.fromJson(json)).toList();
       return Right(juzs);
-    } on SupabaseException catch (e) {
-      return Left(ServerFailure(message: e.message));
+    } catch (e, st) {
+      return Left(ServerFailure(message: e.toString()));
     }
   }
 
@@ -59,8 +59,8 @@ class CurriculumRepositoryImpl implements CurriculumRepository {
           .eq('number', number)
           .single();
       return Right(Juz.fromJson(data));
-    } on SupabaseException catch (e) {
-      return Left(ServerFailure(message: e.message));
+    } catch (e, st) {
+      return Left(ServerFailure(message: e.toString()));
     }
   }
 
@@ -77,8 +77,8 @@ class CurriculumRepositoryImpl implements CurriculumRepository {
       final plans =
           data.map((json) => MemorizationPlan.fromJson(json)).toList();
       return Right(plans);
-    } on SupabaseException catch (e) {
-      return Left(ServerFailure(message: e.message));
+    } catch (e, st) {
+      return Left(ServerFailure(message: e.toString()));
     }
   }
 
@@ -95,8 +95,8 @@ class CurriculumRepositoryImpl implements CurriculumRepository {
       final plans =
           data.map((json) => MemorizationPlan.fromJson(json)).toList();
       return Right(plans);
-    } on SupabaseException catch (e) {
-      return Left(ServerFailure(message: e.message));
+    } catch (e, st) {
+      return Left(ServerFailure(message: e.toString()));
     }
   }
 
@@ -109,8 +109,8 @@ class CurriculumRepositoryImpl implements CurriculumRepository {
           .eq('id', id)
           .single();
       return Right(MemorizationPlan.fromJson(data));
-    } on SupabaseException catch (e) {
-      return Left(ServerFailure(message: e.message));
+    } catch (e, st) {
+      return Left(ServerFailure(message: e.toString()));
     }
   }
 
@@ -144,8 +144,8 @@ class CurriculumRepositoryImpl implements CurriculumRepository {
           .select()
           .single();
       return Right(MemorizationPlan.fromJson(data));
-    } on SupabaseException catch (e) {
-      return Left(ServerFailure(message: e.message));
+    } catch (e, st) {
+      return Left(ServerFailure(message: e.toString()));
     }
   }
 
@@ -184,8 +184,8 @@ class CurriculumRepositoryImpl implements CurriculumRepository {
           .select()
           .single();
       return Right(MemorizationPlan.fromJson(data));
-    } on SupabaseException catch (e) {
-      return Left(ServerFailure(message: e.message));
+    } catch (e, st) {
+      return Left(ServerFailure(message: e.toString()));
     }
   }
 
@@ -209,8 +209,8 @@ class CurriculumRepositoryImpl implements CurriculumRepository {
           .select()
           .single();
       return Right(MemorizationCheckpoint.fromJson(data));
-    } on SupabaseException catch (e) {
-      return Left(ServerFailure(message: e.message));
+    } catch (e, st) {
+      return Left(ServerFailure(message: e.toString()));
     }
   }
 
@@ -239,8 +239,8 @@ class CurriculumRepositoryImpl implements CurriculumRepository {
           .select()
           .single();
       return Right(MemorizationCheckpoint.fromJson(data));
-    } on SupabaseException catch (e) {
-      return Left(ServerFailure(message: e.message));
+    } catch (e, st) {
+      return Left(ServerFailure(message: e.toString()));
     }
   }
 
@@ -273,8 +273,8 @@ class CurriculumRepositoryImpl implements CurriculumRepository {
           .select()
           .single();
       return Right(MemorizationSession.fromJson(data));
-    } on SupabaseException catch (e) {
-      return Left(ServerFailure(message: e.message));
+    } catch (e, st) {
+      return Left(ServerFailure(message: e.toString()));
     }
   }
 
@@ -283,8 +283,8 @@ class CurriculumRepositoryImpl implements CurriculumRepository {
     try {
       await supabase.from('memorization_plans').delete().eq('id', id);
       return const Right(null);
-    } on SupabaseException catch (e) {
-      return Left(ServerFailure(message: e.message));
+    } catch (e, st) {
+      return Left(ServerFailure(message: e.toString()));
     }
   }
 }

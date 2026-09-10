@@ -1,6 +1,6 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
-import '../domain/entities/tasmi_session.dart';
-import '../domain/repositories/tasmi_repository.dart';
+import 'package:hafiz/features/tasmi/domain/entities/tasmi_session.dart';
+import 'package:hafiz/features/tasmi/domain/repositories/tasmi_repository.dart';
 
 class TasmiRepositoryImpl implements TasmiRepository {
   final SupabaseClient _client;

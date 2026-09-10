@@ -38,3 +38,6 @@ const _$RevelationTypeEnumMap = {
   RevelationType.meccan: 'meccan',
   RevelationType.medinan: 'medinan',
 };
+
+_$SurahImpl _$SurahFromJson(Map<String, dynamic> json) => _$$SurahImplFromJson(json);
+Map<String, dynamic> _$SurahToJson(_$SurahImpl instance) => _$$SurahImplToJson(instance);

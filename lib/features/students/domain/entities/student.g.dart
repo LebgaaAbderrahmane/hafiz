@@ -75,3 +75,6 @@ const _$StudentStatusEnumMap = {
   StudentStatus.withdrawn: 'withdrawn',
   StudentStatus.archived: 'archived',
 };
+
+_$StudentImpl _$StudentFromJson(Map<String, dynamic> json) => _$$StudentImplFromJson(json);
+Map<String, dynamic> _$StudentToJson(_$StudentImpl instance) => _$$StudentImplToJson(instance);

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import "package:hafiz/core/localization/app_localizations.dart";
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hafiz/core/localization/localization.dart';
@@ -36,7 +37,7 @@ class _StudentListViewState extends ConsumerState<StudentListView> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(context.l.students.title),
+        title: Text(context.l.title),
         actions: [
           IconButton(
             icon: const Icon(Icons.add),
@@ -50,7 +51,7 @@ class _StudentListViewState extends ConsumerState<StudentListView> {
             padding: const EdgeInsets.all(16),
             child: app.SearchBar(
               controller: _searchController,
-              hintText: context.l.students.searchHint,
+              hintText: context.l.searchHint,
               onChanged: (value) {
                 setState(() => _searchQuery = value);
               },
@@ -66,9 +67,9 @@ class _StudentListViewState extends ConsumerState<StudentListView> {
                 if (filtered.isEmpty) {
                   return EmptyState(
                     icon: Icons.school_outlined,
-                    title: context.l.students.emptyTitle,
-                    message: context.l.students.emptyMessage,
-                    actionLabel: context.l.students.addStudent,
+                    title: context.l.emptyTitle,
+                    message: context.l.emptyMessage,
+                    actionLabel: context.l.addStudent,
                     onAction: () => context.push('/students/add'),
                   );
                 }
@@ -89,7 +90,7 @@ class _StudentListViewState extends ConsumerState<StudentListView> {
         padding: const EdgeInsets.symmetric(horizontal: 16),
         children: [
           FilterChip(
-            label: Text(context.l.common.all),
+            label: Text(context.l.all),
             selected: _statusFilter == null,
             onSelected: (_) => setState(() => _statusFilter = null),
           ),

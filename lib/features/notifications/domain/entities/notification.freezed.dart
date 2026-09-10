@@ -277,7 +277,7 @@ class _$AppNotificationImpl implements _AppNotification {
 
 abstract class _AppNotification implements AppNotification {
   const factory _AppNotification(
-      {required final String id,
+      {required String id,
       required String organizationId,
       required String branchId,
       required String userId,

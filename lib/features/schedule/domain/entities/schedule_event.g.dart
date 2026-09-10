@@ -76,3 +76,6 @@ const _$EventStatusEnumMap = {
   EventStatus.cancelled: 'cancelled',
   EventStatus.rescheduled: 'rescheduled',
 };
+
+_$ScheduleEventImpl _$ScheduleEventFromJson(Map<String, dynamic> json) => _$$ScheduleEventImplFromJson(json);
+Map<String, dynamic> _$ScheduleEventToJson(_$ScheduleEventImpl instance) => _$$ScheduleEventImplToJson(instance);

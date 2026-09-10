@@ -1,6 +1,6 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
-import '../entities/revision.dart';
-import '../repositories/revision_repository.dart';
+import 'package:hafiz/features/revision/domain/entities/revision.dart';
+import 'package:hafiz/features/revision/domain/repositories/revision_repository.dart';
 
 class RevisionRepositoryImpl implements RevisionRepository {
   final SupabaseClient _client;

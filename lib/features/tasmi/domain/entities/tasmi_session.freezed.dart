@@ -295,7 +295,7 @@ class _$TasmiSessionImpl implements _TasmiSession {
       this.tajwidScore,
       this.fluencyScore,
       this.overallRating,
-      final List<TasmiError> errors = const [],
+      List<TasmiError> errors = const [],
       this.teacherNotes,
       required this.recordedAt,
       required this.createdAt,
@@ -303,40 +303,40 @@ class _$TasmiSessionImpl implements _TasmiSession {
       : _errors = errors;
 
   @override
-  final String id;
+  String id;
   @override
-  final String organizationId;
+  String organizationId;
   @override
-  final String branchId;
+  String branchId;
   @override
-  final String studentId;
+  String studentId;
   @override
-  final String teacherId;
+  String teacherId;
   @override
-  final String sessionId;
+  String sessionId;
   @override
-  final String? classId;
+  String? classId;
   @override
-  final int startSurah;
+  int startSurah;
   @override
-  final int startAyah;
+  int startAyah;
   @override
-  final int endSurah;
+  int endSurah;
   @override
-  final int endAyah;
+  int endAyah;
   @override
-  final TasmiSessionType sessionType;
+  TasmiSessionType sessionType;
   @override
-  final TasmiOutcome outcome;
+  TasmiOutcome outcome;
   @override
-  final int? accuracyScore;
+  int? accuracyScore;
   @override
-  final int? tajwidScore;
+  int? tajwidScore;
   @override
-  final int? fluencyScore;
+  int? fluencyScore;
   @override
-  final int? overallRating;
-  final List<TasmiError> _errors;
+  int? overallRating;
+  List<TasmiError> _errors;
   @override
   List<TasmiError> get errors {
     if (_errors is EqualUnmodifiableListView) return _errors;
@@ -344,13 +344,13 @@ class _$TasmiSessionImpl implements _TasmiSession {
   }
 
   @override
-  final String? teacherNotes;
+  String? teacherNotes;
   @override
-  final DateTime recordedAt;
+  DateTime recordedAt;
   @override
-  final DateTime createdAt;
+  DateTime createdAt;
   @override
-  final DateTime? updatedAt;
+  DateTime? updatedAt;
 
   @override
   String toString() {
@@ -659,19 +659,19 @@ class _$TasmiErrorImpl implements _TasmiError {
       this.notes});
 
   @override
-  final String id;
+  String id;
   @override
-  final int surahNumber;
+  int surahNumber;
   @override
-  final int ayahNumber;
+  int ayahNumber;
   @override
-  final String? wordLocation;
+  String? wordLocation;
   @override
-  final ErrorType errorType;
+  ErrorType errorType;
   @override
-  final ErrorSeverity? severity;
+  ErrorSeverity? severity;
   @override
-  final String? notes;
+  String? notes;
 
   @override
   String toString() {

@@ -1,4 +1,5 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Supabase client singleton.
 ///
@@ -44,15 +45,12 @@ Future<void> initializeSupabase() async {
 }
 
 /// Supabase client accessor.
-///
-/// Use this instead of Supabase.instance.client for consistency.
 SupabaseClient get supabase => Supabase.instance.client;
 
 /// Supabase auth accessor.
 GoTrueClient get supabaseAuth => Supabase.instance.client.auth;
 
-/// Supabase database accessor.
-PostgrestClient get supabaseDb => Supabase.instance.client.from;
-
-/// Supabase storage accessor.
-StorageClient get supabaseStorage => Supabase.instance.client.storage;
+/// Supabase client Riverpod provider.
+final supabaseClientProvider = Provider<SupabaseClient>((ref) {
+  return Supabase.instance.client;
+});

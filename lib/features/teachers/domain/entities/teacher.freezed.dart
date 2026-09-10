@@ -304,34 +304,34 @@ class _$TeacherImpl implements _Teacher {
         _languagesSpoken = languagesSpoken;
 
   @override
-  final String id;
+  String id;
   @override
-  final String organizationId;
+  String organizationId;
   @override
-  final String branchId;
+  String branchId;
   @override
-  final String userId;
+  String userId;
   @override
-  final String? employeeId;
+  String? employeeId;
   @override
-  final String fullName;
+  String fullName;
   @override
-  final String? preferredName;
+  String? preferredName;
   @override
-  final Gender? gender;
+  Gender? gender;
   @override
-  final DateTime? dateOfBirth;
+  DateTime? dateOfBirth;
   @override
-  final String? avatarUrl;
+  String? avatarUrl;
   @override
-  final String? nationality;
+  String? nationality;
   @override
-  final String? phone;
+  String? phone;
   @override
-  final String? email;
+  String? email;
   @override
-  final String? specialization;
-  final List<String> _qualifications;
+  String? specialization;
+  List<String> _qualifications;
   @override
   @JsonKey()
   List<String> get qualifications {
@@ -339,7 +339,7 @@ class _$TeacherImpl implements _Teacher {
     return EqualUnmodifiableListView(_qualifications);
   }
 
-  final List<String> _certifications;
+  List<String> _certifications;
   @override
   @JsonKey()
   List<String> get certifications {
@@ -347,7 +347,7 @@ class _$TeacherImpl implements _Teacher {
     return EqualUnmodifiableListView(_certifications);
   }
 
-  final List<String> _languagesSpoken;
+  List<String> _languagesSpoken;
   @override
   @JsonKey()
   List<String> get languagesSpoken {
@@ -357,17 +357,17 @@ class _$TeacherImpl implements _Teacher {
 
   @override
   @JsonKey()
-  final TeacherStatus status;
+  TeacherStatus status;
   @override
-  final DateTime? hireDate;
+  DateTime? hireDate;
   @override
-  final DateTime? terminationDate;
+  DateTime? terminationDate;
   @override
-  final String? notes;
+  String? notes;
   @override
-  final DateTime createdAt;
+  DateTime createdAt;
   @override
-  final DateTime? updatedAt;
+  DateTime? updatedAt;
 
   @override
   String toString() {

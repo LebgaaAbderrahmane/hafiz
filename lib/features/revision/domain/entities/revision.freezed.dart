@@ -401,7 +401,7 @@ class _$RevisionImpl implements _Revision {
 
 abstract class _Revision implements Revision {
   const factory _Revision(
-      {required final String id,
+      {required String id,
       required String organizationId,
       required String branchId,
       required String studentId,

@@ -1,6 +1,6 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
-import '../entities/notification.dart';
-import '../repositories/notification_repository.dart';
+import 'package:hafiz/features/notifications/domain/entities/notification.dart';
+import 'package:hafiz/features/notifications/domain/repositories/notification_repository.dart';
 
 class NotificationRepositoryImpl implements NotificationRepository {
   final SupabaseClient _client;

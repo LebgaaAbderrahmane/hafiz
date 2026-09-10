@@ -58,7 +58,7 @@ class ClassRepositoryImpl implements ClassRepository {
   Future<Either<Failure, SchoolClass>> getClass(String id) async {
     try {
       final data =
-          await supabase.from('classes').select().eq('id', id).single();
+          await supabase.from('classes').eq('id', id).select().single();
       return Right(SchoolClass.fromJson(data));
     } on SupabaseException catch (e) {
       return Left(ServerFailure(message: e.message));

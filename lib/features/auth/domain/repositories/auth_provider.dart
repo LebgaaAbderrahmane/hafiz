@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../domain/entities/user.dart';
-import '../domain/repositories/auth_repository.dart';
-import '../data/repositories/auth_repository_impl.dart';
+import 'package:hafiz/features/auth/domain/entities/user.dart';
+import 'package:hafiz/features/auth/domain/repositories/auth_repository.dart';
+import 'package:hafiz/features/auth/data/repositories/auth_repository_impl.dart';
 
 /// Auth repository provider.
 ///

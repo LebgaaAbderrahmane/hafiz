@@ -25,7 +25,7 @@ class OwnerDashboardView extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Header
-              _buildHeader(context, currentUser?.name ?? 'المالك'),
+              _buildHeader(context, currentUser?.fullName ?? 'المالك'),
               Gap.l,
 
               // Quick stats

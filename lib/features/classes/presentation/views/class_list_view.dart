@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import "package:hafiz/core/localization/app_localizations.dart";
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hafiz/core/localization/localization.dart';
@@ -36,7 +37,7 @@ class _ClassListViewState extends ConsumerState<ClassListView> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(context.l.classes.title),
+        title: Text(context.l.title),
         actions: [
           IconButton(
             icon: const Icon(Icons.add),
@@ -50,7 +51,7 @@ class _ClassListViewState extends ConsumerState<ClassListView> {
             padding: const EdgeInsets.all(16),
             child: app.SearchBar(
               controller: _searchController,
-              hintText: context.l.classes.searchHint,
+              hintText: context.l.searchHint,
               onChanged: (value) {
                 setState(() => _searchQuery = value);
               },
@@ -66,9 +67,9 @@ class _ClassListViewState extends ConsumerState<ClassListView> {
                 if (filtered.isEmpty) {
                   return EmptyState(
                     icon: Icons.class_outlined,
-                    title: context.l.classes.emptyTitle,
-                    message: context.l.classes.emptyMessage,
-                    actionLabel: context.l.classes.addClass,
+                    title: context.l.emptyTitle,
+                    message: context.l.emptyMessage,
+                    actionLabel: context.l.addClass,
                     onAction: () => context.push('/classes/add'),
                   );
                 }
@@ -89,7 +90,7 @@ class _ClassListViewState extends ConsumerState<ClassListView> {
         padding: const EdgeInsets.symmetric(horizontal: 16),
         children: [
           FilterChip(
-            label: Text(context.l.common.all),
+            label: Text(context.l.all),
             selected: _statusFilter == null && _levelFilter == null,
             onSelected: (_) => setState(() {
               _statusFilter = null;

@@ -48,7 +48,7 @@ class StudentRepositoryImpl implements StudentRepository {
   Future<Either<Failure, Student>> getStudent(String id) async {
     try {
       final data =
-          await supabase.from('students').select().eq('id', id).single();
+          await supabase.from('students').eq('id', id).select().single();
       return Right(Student.fromJson(data));
     } on SupabaseException catch (e) {
       return Left(ServerFailure(message: e.message));

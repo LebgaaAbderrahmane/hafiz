@@ -71,3 +71,6 @@ const _$AssignmentStatusEnumMap = {
   AssignmentStatus.overdue: 'overdue',
   AssignmentStatus.cancelled: 'cancelled',
 };
+
+_$HifzAssignmentImpl _$HifzAssignmentFromJson(Map<String, dynamic> json) => _$$HifzAssignmentImplFromJson(json);
+Map<String, dynamic> _$HifzAssignmentToJson(_$HifzAssignmentImpl instance) => _$$HifzAssignmentImplToJson(instance);

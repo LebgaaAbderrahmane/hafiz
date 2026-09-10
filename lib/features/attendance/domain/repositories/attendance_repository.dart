@@ -1,4 +1,4 @@
-import '../entities/attendance.dart';
+import 'package:hafiz/features/attendance/domain/entities/attendance.dart';
 
 /// Abstract repository for attendance operations.
 abstract class AttendanceRepository {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import "package:hafiz/core/localization/app_localizations.dart";
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hafiz/core/localization/localization.dart';
@@ -54,7 +55,7 @@ class _AddStudentViewState extends ConsumerState<AddStudentView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(context.l.students.addStudent),
+        title: Text(context.l.addStudent),
         leading: IconButton(
           icon: const Icon(Icons.close),
           onPressed: () => context.pop(),
@@ -85,11 +86,11 @@ class _AddStudentViewState extends ConsumerState<AddStudentView> {
       padding: const EdgeInsets.all(16),
       child: Row(
         children: [
-          _buildStepIndicator(0, context.l.students.stepBasicInfo),
+          _buildStepIndicator(0, context.l.stepBasicInfo),
           Expanded(child: Divider(color: Theme.of(context).colorScheme.outline)),
-          _buildStepIndicator(1, context.l.students.stepContact),
+          _buildStepIndicator(1, context.l.stepContact),
           Expanded(child: Divider(color: Theme.of(context).colorScheme.outline)),
-          _buildStepIndicator(2, context.l.students.stepEducation),
+          _buildStepIndicator(2, context.l.stepEducation),
         ],
       ),
     );
@@ -136,16 +137,16 @@ class _AddStudentViewState extends ConsumerState<AddStudentView> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              context.l.students.basicInfo,
+              context.l.basicInfo,
               style: Theme.of(context).textTheme.headlineSmall,
             ),
             const SizedBox(height: 24),
             AppTextField(
               controller: _fullNameController,
-              label: context.l.students.fullName,
+              label: context.l.fullName,
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return context.l.validation.required;
+                  return context.l.required;
                 }
                 return null;
               },
@@ -153,18 +154,18 @@ class _AddStudentViewState extends ConsumerState<AddStudentView> {
             const SizedBox(height: 16),
             AppTextField(
               controller: _preferredNameController,
-              label: context.l.students.preferredName,
+              label: context.l.preferredName,
             ),
             const SizedBox(height: 16),
             AppTextField(
               controller: _studentIdController,
-              label: context.l.students.studentId,
+              label: context.l.studentId,
             ),
             const SizedBox(height: 16),
             DropdownButtonFormField<Gender>(
               value: _gender,
               decoration: InputDecoration(
-                labelText: context.l.students.gender,
+                labelText: context.l.gender,
                 border: const OutlineInputBorder(),
               ),
               items: Gender.values
@@ -177,11 +178,11 @@ class _AddStudentViewState extends ConsumerState<AddStudentView> {
             ),
             const SizedBox(height: 16),
             ListTile(
-              title: Text(context.l.students.dateOfBirth),
+              title: Text(context.l.dateOfBirth),
               subtitle: Text(
                 _dateOfBirth != null
                     ? '${_dateOfBirth!.day}/${_dateOfBirth!.month}/${_dateOfBirth!.year}'
-                    : context.l.students.selectDate,
+                    : context.l.selectDate,
               ),
               trailing: const Icon(Icons.calendar_today),
               onTap: _selectDate,
@@ -193,7 +194,7 @@ class _AddStudentViewState extends ConsumerState<AddStudentView> {
             const SizedBox(height: 16),
             AppTextField(
               controller: TextEditingController(text: _nationality),
-              label: context.l.students.nationality,
+              label: context.l.nationality,
               onChanged: (value) => _nationality = value,
             ),
           ],
@@ -209,19 +210,19 @@ class _AddStudentViewState extends ConsumerState<AddStudentView> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            context.l.students.contactInfo,
+            context.l.contactInfo,
             style: Theme.of(context).textTheme.headlineSmall,
           ),
           const SizedBox(height: 24),
           AppTextField(
             controller: _phoneController,
-            label: context.l.students.phone,
+            label: context.l.phone,
             keyboardType: TextInputType.phone,
           ),
           const SizedBox(height: 16),
           AppTextField(
             controller: _emailController,
-            label: context.l.students.email,
+            label: context.l.email,
             keyboardType: TextInputType.emailAddress,
           ),
         ],
@@ -236,21 +237,21 @@ class _AddStudentViewState extends ConsumerState<AddStudentView> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            context.l.students.quranEducation,
+            context.l.quranEducation,
             style: Theme.of(context).textTheme.headlineSmall,
           ),
           const SizedBox(height: 24),
           DropdownButtonFormField<String>(
             value: _previousQuranEducation,
             decoration: InputDecoration(
-              labelText: context.l.students.previousEducation,
+              labelText: context.l.previousEducation,
               border: const OutlineInputBorder(),
             ),
             items: [
-              DropdownMenuItem(value: 'none', child: Text(context.l.students.none)),
-              DropdownMenuItem(value: 'basic', child: Text(context.l.students.basic)),
-              DropdownMenuItem(value: 'intermediate', child: Text(context.l.students.intermediate)),
-              DropdownMenuItem(value: 'advanced', child: Text(context.l.students.advanced)),
+              DropdownMenuItem(value: 'none', child: Text(context.l.none)),
+              DropdownMenuItem(value: 'basic', child: Text(context.l.basic)),
+              DropdownMenuItem(value: 'intermediate', child: Text(context.l.intermediate)),
+              DropdownMenuItem(value: 'advanced', child: Text(context.l.advanced)),
             ],
             onChanged: (value) => setState(() => _previousQuranEducation = value),
           ),
@@ -258,15 +259,15 @@ class _AddStudentViewState extends ConsumerState<AddStudentView> {
           DropdownButtonFormField<String>(
             value: _currentQuranLevel,
             decoration: InputDecoration(
-              labelText: context.l.students.currentQuranLevel,
+              labelText: context.l.currentQuranLevel,
               border: const OutlineInputBorder(),
             ),
             items: [
-              DropdownMenuItem(value: 'beginner', child: Text(context.l.students.beginner)),
-              DropdownMenuItem(value: 'elementary', child: Text(context.l.students.elementary)),
-              DropdownMenuItem(value: 'intermediate', child: Text(context.l.students.intermediate)),
-              DropdownMenuItem(value: 'advanced', child: Text(context.l.students.advanced)),
-              DropdownMenuItem(value: 'hafiz', child: Text(context.l.students.hafiz)),
+              DropdownMenuItem(value: 'beginner', child: Text(context.l.beginner)),
+              DropdownMenuItem(value: 'elementary', child: Text(context.l.elementary)),
+              DropdownMenuItem(value: 'intermediate', child: Text(context.l.intermediate)),
+              DropdownMenuItem(value: 'advanced', child: Text(context.l.advanced)),
+              DropdownMenuItem(value: 'hafiz', child: Text(context.l.hafiz)),
             ],
             onChanged: (value) => setState(() => _currentQuranLevel = value),
           ),
@@ -274,14 +275,14 @@ class _AddStudentViewState extends ConsumerState<AddStudentView> {
           DropdownButtonFormField<String>(
             value: _readingLevel,
             decoration: InputDecoration(
-              labelText: context.l.students.readingLevel,
+              labelText: context.l.readingLevel,
               border: const OutlineInputBorder(),
             ),
             items: [
-              DropdownMenuItem(value: 'cant_read', child: Text(context.l.students.cantRead)),
-              DropdownMenuItem(value: 'beginner', child: Text(context.l.students.beginner)),
-              DropdownMenuItem(value: 'intermediate', child: Text(context.l.students.intermediate)),
-              DropdownMenuItem(value: 'advanced', child: Text(context.l.students.advanced)),
+              DropdownMenuItem(value: 'cant_read', child: Text(context.l.cantRead)),
+              DropdownMenuItem(value: 'beginner', child: Text(context.l.beginner)),
+              DropdownMenuItem(value: 'intermediate', child: Text(context.l.intermediate)),
+              DropdownMenuItem(value: 'advanced', child: Text(context.l.advanced)),
             ],
             onChanged: (value) => setState(() => _readingLevel = value),
           ),
@@ -289,14 +290,14 @@ class _AddStudentViewState extends ConsumerState<AddStudentView> {
           DropdownButtonFormField<String>(
             value: _tajwidLevel,
             decoration: InputDecoration(
-              labelText: context.l.students.tajwidLevel,
+              labelText: context.l.tajwidLevel,
               border: const OutlineInputBorder(),
             ),
             items: [
-              DropdownMenuItem(value: 'none', child: Text(context.l.students.none)),
-              DropdownMenuItem(value: 'basic', child: Text(context.l.students.basic)),
-              DropdownMenuItem(value: 'intermediate', child: Text(context.l.students.intermediate)),
-              DropdownMenuItem(value: 'advanced', child: Text(context.l.students.advanced)),
+              DropdownMenuItem(value: 'none', child: Text(context.l.none)),
+              DropdownMenuItem(value: 'basic', child: Text(context.l.basic)),
+              DropdownMenuItem(value: 'intermediate', child: Text(context.l.intermediate)),
+              DropdownMenuItem(value: 'advanced', child: Text(context.l.advanced)),
             ],
             onChanged: (value) => setState(() => _tajwidLevel = value),
           ),
@@ -304,17 +305,17 @@ class _AddStudentViewState extends ConsumerState<AddStudentView> {
           DropdownButtonFormField<String>(
             value: _memorizationLevel,
             decoration: InputDecoration(
-              labelText: context.l.students.memorizationLevel,
+              labelText: context.l.memorizationLevel,
               border: const OutlineInputBorder(),
             ),
             items: [
-              DropdownMenuItem(value: 'none', child: Text(context.l.students.none)),
-              DropdownMenuItem(value: 'juz_ama', child: Text(context.l.students.juzAma)),
-              DropdownMenuItem(value: 'juz_2_5', child: Text(context.l.students.juz2to5)),
-              DropdownMenuItem(value: 'juz_6_10', child: Text(context.l.students.juz6to10)),
-              DropdownMenuItem(value: 'juz_11_20', child: Text(context.l.students.juz11to20)),
-              DropdownMenuItem(value: 'juz_21_30', child: Text(context.l.students.juz21to30)),
-              DropdownMenuItem(value: 'hafiz', child: Text(context.l.students.hafiz)),
+              DropdownMenuItem(value: 'none', child: Text(context.l.none)),
+              DropdownMenuItem(value: 'juz_ama', child: Text(context.l.juzAma)),
+              DropdownMenuItem(value: 'juz_2_5', child: Text(context.l.juz2to5)),
+              DropdownMenuItem(value: 'juz_6_10', child: Text(context.l.juz6to10)),
+              DropdownMenuItem(value: 'juz_11_20', child: Text(context.l.juz11to20)),
+              DropdownMenuItem(value: 'juz_21_30', child: Text(context.l.juz21to30)),
+              DropdownMenuItem(value: 'hafiz', child: Text(context.l.hafiz)),
             ],
             onChanged: (value) => setState(() => _memorizationLevel = value),
           ),
@@ -331,7 +332,7 @@ class _AddStudentViewState extends ConsumerState<AddStudentView> {
           if (_currentPage > 0)
             Expanded(
               child: AppButton(
-                label: context.l.common.previous,
+                label: context.l.previous,
                 variant: AppButtonVariant.outlined,
                 onPressed: () {
                   _pageController.previousPage(
@@ -346,8 +347,8 @@ class _AddStudentViewState extends ConsumerState<AddStudentView> {
           Expanded(
             child: AppButton(
               label: _currentPage == 2
-                  ? context.l.common.save
-                  : context.l.common.next,
+                  ? context.l.save
+                  : context.l.next,
               onPressed: _currentPage == 2 ? _submit : _nextStep,
             ),
           ),
@@ -412,7 +413,7 @@ class _AddStudentViewState extends ConsumerState<AddStudentView> {
         ref.read(studentsProvider.notifier).refresh();
         context.pop();
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(context.l.students.studentAdded)),
+          SnackBar(content: Text(context.l.studentAdded)),
         );
       },
     );

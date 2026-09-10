@@ -37,6 +37,7 @@ import '../theme/theme.dart';
 /// StatefulShellRoute for bottom navigation (teacher/parent).
 final appRouterProvider = Provider<GoRouter>((ref) {
   final authState = ref.watch(authStateProvider);
+  final authStream = ref.watch(authRepositoryProvider).authStateChanges;
 
   return GoRouter(
     initialLocation: '/login',
@@ -46,19 +47,17 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       final isAuthRoute = state.matchedLocation == '/login' ||
           state.matchedLocation == '/forgot-password';
 
-      // Redirect to login if not authenticated and not on auth route
       if (!isLoggedIn && !isAuthRoute) {
         return '/login';
       }
 
-      // Redirect to dashboard if authenticated and on auth route
       if (isLoggedIn && isAuthRoute) {
         return '/dashboard';
       }
 
       return null;
     },
-    refreshListenable: GoRouterRefreshStream(authState),
+    refreshListenable: GoRouterRefreshStream(authStream),
     routes: [
       // ── Auth Routes ──
       GoRoute(
@@ -224,16 +223,6 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                 ),
               ),
             ],
-          ),
-          GoRoute(
-            path: '/reports',
-            name: 'reports',
-            builder: (context, state) => const _PlaceholderPage(title: 'Reports'),
-          ),
-          GoRoute(
-            path: '/settings',
-            name: 'settings',
-            builder: (context, state) => const _PlaceholderPage(title: 'Settings'),
           ),
         ],
       ),

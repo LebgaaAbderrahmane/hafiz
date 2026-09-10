@@ -1,6 +1,6 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
-import '../entities/guardian.dart';
-import '../repositories/guardian_repository.dart';
+import 'package:hafiz/features/guardians/domain/entities/guardian.dart';
+import 'package:hafiz/features/guardians/domain/repositories/guardian_repository.dart';
 
 class GuardianRepositoryImpl implements GuardianRepository {
   final SupabaseClient _client;
