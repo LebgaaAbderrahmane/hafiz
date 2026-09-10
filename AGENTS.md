@@ -70,11 +70,11 @@ supabase db diff
 ## Current Sprint — Phase 9: Reports + Settings
 
 ### Tasks
-- [ ] Reports entity (freezed)
-- [ ] Reports repository + providers
-- [ ] Reports view
-- [ ] Settings view
-- [ ] Update router with reports and settings routes
+- [x] Reports entity (freezed)
+- [x] Reports repository + providers
+- [x] Reports view
+- [x] Settings view
+- [x] Update router with reports and settings routes
 
 ## Key Files
 
