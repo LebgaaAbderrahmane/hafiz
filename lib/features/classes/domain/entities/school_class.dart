@@ -9,7 +9,7 @@ part 'school_class.g.dart';
 /// Using 'school_class' to avoid Dart keyword conflict.
 @freezed
 abstract class SchoolClass with _$SchoolClass {
-  const factory SchoolClass({
+  factory SchoolClass({
     required String id,
     required String organizationId,
     required String branchId,

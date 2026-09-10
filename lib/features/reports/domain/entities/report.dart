@@ -8,7 +8,7 @@ part 'report.g.dart';
 /// Represents a generated report (attendance, progress, etc.).
 @freezed
 abstract class Report with _$Report {
-  const factory Report({
+  factory Report({
     required String id,
     required String organizationId,
     required String branchId,

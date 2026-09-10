@@ -8,7 +8,7 @@ part 'teacher.g.dart';
 /// Maps to the teachers table in Supabase.
 @freezed
 abstract class Teacher with _$Teacher {
-  const factory Teacher({
+  factory Teacher({
     required String id,
     required String organizationId,
     required String branchId,

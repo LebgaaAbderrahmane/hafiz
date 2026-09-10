@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../theme/theme.dart';
+import 'app_card.dart';
 
 /// Loading skeleton placeholder.
 ///

@@ -8,7 +8,7 @@ part 'revision.g.dart';
 /// Tracks Qur'an revision (muraja'ah) for a student.
 @freezed
 abstract class Revision with _$Revision {
-  const factory Revision({
+  factory Revision({
     required String id,
     required String organizationId,
     required String branchId,

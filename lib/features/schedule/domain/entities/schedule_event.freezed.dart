@@ -227,7 +227,7 @@ class __$$ScheduleEventImplCopyWithImpl<$Res>
 
 /// @nodoc
 class _$ScheduleEventImpl implements _ScheduleEvent {
-  const _$ScheduleEventImpl(
+  _$ScheduleEventImpl(
       {required this.id,
       required this.organizationId,
       required this.branchId,
@@ -380,7 +380,7 @@ class _$ScheduleEventImpl implements _ScheduleEvent {
 }
 
 abstract class _ScheduleEvent implements ScheduleEvent {
-  const factory _ScheduleEvent(
+  factory _ScheduleEvent(
       {required String id,
       required String organizationId,
       required String branchId,

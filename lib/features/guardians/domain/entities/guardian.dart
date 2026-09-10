@@ -8,7 +8,7 @@ part 'guardian.g.dart';
 /// Represents a parent/guardian of a student.
 @freezed
 abstract class Guardian with _$Guardian {
-  const factory Guardian({
+  factory Guardian({
     required String id,
     required String organizationId,
     required String branchId,

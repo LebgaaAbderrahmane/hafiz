@@ -167,7 +167,7 @@ class __$$AppNotificationImplCopyWithImpl<$Res>
 
 /// @nodoc
 class _$AppNotificationImpl implements _AppNotification {
-  const _$AppNotificationImpl(
+  _$AppNotificationImpl(
       {required this.id,
       required this.organizationId,
       required this.branchId,
@@ -199,10 +199,11 @@ class _$AppNotificationImpl implements _AppNotification {
   Map<String, dynamic>? _data;
   @override
   Map<String, dynamic>? get data {
-    value = _data;
-    if (value == null) return null;
+    if (_data == null) return null;
+
     if (_data is EqualUnmodifiableMapView) return _data;
-    return EqualUnmodifiableMapView(value);
+
+    return EqualUnmodifiableMapView(_data!);
   }
 
   @override
@@ -276,7 +277,7 @@ class _$AppNotificationImpl implements _AppNotification {
 }
 
 abstract class _AppNotification implements AppNotification {
-  const factory _AppNotification(
+  factory _AppNotification(
       {required String id,
       required String organizationId,
       required String branchId,

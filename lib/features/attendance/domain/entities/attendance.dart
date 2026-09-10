@@ -8,7 +8,7 @@ part 'attendance.g.dart';
 /// Records student attendance for a session.
 @freezed
 abstract class Attendance with _$Attendance {
-  const factory Attendance({
+  factory Attendance({
     required String id,
     required String organizationId,
     required String branchId,

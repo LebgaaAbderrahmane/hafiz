@@ -8,7 +8,7 @@ part 'schedule_event.g.dart';
 /// Represents a scheduled event (class, session, exam, etc.).
 @freezed
 abstract class ScheduleEvent with _$ScheduleEvent {
-  const factory ScheduleEvent({
+  factory ScheduleEvent({
     required String id,
     required String organizationId,
     required String branchId,

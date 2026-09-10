@@ -260,7 +260,7 @@ class __$$StudentImplCopyWithImpl<$Res>
 
 /// @nodoc
 class _$StudentImpl implements _Student {
-  const _$StudentImpl({
+  _$StudentImpl({
     required this.id,
     required this.organizationId,
     required this.branchId,
@@ -417,7 +417,7 @@ class _$StudentImpl implements _Student {
 }
 
 abstract class _Student implements Student {
-  const factory _Student({
+  factory _Student({
     required String id,
     required String organizationId,
     required String branchId,

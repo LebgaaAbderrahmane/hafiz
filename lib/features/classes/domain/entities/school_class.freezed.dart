@@ -221,7 +221,7 @@ class __$$SchoolClassImplCopyWithImpl<$Res>
 
 /// @nodoc
 class _$SchoolClassImpl implements _SchoolClass {
-  const _$SchoolClassImpl(
+  _$SchoolClassImpl(
       {required this.id,
       required this.organizationId,
       required this.branchId,
@@ -365,7 +365,7 @@ class _$SchoolClassImpl implements _SchoolClass {
 }
 
 abstract class _SchoolClass implements SchoolClass {
-  const factory _SchoolClass(
+  factory _SchoolClass(
       {required String id,
       required String organizationId,
       required String branchId,

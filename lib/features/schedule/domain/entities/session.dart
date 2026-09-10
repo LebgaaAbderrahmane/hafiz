@@ -8,7 +8,7 @@ part 'session.g.dart';
 /// Represents a specific class session or tasmi' session.
 @freezed
 abstract class Session with _$Session {
-  const factory Session({
+  factory Session({
     required String id,
     required String organizationId,
     required String branchId,

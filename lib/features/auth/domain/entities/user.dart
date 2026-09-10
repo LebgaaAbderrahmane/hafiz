@@ -8,7 +8,7 @@ part 'user.g.dart';
 /// Maps to Supabase auth.users + public.users table.
 @freezed
 abstract class AppUser with _$AppUser {
-  const factory AppUser({
+  factory AppUser({
     required String id,
     required String email,
     String? phone,
@@ -28,7 +28,7 @@ abstract class AppUser with _$AppUser {
 /// User role within an organization.
 @freezed
 abstract class UserRole with _$UserRole {
-  const factory UserRole({
+  factory UserRole({
     required String id,
     required String userId,
     required String organizationId,

@@ -174,7 +174,7 @@ class __$$ReportImplCopyWithImpl<$Res>
 
 /// @nodoc
 class _$ReportImpl implements _Report {
-  const _$ReportImpl(
+  _$ReportImpl(
       {required this.id,
       required this.organizationId,
       required this.branchId,
@@ -205,19 +205,21 @@ class _$ReportImpl implements _Report {
   Map<String, dynamic>? _parameters;
   @override
   Map<String, dynamic>? get parameters {
-    value = _parameters;
-    if (value == null) return null;
+    if (_parameters == null) return null;
+
     if (_parameters is EqualUnmodifiableMapView) return _parameters;
-    return EqualUnmodifiableMapView(value);
+
+    return EqualUnmodifiableMapView(_parameters!);
   }
 
   Map<String, dynamic>? _data;
   @override
   Map<String, dynamic>? get data {
-    value = _data;
-    if (value == null) return null;
+    if (_data == null) return null;
+
     if (_data is EqualUnmodifiableMapView) return _data;
-    return EqualUnmodifiableMapView(value);
+
+    return EqualUnmodifiableMapView(_data!);
   }
 
   @override
@@ -289,7 +291,7 @@ class _$ReportImpl implements _Report {
 }
 
 abstract class _Report implements Report {
-  const factory _Report(
+  factory _Report(
       {required String id,
       required String organizationId,
       required String branchId,
