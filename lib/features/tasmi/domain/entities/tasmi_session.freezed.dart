@@ -649,7 +649,7 @@ class __$$TasmiErrorImplCopyWithImpl<$Res>
 
 /// @nodoc
 class _$TasmiErrorImpl implements _TasmiError {
-  const _$TasmiErrorImpl(
+  _$TasmiErrorImpl(
       {required this.id,
       required this.surahNumber,
       required this.ayahNumber,

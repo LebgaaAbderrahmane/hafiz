@@ -129,7 +129,7 @@ extension TasmiOutcomeExtension on TasmiOutcome {
   String get displayNameAr {
     return switch (this) {
       TasmiOutcome.pass => 'نجح',
-      NeedsRevision => 'يحتاج مراجعة',
+      TasmiOutcome.needsRevision => 'يحتاج مراجعة',
       TasmiOutcome.fail => 'لم ينجح',
     };
   }

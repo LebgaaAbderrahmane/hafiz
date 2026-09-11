@@ -141,3 +141,9 @@ Map<String, dynamic> _$$MemorizationSessionImplToJson(
 
 _$MemorizationPlanImpl _$MemorizationPlanFromJson(Map<String, dynamic> json) => _$$MemorizationPlanImplFromJson(json);
 Map<String, dynamic> _$MemorizationPlanToJson(_$MemorizationPlanImpl instance) => _$$MemorizationPlanImplToJson(instance);
+
+_$MemorizationCheckpointImpl _$MemorizationCheckpointFromJson(Map<String, dynamic> json) => _$$MemorizationCheckpointImplFromJson(json);
+Map<String, dynamic> _$MemorizationCheckpointToJson(_$MemorizationCheckpointImpl instance) => _$$MemorizationCheckpointImplToJson(instance);
+
+_$MemorizationSessionImpl _$MemorizationSessionFromJson(Map<String, dynamic> json) => _$$MemorizationSessionImplFromJson(json);
+Map<String, dynamic> _$MemorizationSessionToJson(_$MemorizationSessionImpl instance) => _$$MemorizationSessionImplToJson(instance);
