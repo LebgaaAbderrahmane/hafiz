@@ -40,10 +40,10 @@ abstract class AuthRepository {
     String? language,
   });
 
-  /// Get user roles for an organization.
-  Future<List<UserRole>> getUserRoles({required String organizationId});
+  /// Get all roles for a user across all organizations.
+  Future<List<UserRole>> getUserRolesForUser({required String userId});
 
-  /// Check if user has a specific role.
+  /// Check if user has a specific role in an organization.
   Future<bool> hasRole({
     required String organizationId,
     required Role role,

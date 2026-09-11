@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/theme/theme.dart';
 import '../../../../core/widgets/widgets.dart';
+import '../../../auth/domain/repositories/user_role_provider.dart';
 import '../../domain/entities/tasmi_session.dart';
 import '../../domain/repositories/tasmi_provider.dart';
 
@@ -430,10 +431,12 @@ class _TasmiEvalViewState extends ConsumerState<TasmiEvalView> {
     setState(() => _saving = true);
 
     try {
+      final orgId = ref.read(activeOrganizationIdProvider) ?? '';
+      final branchId = ref.read(activeBranchIdProvider) ?? '';
       final session = TasmiSession(
         id: '',
-        organizationId: '',
-        branchId: '',
+        organizationId: orgId,
+        branchId: branchId,
         studentId: widget.studentId,
         teacherId: widget.teacherId,
         sessionId: widget.sessionId,

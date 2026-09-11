@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/theme.dart';
+import '../../../auth/domain/repositories/user_role_provider.dart';
 import '../../domain/entities/teacher.dart';
 import '../../domain/repositories/teacher_provider.dart';
 
@@ -25,7 +26,8 @@ class _TeacherListViewState extends ConsumerState<TeacherListView> {
 
   @override
   Widget build(BuildContext context) {
-    final teachersAsync = ref.watch(branchTeachersProvider(''));
+    final branchId = ref.watch(activeBranchIdProvider) ?? '';
+    final teachersAsync = ref.watch(branchTeachersProvider(branchId));
 
     return Scaffold(
       appBar: AppBar(
@@ -113,7 +115,10 @@ class _TeacherListViewState extends ConsumerState<TeacherListView> {
 
   Widget _buildTeacherList(List<Teacher> teachers) {
     return RefreshIndicator(
-      onRefresh: () async => ref.invalidate(branchTeachersProvider('')),
+      onRefresh: () async {
+        final branchId = ref.read(activeBranchIdProvider) ?? '';
+        ref.invalidate(branchTeachersProvider(branchId));
+      },
       child: ListView.builder(
         padding: EdgeInsets.all(AppSpacing.m),
         itemCount: teachers.length,

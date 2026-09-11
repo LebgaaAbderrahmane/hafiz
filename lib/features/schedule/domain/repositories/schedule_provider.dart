@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hafiz/features/auth/domain/repositories/auth_provider.dart';
+import 'package:hafiz/features/auth/domain/repositories/user_role_provider.dart';
 import 'package:hafiz/features/schedule/data/repositories/schedule_repository_impl.dart';
 import 'package:hafiz/features/schedule/domain/entities/schedule_event.dart';
 import 'package:hafiz/features/schedule/domain/entities/session.dart';
@@ -14,11 +14,11 @@ final scheduleRepositoryProvider = Provider<ScheduleRepository>((ref) {
 final eventsProvider = FutureProvider.autoDispose
     .family<List<ScheduleEvent>, ({DateTime start, DateTime end})>(
         (ref, params) async {
-  final user = ref.watch(currentUserProvider);
-  if (user == null) return [];
+  final orgId = ref.watch(activeOrganizationIdProvider);
+  if (orgId == null) return [];
 
   final result = await ref.read(scheduleRepositoryProvider).getEvents(
-        organizationId: user.id,
+        organizationId: orgId,
         startDate: params.start,
         endDate: params.end,
       );
@@ -44,11 +44,11 @@ final eventProvider =
 final sessionsProvider = FutureProvider.autoDispose
     .family<List<Session>, ({DateTime start, DateTime end})>(
         (ref, params) async {
-  final user = ref.watch(currentUserProvider);
-  if (user == null) return [];
+  final orgId = ref.watch(activeOrganizationIdProvider);
+  if (orgId == null) return [];
 
   final result = await ref.read(scheduleRepositoryProvider).getSessions(
-        organizationId: user.id,
+        organizationId: orgId,
         startDate: params.start,
         endDate: params.end,
       );

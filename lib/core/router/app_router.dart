@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hafiz/features/auth/presentation/views/login_view.dart';
 import 'package:hafiz/features/auth/presentation/views/forgot_password_view.dart';
 import 'package:hafiz/features/auth/domain/repositories/auth_provider.dart';
+import 'package:hafiz/features/auth/domain/repositories/user_role_provider.dart';
+import 'package:hafiz/features/auth/domain/entities/user.dart' show Role;
 import 'package:hafiz/features/hifz/presentation/views/hifz_assignment_list_view.dart';
 import 'package:hafiz/features/hifz/presentation/views/hifz_assignment_form_view.dart';
 import 'package:hafiz/features/notifications/presentation/views/notification_view.dart';
@@ -32,6 +34,7 @@ import 'package:hafiz/core/theme/theme.dart';
 final appRouterProvider = Provider<GoRouter>((ref) {
   final authState = ref.watch(authStateProvider);
   final authStream = ref.watch(authRepositoryProvider).authStateChanges;
+  final activeRole = ref.watch(activeRoleProvider);
 
   return GoRouter(
     initialLocation: '/login',
@@ -41,7 +44,15 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           state.matchedLocation == '/forgot-password';
 
       if (!isLoggedIn && !isAuthRoute) return '/login';
-      if (isLoggedIn && isAuthRoute) return '/dashboard';
+      if (isLoggedIn && isAuthRoute) {
+        // Route based on role
+        return switch (activeRole) {
+          null => '/login',
+          Role.teacher || Role.assistant => '/calendar',
+          Role.parent => '/parent-portal',
+          _ => '/dashboard',
+        };
+      }
       return null;
     },
     refreshListenable: GoRouterRefreshStream(authStream),
