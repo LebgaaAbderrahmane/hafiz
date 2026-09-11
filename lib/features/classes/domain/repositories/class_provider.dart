@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hafiz/features/auth/domain/repositories/auth_provider.dart';
+import 'package:hafiz/features/auth/domain/repositories/user_role_provider.dart';
 import 'package:hafiz/features/classes/data/repositories/class_repository_impl.dart';
 import 'package:hafiz/features/classes/domain/entities/school_class.dart';
 import 'package:hafiz/features/classes/domain/repositories/class_repository.dart';
@@ -18,11 +18,11 @@ final classesProvider =
 class ClassesNotifier extends AutoDisposeAsyncNotifier<List<SchoolClass>> {
   @override
   Future<List<SchoolClass>> build() async {
-    final user = ref.watch(currentUserProvider);
-    if (user == null) return [];
+    final orgId = ref.watch(activeOrganizationIdProvider);
+    if (orgId == null) return [];
 
     final result = await ref.read(classRepositoryProvider).getClasses(
-          organizationId: user.id,
+          organizationId: orgId,
         );
 
     return result.fold(

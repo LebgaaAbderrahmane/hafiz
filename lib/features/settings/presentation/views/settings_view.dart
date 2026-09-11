@@ -156,7 +156,7 @@ class SettingsView extends ConsumerWidget {
               radius: 32,
               backgroundColor: AppColors.primary.withValues(alpha: 0.1),
               child: Text(
-                (user?.name ?? 'م')[0],
+                (user?.fullName ?? 'م')[0],
                 style: AppTextStyles.headlineMedium.copyWith(
                   color: AppColors.primary,
                 ),
@@ -168,7 +168,7 @@ class SettingsView extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    user?.name ?? 'مستخدم',
+                    user?.fullName ?? 'مستخدم',
                     style: AppTextStyles.titleMedium,
                   ),
                   Gap.xs,

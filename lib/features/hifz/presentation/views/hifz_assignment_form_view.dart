@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/theme.dart';
+import '../../../auth/domain/repositories/user_role_provider.dart';
 import '../../domain/entities/hifz_assignment.dart';
 import '../../domain/repositories/hifz_assignment_provider.dart';
 
@@ -370,10 +371,12 @@ class _HifzAssignmentFormViewState extends ConsumerState<HifzAssignmentFormView>
     setState(() => _isLoading = true);
 
     try {
+      final orgId = ref.read(activeOrganizationIdProvider) ?? '';
+      final branchId = ref.read(activeBranchIdProvider) ?? '';
       final assignment = HifzAssignment(
         id: widget.assignmentId ?? '',
-        organizationId: '',
-        branchId: widget.branchId ?? '',
+        organizationId: orgId,
+        branchId: widget.branchId ?? branchId,
         studentId: widget.studentId ?? '',
         teacherId: widget.teacherId ?? '',
         classId: widget.classId,

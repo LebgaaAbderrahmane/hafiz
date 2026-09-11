@@ -130,12 +130,12 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<List<UserRole>> getUserRoles({required String organizationId}) async {
+  Future<List<UserRole>> getUserRolesForUser({required String userId}) async {
     try {
       final response = await _client
           .from('user_roles')
           .select()
-          .eq('organization_id', organizationId);
+          .eq('user_id', userId);
 
       return (response as List)
           .map((json) => UserRole.fromJson(json))

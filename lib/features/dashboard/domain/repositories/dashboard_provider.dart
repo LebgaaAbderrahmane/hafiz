@@ -3,6 +3,7 @@ import 'package:hafiz/features/dashboard/data/repositories/dashboard_repository.
 import 'package:hafiz/features/dashboard/data/repositories/dashboard_repository_impl.dart';
 import 'package:hafiz/features/dashboard/domain/entities/dashboard_stats.dart';
 import 'package:hafiz/features/auth/domain/repositories/auth_provider.dart';
+import 'package:hafiz/features/auth/domain/repositories/user_role_provider.dart';
 
 final dashboardRepositoryProvider = Provider<DashboardRepository>((ref) {
   return DashboardRepositoryImpl();
@@ -10,11 +11,11 @@ final dashboardRepositoryProvider = Provider<DashboardRepository>((ref) {
 
 final dashboardStatsProvider = FutureProvider<DashboardStats>((ref) async {
   final repo = ref.watch(dashboardRepositoryProvider);
-  final user = ref.watch(currentUserProvider);
-  if (user == null) {
+  final orgId = ref.watch(activeOrganizationIdProvider);
+  if (orgId == null) {
     return const DashboardStats();
   }
-  return repo.getDashboardStats(user.id);
+  return repo.getDashboardStats(orgId);
 });
 
 final unreadNotificationCountProvider = FutureProvider<int>((ref) async {

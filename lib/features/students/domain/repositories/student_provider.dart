@@ -1,6 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hafiz/core/network/supabase_client.dart';
-import 'package:hafiz/features/auth/domain/repositories/auth_provider.dart';
+import 'package:hafiz/features/auth/domain/repositories/user_role_provider.dart';
 import 'package:hafiz/features/students/data/repositories/student_repository_impl.dart';
 import 'package:hafiz/features/students/domain/entities/student.dart';
 import 'package:hafiz/features/students/domain/repositories/student_repository.dart';
@@ -18,11 +17,11 @@ final studentsProvider =
 class StudentsNotifier extends AutoDisposeAsyncNotifier<List<Student>> {
   @override
   Future<List<Student>> build() async {
-    final user = ref.watch(currentUserProvider);
-    if (user == null) return [];
+    final orgId = ref.watch(activeOrganizationIdProvider);
+    if (orgId == null) return [];
 
     final result = await ref.read(studentRepositoryProvider).getStudents(
-          organizationId: user.id, // TODO: use organizationId from user roles
+          organizationId: orgId,
         );
 
     return result.fold(
@@ -40,11 +39,11 @@ class StudentsNotifier extends AutoDisposeAsyncNotifier<List<Student>> {
   /// Load more students.
   Future<void> loadMore() async {
     final current = state.valueOrNull ?? [];
-    final user = ref.read(currentUserProvider);
-    if (user == null) return;
+    final orgId = ref.read(activeOrganizationIdProvider);
+    if (orgId == null) return;
 
     final result = await ref.read(studentRepositoryProvider).getStudents(
-          organizationId: user.id,
+          organizationId: orgId,
           offset: current.length,
         );
 

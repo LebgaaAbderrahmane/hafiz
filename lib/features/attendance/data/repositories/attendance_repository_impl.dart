@@ -63,6 +63,8 @@ class AttendanceRepositoryImpl implements AttendanceRepository {
 
   @override
   Future<Attendance> markAttendance({
+    required String organizationId,
+    required String branchId,
     required String studentId,
     required String sessionId,
     required String classId,
@@ -72,8 +74,8 @@ class AttendanceRepositoryImpl implements AttendanceRepository {
   }) async {
     final attendance = Attendance(
       id: '',
-      organizationId: '',
-      branchId: '',
+      organizationId: organizationId,
+      branchId: branchId,
       studentId: studentId,
       sessionId: sessionId,
       classId: classId,

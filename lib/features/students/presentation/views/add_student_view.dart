@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hafiz/core/localization/localization.dart';
 import 'package:hafiz/core/widgets/button.dart';
 import 'package:hafiz/core/widgets/text_field.dart';
+import 'package:hafiz/features/auth/domain/repositories/user_role_provider.dart';
 import 'package:hafiz/features/students/domain/entities/student.dart';
 import 'package:hafiz/features/students/domain/repositories/student_provider.dart';
 
@@ -379,10 +380,11 @@ class _AddStudentViewState extends ConsumerState<AddStudentView> {
   }
 
   Future<void> _submit() async {
-    // TODO: Get organizationId and branchId from auth state
+    final orgId = ref.read(activeOrganizationIdProvider) ?? '';
+    final branchId = ref.read(activeBranchIdProvider) ?? '';
     final result = await ref.read(studentRepositoryProvider).createStudent(
-          organizationId: 'org_123',
-          branchId: 'branch_123',
+          organizationId: orgId,
+          branchId: branchId,
           fullName: _fullNameController.text,
           studentId: _studentIdController.text.isNotEmpty
               ? _studentIdController.text

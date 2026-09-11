@@ -20,6 +20,8 @@ abstract class AttendanceRepository {
 
   /// Mark attendance for a student.
   Future<Attendance> markAttendance({
+    required String organizationId,
+    required String branchId,
     required String studentId,
     required String sessionId,
     required String classId,
