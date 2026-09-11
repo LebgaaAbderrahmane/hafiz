@@ -136,6 +136,17 @@ class AppLocalizations {
 
   // ── Quran ──
   String get quran => 'القرآن';
+  String get surah => 'السورة';
+  String get surahs => 'سور';
+  String get ayahs => 'آيات';
+  String get pages => 'صفحات';
+  String get tabSurahs => 'السور';
+  String get tabJuzs => 'الأجزاء';
+  String get memorizationPlans => 'خطط الحفظ';
+  String get noPlans => 'لا توجد خطط';
+  String get noPlansMessage => 'لا توجد خطط حفظ';
+  String get createPlan => 'إنشاء خطة';
+  String get required => 'مطلوب';
   String get juzAma => 'جزء عم';
   String get juz2to5 => 'الأجزاء 2-5';
   String get juz6to10 => 'الأجزاء 6-10';
