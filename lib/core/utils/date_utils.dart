@@ -27,7 +27,7 @@ String formatDateTime(DateTime date, {String locale = 'ar'}) {
 /// Get Hijri date string.
 String getHijriDate(DateTime date) {
   final hijri = HijriCalendar.fromDate(date);
-  return hijri.toFormatDDMMMMYYYY();
+  return '${hijri.hDay} ${hijri.longMonthName} ${hijri.hYear}';
 }
 
 /// Get day name in Arabic.

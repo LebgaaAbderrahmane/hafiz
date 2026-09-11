@@ -82,7 +82,7 @@ class RevisionTrackingView extends ConsumerWidget {
                   ],
                 );
               },
-              loading: const Center(child: CircularProgressIndicator()),
+              loading: () => const Center(child: CircularProgressIndicator()),
               error: (e, st) => Center(child: Text('Error: $e')),
             ),
           ),

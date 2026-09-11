@@ -90,5 +90,5 @@ const _$TeacherStatusEnumMap = {
   TeacherStatus.terminated: 'terminated',
 };
 
-_$TeacherImpl _$TeacherFromJson(Map<String, dynamic> json) => _$$TeacherImplFromJson(json);
+_$TeacherImpl _$TeacherFromJson(Map<String, dynamic> json) => _$TeacherImplFromJson(json);
 Map<String, dynamic> _$TeacherToJson(_$TeacherImpl instance) => _$$TeacherImplToJson(instance);

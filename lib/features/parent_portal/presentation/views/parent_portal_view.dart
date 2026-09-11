@@ -22,7 +22,7 @@ class ParentPortalView extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Header
-              _buildHeader(context, currentUser?.name ?? 'ولي الأمر'),
+              _buildHeader(context, currentUser?.fullName ?? 'ولي الأمر'),
               Gap.l,
 
               // Children list

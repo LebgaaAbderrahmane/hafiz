@@ -1,5 +1,4 @@
 import 'package:dartz/dartz.dart';
-import 'package:hafiz/core/errors/exceptions.dart';
 import 'package:hafiz/core/errors/failures.dart';
 import 'package:hafiz/core/network/supabase_client.dart';
 import 'package:hafiz/features/classes/domain/entities/school_class.dart';
@@ -20,6 +19,7 @@ class ClassRepositoryImpl implements ClassRepository {
     try {
       var query = supabase
           .from('classes')
+          .select()
           .eq('organization_id', organizationId);
 
       if (branchId != null) {
@@ -39,7 +39,6 @@ class ClassRepositoryImpl implements ClassRepository {
       }
 
       final data = await query
-          .select()
           .order('created_at', ascending: false)
           .range(offset, offset + limit - 1);
 
@@ -55,7 +54,7 @@ class ClassRepositoryImpl implements ClassRepository {
   Future<Either<Failure, SchoolClass>> getClass(String id) async {
     try {
       final data =
-          await supabase.from('classes').eq('id', id).select().single();
+          await supabase.from('classes').select().eq('id', id).single();
       return Right(SchoolClass.fromJson(data));
     } catch (e) {
       return Left(ServerFailure(message: e.toString()));

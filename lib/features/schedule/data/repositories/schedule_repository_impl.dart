@@ -19,6 +19,7 @@ class ScheduleRepositoryImpl implements ScheduleRepository {
     try {
       var query = supabase
           .from('schedule_events')
+          .select()
           .eq('organization_id', organizationId);
 
       if (branchId != null) {
@@ -40,7 +41,7 @@ class ScheduleRepositoryImpl implements ScheduleRepository {
         query = query.eq('teacher_id', teacherId);
       }
 
-      final data = await query.select().order('start_time', ascending: true);
+      final data = await query.order('start_time', ascending: true);
       final events =
           data.map((json) => ScheduleEvent.fromJson(json)).toList();
       return Right(events);
@@ -54,8 +55,8 @@ class ScheduleRepositoryImpl implements ScheduleRepository {
     try {
       final data = await supabase
           .from('schedule_events')
-          .eq('id', id)
           .select()
+          .eq('id', id)
           .single();
       return Right(ScheduleEvent.fromJson(data));
     } catch (e, st) {
@@ -182,6 +183,7 @@ class ScheduleRepositoryImpl implements ScheduleRepository {
     try {
       var query = supabase
           .from('sessions')
+          .select()
           .eq('organization_id', organizationId);
 
       if (branchId != null) {
@@ -203,7 +205,7 @@ class ScheduleRepositoryImpl implements ScheduleRepository {
         query = query.eq('teacher_id', teacherId);
       }
 
-      final data = await query.select().order('date', ascending: true);
+      final data = await query.order('date', ascending: true);
       final sessions = data.map((json) => Session.fromJson(json)).toList();
       return Right(sessions);
     } catch (e, st) {
@@ -216,8 +218,8 @@ class ScheduleRepositoryImpl implements ScheduleRepository {
     try {
       final data = await supabase
           .from('sessions')
-          .eq('id', id)
           .select()
+          .eq('id', id)
           .single();
       return Right(Session.fromJson(data));
     } catch (e, st) {
