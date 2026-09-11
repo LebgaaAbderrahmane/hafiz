@@ -1,5 +1,4 @@
 import 'package:dartz/dartz.dart';
-import 'package:hafiz/core/errors/exceptions.dart';
 import 'package:hafiz/core/errors/failures.dart';
 import 'package:hafiz/core/network/supabase_client.dart';
 import 'package:hafiz/features/schedule/domain/entities/schedule_event.dart';
@@ -20,35 +19,28 @@ class ScheduleRepositoryImpl implements ScheduleRepository {
     try {
       var query = supabase
           .from('schedule_events')
-          .select()
-          .eq('organization_id', organizationId)
-          .order('start_time', ascending: true);
+          .eq('organization_id', organizationId);
 
       if (branchId != null) {
         query = query.eq('branch_id', branchId);
       }
-
       if (startDate != null) {
         query = query.gte('start_time', startDate.toIso8601String());
       }
-
       if (endDate != null) {
         query = query.lte('end_time', endDate.toIso8601String());
       }
-
       if (type != null) {
         query = query.eq('event_type', type.name);
       }
-
       if (classId != null) {
         query = query.eq('class_id', classId);
       }
-
       if (teacherId != null) {
         query = query.eq('teacher_id', teacherId);
       }
 
-      final data = await query;
+      final data = await query.select().order('start_time', ascending: true);
       final events =
           data.map((json) => ScheduleEvent.fromJson(json)).toList();
       return Right(events);
@@ -62,8 +54,8 @@ class ScheduleRepositoryImpl implements ScheduleRepository {
     try {
       final data = await supabase
           .from('schedule_events')
-          .select()
           .eq('id', id)
+          .select()
           .single();
       return Right(ScheduleEvent.fromJson(data));
     } catch (e, st) {
@@ -190,35 +182,28 @@ class ScheduleRepositoryImpl implements ScheduleRepository {
     try {
       var query = supabase
           .from('sessions')
-          .select()
-          .eq('organization_id', organizationId)
-          .order('date', ascending: true);
+          .eq('organization_id', organizationId);
 
       if (branchId != null) {
         query = query.eq('branch_id', branchId);
       }
-
       if (startDate != null) {
         query = query.gte('date', startDate.toIso8601String());
       }
-
       if (endDate != null) {
         query = query.lte('date', endDate.toIso8601String());
       }
-
       if (type != null) {
         query = query.eq('type', type.name);
       }
-
       if (classId != null) {
         query = query.eq('class_id', classId);
       }
-
       if (teacherId != null) {
         query = query.eq('teacher_id', teacherId);
       }
 
-      final data = await query;
+      final data = await query.select().order('date', ascending: true);
       final sessions = data.map((json) => Session.fromJson(json)).toList();
       return Right(sessions);
     } catch (e, st) {
@@ -231,8 +216,8 @@ class ScheduleRepositoryImpl implements ScheduleRepository {
     try {
       final data = await supabase
           .from('sessions')
-          .select()
           .eq('id', id)
+          .select()
           .single();
       return Right(Session.fromJson(data));
     } catch (e, st) {

@@ -18,29 +18,28 @@ class StudentRepositoryImpl implements StudentRepository {
     try {
       var query = supabase
           .from('students')
-          .select()
-          .eq('organization_id', organizationId)
-          .order('created_at', ascending: false)
-          .range(offset, offset + limit - 1);
+          .eq('organization_id', organizationId);
 
       if (branchId != null) {
         query = query.eq('branch_id', branchId);
       }
-
       if (status != null) {
         query = query.eq('status', status.name);
       }
-
       if (search != null && search.isNotEmpty) {
         query = query.or('full_name.ilike.%$search%,email.ilike.%$search%');
       }
 
-      final data = await query;
+      final data = await query
+          .select()
+          .order('created_at', ascending: false)
+          .range(offset, offset + limit - 1);
+
       final students =
           data.map((json) => Student.fromJson(json)).toList();
       return Right(students);
-    } on SupabaseException catch (e) {
-      return Left(ServerFailure(message: e.message));
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
     }
   }
 
@@ -50,8 +49,8 @@ class StudentRepositoryImpl implements StudentRepository {
       final data =
           await supabase.from('students').eq('id', id).select().single();
       return Right(Student.fromJson(data));
-    } on SupabaseException catch (e) {
-      return Left(ServerFailure(message: e.message));
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
     }
   }
 
@@ -90,8 +89,8 @@ class StudentRepositoryImpl implements StudentRepository {
           .select()
           .single();
       return Right(Student.fromJson(data));
-    } on SupabaseException catch (e) {
-      return Left(ServerFailure(message: e.message));
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
     }
   }
 
@@ -146,8 +145,8 @@ class StudentRepositoryImpl implements StudentRepository {
           .select()
           .single();
       return Right(Student.fromJson(data));
-    } on SupabaseException catch (e) {
-      return Left(ServerFailure(message: e.message));
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
     }
   }
 
@@ -156,8 +155,8 @@ class StudentRepositoryImpl implements StudentRepository {
     try {
       await supabase.from('students').delete().eq('id', id);
       return const Right(null);
-    } on SupabaseException catch (e) {
-      return Left(ServerFailure(message: e.message));
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
     }
   }
 
