@@ -5,25 +5,25 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 ///
 /// Initialize in bootstrap.dart before runApp().
 /// Pass secrets via --dart-define:
-///   flutter run --dart-define=SUPABASE_URL=... --dart-define=SUPABASE_ANON_KEY=...
+///   flutter run --dart-define=SUPABASE_URL=... --dart-define=SUPABASE_PUBLISHABLE_KEY=...
 class SupabaseConfig {
   SupabaseConfig._();
 
   static const String _supabaseUrl = String.fromEnvironment(
     'SUPABASE_URL',
-    defaultValue: '',
+    defaultValue: 'http://127.0.0.1:54421',
   );
 
-  static const String _supabaseAnonKey = String.fromEnvironment(
-    'SUPABASE_ANON_KEY',
-    defaultValue: '',
+  static const String _supabasePublishableKey = String.fromEnvironment(
+    'SUPABASE_PUBLISHABLE_KEY',
+    defaultValue: 'sb_publishable_ACJWlzQHlZjBrEguHvfOxg_3BJgxAaH',
   );
 
   static String get url => _supabaseUrl;
-  static String get anonKey => _supabaseAnonKey;
+  static String get publishableKey => _supabasePublishableKey;
 
   static bool get isConfigured =>
-      _supabaseUrl.isNotEmpty && _supabaseAnonKey.isNotEmpty;
+      _supabaseUrl.isNotEmpty && _supabasePublishableKey.isNotEmpty;
 }
 
 /// Initialize Supabase.
@@ -37,7 +37,7 @@ Future<void> initializeSupabase() async {
 
   await Supabase.initialize(
     url: SupabaseConfig.url,
-    anonKey: SupabaseConfig.anonKey,
+    publishableKey: SupabaseConfig.publishableKey,
     authOptions: const FlutterAuthClientOptions(
       authFlowType: AuthFlowType.pkce,
     ),

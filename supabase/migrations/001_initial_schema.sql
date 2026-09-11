@@ -1,9 +1,99 @@
 -- Hafiz Database Schema
--- Version: 001_initial
--- Date: 2026-09-06
+-- Version: 002_full_rewrite
+-- Date: 2026-09-11
 
 -- Enable UUID extension
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+-- ──────────────────────────────────────────────
+-- ENUM TYPES
+-- ──────────────────────────────────────────────
+
+CREATE TYPE user_role AS ENUM (
+  'owner', 'super_admin', 'branch_manager', 'supervisor',
+  'teacher', 'assistant', 'reception', 'finance', 'parent', 'student'
+);
+
+CREATE TYPE student_status AS ENUM (
+  'lead', 'applicant', 'active', 'suspended', 'graduated', 'withdrawn', 'archived'
+);
+
+CREATE TYPE gender AS ENUM ('male', 'female');
+
+CREATE TYPE teacher_status AS ENUM ('active', 'on_leave', 'inactive', 'terminated');
+
+CREATE TYPE class_status AS ENUM ('active', 'inactive', 'completed', 'cancelled');
+
+CREATE TYPE attendance_status AS ENUM ('present', 'late', 'absent', 'excused', 'left_early');
+
+CREATE TYPE assignment_status AS ENUM (
+  'pending', 'in_progress', 'completed', 'overdue', 'cancelled'
+);
+
+CREATE TYPE memorization_status AS ENUM (
+  'not_started', 'in_progress', 'paused', 'completed', 'cancelled'
+);
+
+CREATE TYPE memorization_priority AS ENUM ('low', 'medium', 'high');
+
+CREATE TYPE checkpoint_status AS ENUM (
+  'pending', 'in_progress', 'completed', 'needs_revision'
+);
+
+CREATE TYPE tasmi_session_type AS ENUM (
+  'new_memorization', 'revision', 'comprehensive_revision',
+  'exam', 'placement', 'competition'
+);
+
+CREATE TYPE tasmi_outcome AS ENUM ('pass', 'needs_revision', 'fail');
+
+CREATE TYPE error_type AS ENUM (
+  'omission', 'addition', 'substitution', 'hesitation',
+  'repeated_mistake', 'tajwid_error', 'pronunciation_error',
+  'stopping_error', 'starting_error'
+);
+
+CREATE TYPE error_severity AS ENUM ('minor', 'moderate', 'major');
+
+CREATE TYPE revision_status AS ENUM (
+  'pending', 'due', 'overdue', 'in_progress', 'completed', 'needs_revision'
+);
+
+CREATE TYPE revision_priority AS ENUM ('low', 'medium', 'high', 'urgent');
+
+CREATE TYPE schedule_session_type AS ENUM (
+  'class_session', 'tasmi', 'revision', 'exam', 'makeup', 'other'
+);
+
+CREATE TYPE schedule_session_status AS ENUM (
+  'scheduled', 'in_progress', 'completed', 'cancelled', 'rescheduled'
+);
+
+CREATE TYPE event_type AS ENUM (
+  'class_session', 'tasmi', 'exam', 'meeting', 'holiday', 'other'
+);
+
+CREATE TYPE event_status AS ENUM (
+  'scheduled', 'in_progress', 'completed', 'cancelled', 'rescheduled'
+);
+
+CREATE TYPE notification_type AS ENUM (
+  'attendance', 'memorization', 'tasmi', 'assignment',
+  'schedule', 'report', 'system', 'reminder'
+);
+
+CREATE TYPE report_type AS ENUM (
+  'attendance', 'memorization_progress', 'tasmi_summary',
+  'student_performance', 'teacher_performance', 'class_overview', 'custom'
+);
+
+CREATE TYPE report_format AS ENUM ('pdf', 'csv', 'excel');
+
+CREATE TYPE revelation_type AS ENUM ('meccan', 'medinan');
+
+-- ──────────────────────────────────────────────
+-- CORE TABLES
+-- ──────────────────────────────────────────────
 
 -- ── Organizations ──
 CREATE TABLE organizations (
@@ -29,7 +119,7 @@ CREATE TABLE branches (
 
 -- ── Users ──
 CREATE TABLE users (
-  id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   email TEXT,
   phone TEXT,
   full_name TEXT NOT NULL,
@@ -42,11 +132,6 @@ CREATE TABLE users (
 );
 
 -- ── User Roles ──
-CREATE TYPE user_role AS ENUM (
-  'owner', 'super_admin', 'branch_manager', 'supervisor',
-  'teacher', 'assistant', 'reception', 'finance', 'parent', 'student'
-);
-
 CREATE TABLE user_roles (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
@@ -57,13 +142,11 @@ CREATE TABLE user_roles (
   UNIQUE(user_id, organization_id, role)
 );
 
+-- ──────────────────────────────────────────────
+-- PEOPLE TABLES
+-- ──────────────────────────────────────────────
+
 -- ── Students ──
-CREATE TYPE student_status AS ENUM (
-  'lead', 'applicant', 'active', 'suspended', 'graduated', 'withdrawn', 'archived'
-);
-
-CREATE TYPE gender AS ENUM ('male', 'female');
-
 CREATE TABLE students (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   organization_id UUID NOT NULL REFERENCES organizations(id) ON DELETE CASCADE,
@@ -78,7 +161,7 @@ CREATE TABLE students (
   language TEXT DEFAULT 'ar',
   phone TEXT,
   email TEXT,
-  status student_status DEFAULT 'lead',
+  status student_status DEFAULT 'active',
   previous_quran_education TEXT,
   current_quran_level TEXT,
   reading_level TEXT,
@@ -92,10 +175,15 @@ CREATE TABLE students (
 CREATE TABLE guardians (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   organization_id UUID NOT NULL REFERENCES organizations(id) ON DELETE CASCADE,
+  branch_id UUID REFERENCES branches(id) ON DELETE SET NULL,
   full_name TEXT NOT NULL,
   phone TEXT,
   email TEXT,
+  address TEXT,
+  occupation TEXT,
   relationship TEXT,
+  type TEXT,
+  notes TEXT,
   is_emergency_contact BOOLEAN DEFAULT false,
   communication_preference TEXT DEFAULT 'sms',
   created_at TIMESTAMPTZ DEFAULT NOW(),
@@ -108,24 +196,40 @@ CREATE TABLE student_guardians (
   student_id UUID NOT NULL REFERENCES students(id) ON DELETE CASCADE,
   guardian_id UUID NOT NULL REFERENCES guardians(id) ON DELETE CASCADE,
   is_primary BOOLEAN DEFAULT false,
+  relationship TEXT,
   UNIQUE(student_id, guardian_id)
 );
 
 -- ── Teachers ──
-CREATE TYPE employment_status AS ENUM ('active', 'inactive', 'on_leave');
-
 CREATE TABLE teachers (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   organization_id UUID NOT NULL REFERENCES organizations(id) ON DELETE CASCADE,
   branch_id UUID NOT NULL REFERENCES branches(id) ON DELETE CASCADE,
-  qualifications TEXT,
-  ijazah_info TEXT,
-  tajwid_specialization TEXT,
-  employment_status employment_status DEFAULT 'active',
+  employee_id TEXT,
+  full_name TEXT NOT NULL,
+  preferred_name TEXT,
+  gender gender,
+  date_of_birth DATE,
+  avatar_url TEXT,
+  nationality TEXT,
+  phone TEXT,
+  email TEXT,
+  specialization TEXT,
+  qualifications TEXT[] DEFAULT '{}',
+  certifications TEXT[] DEFAULT '{}',
+  languages_spoken TEXT[] DEFAULT '{}',
+  status teacher_status DEFAULT 'active',
+  hire_date DATE,
+  termination_date DATE,
+  notes TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
+
+-- ──────────────────────────────────────────────
+-- PROGRAM / LEVEL / CLASS TABLES
+-- ──────────────────────────────────────────────
 
 -- ── Programs ──
 CREATE TABLE programs (
@@ -151,14 +255,19 @@ CREATE TABLE classes (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   organization_id UUID NOT NULL REFERENCES organizations(id) ON DELETE CASCADE,
   branch_id UUID NOT NULL REFERENCES branches(id) ON DELETE CASCADE,
-  program_id UUID REFERENCES programs(id) ON DELETE SET NULL,
-  level_id UUID REFERENCES levels(id) ON DELETE SET NULL,
   name TEXT NOT NULL,
+  description TEXT,
+  room_id TEXT,
   teacher_id UUID REFERENCES teachers(id) ON DELETE SET NULL,
-  assistant_id UUID REFERENCES teachers(id) ON DELETE SET NULL,
-  room TEXT,
-  capacity INTEGER DEFAULT 30,
-  is_active BOOLEAN DEFAULT true,
+  level TEXT,
+  days_of_week TEXT[] DEFAULT '{}',
+  start_time TEXT,
+  end_time TEXT,
+  max_capacity INTEGER DEFAULT 30,
+  status class_status DEFAULT 'active',
+  start_date DATE,
+  end_date DATE,
+  notes TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
@@ -184,42 +293,104 @@ CREATE TABLE schedules (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- ── Attendance ──
-CREATE TYPE attendance_status AS ENUM ('present', 'late', 'absent', 'excused', 'left_early');
+-- ──────────────────────────────────────────────
+-- ATTENDANCE
+-- ──────────────────────────────────────────────
 
 CREATE TABLE attendance (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   organization_id UUID NOT NULL REFERENCES organizations(id) ON DELETE CASCADE,
-  class_id UUID NOT NULL REFERENCES classes(id) ON DELETE CASCADE,
+  branch_id UUID REFERENCES branches(id) ON DELETE SET NULL,
   student_id UUID NOT NULL REFERENCES students(id) ON DELETE CASCADE,
+  session_id UUID,
+  class_id UUID NOT NULL REFERENCES classes(id) ON DELETE CASCADE,
   date DATE NOT NULL,
   status attendance_status NOT NULL,
-  recorded_by UUID REFERENCES users(id) ON DELETE SET NULL,
+  check_in_time TEXT,
+  check_out_time TEXT,
   notes TEXT,
+  marked_by UUID REFERENCES users(id) ON DELETE SET NULL,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW(),
   UNIQUE(class_id, student_id, date)
+);
+
+-- ──────────────────────────────────────────────
+-- QURAN / MEMORIZATION
+-- ──────────────────────────────────────────────
+
+-- ── Quran Surahs (reference data) ──
+CREATE TABLE quran_surahs (
+  number INTEGER PRIMARY KEY,
+  name_arabic TEXT NOT NULL,
+  name_english TEXT NOT NULL,
+  name_transliteration TEXT NOT NULL,
+  total_ayahs INTEGER NOT NULL,
+  revelation_type revelation_type NOT NULL,
+  juz INTEGER NOT NULL,
+  hizb INTEGER,
+  page INTEGER,
+  description TEXT
+);
+
+-- ── Quran Juz (reference data) ──
+CREATE TABLE quran_juz (
+  number INTEGER PRIMARY KEY,
+  name_arabic TEXT NOT NULL,
+  name_english TEXT NOT NULL,
+  start_page INTEGER NOT NULL,
+  end_page INTEGER NOT NULL,
+  surah_numbers INTEGER[] NOT NULL,
+  total_ayahs INTEGER NOT NULL
 );
 
 -- ── Memorization Plans ──
 CREATE TABLE memorization_plans (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   student_id UUID NOT NULL REFERENCES students(id) ON DELETE CASCADE,
+  teacher_id UUID REFERENCES teachers(id) ON DELETE SET NULL,
   organization_id UUID NOT NULL REFERENCES organizations(id) ON DELETE CASCADE,
-  target TEXT,
-  daily_target INTEGER,
-  weekly_target INTEGER,
-  planned_completion_date DATE,
-  is_active BOOLEAN DEFAULT true,
+  class_id UUID REFERENCES classes(id) ON DELETE SET NULL,
+  status memorization_status NOT NULL DEFAULT 'not_started',
+  priority memorization_priority NOT NULL DEFAULT 'medium',
+  current_surah INTEGER NOT NULL DEFAULT 1,
+  current_ayah INTEGER NOT NULL DEFAULT 1,
+  target_surah INTEGER NOT NULL DEFAULT 1,
+  target_ayah INTEGER NOT NULL DEFAULT 1,
+  notes TEXT,
+  completed_at TIMESTAMPTZ,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- ── Memorization Assignments ──
-CREATE TYPE assignment_status AS ENUM (
-  'assigned', 'practiced', 'submitted', 'assessed', 'passed', 'needs_retry', 'cancelled'
+-- ── Memorization Checkpoints ──
+CREATE TABLE memorization_checkpoints (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  plan_id UUID NOT NULL REFERENCES memorization_plans(id) ON DELETE CASCADE,
+  surah_number INTEGER NOT NULL,
+  start_ayah INTEGER NOT NULL,
+  end_ayah INTEGER NOT NULL,
+  status checkpoint_status NOT NULL DEFAULT 'pending',
+  quality_score INTEGER,
+  teacher_notes TEXT,
+  completed_at TIMESTAMPTZ
 );
 
+-- ── Memorization Session Logs ──
+CREATE TABLE memorization_session_logs (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  plan_id UUID NOT NULL REFERENCES memorization_plans(id) ON DELETE CASCADE,
+  date TIMESTAMPTZ NOT NULL,
+  duration_minutes INTEGER NOT NULL,
+  from_surah INTEGER NOT NULL,
+  from_ayah INTEGER NOT NULL,
+  to_surah INTEGER NOT NULL,
+  to_ayah INTEGER NOT NULL,
+  quality_score INTEGER,
+  notes TEXT
+);
+
+-- ── Memorization Assignments ──
 CREATE TABLE memorization_assignments (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   student_id UUID NOT NULL REFERENCES students(id) ON DELETE CASCADE,
@@ -232,17 +403,12 @@ CREATE TABLE memorization_assignments (
   due_date DATE,
   expected_quality TEXT,
   notes TEXT,
-  status assignment_status DEFAULT 'assigned',
+  status assignment_status DEFAULT 'pending',
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
 -- ── Memorization Progress ──
-CREATE TYPE memorization_status AS ENUM (
-  'not_started', 'assigned', 'in_progress', 'memorized',
-  'passed', 'strong', 'needs_revision', 'weak', 'relearning'
-);
-
 CREATE TABLE memorization_progress (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   student_id UUID NOT NULL REFERENCES students(id) ON DELETE CASCADE,
@@ -259,46 +425,55 @@ CREATE TABLE memorization_progress (
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- ── Tasmi Sessions ──
-CREATE TYPE session_type AS ENUM (
-  'new_memorization', 'revision', 'comprehensive_revision',
-  'exam', 'placement', 'competition'
-);
-
-CREATE TYPE tasmi_outcome AS ENUM ('pass', 'needs_revision', 'fail');
-
-CREATE TABLE tasmi_sessions (
+-- ── Hifz Assignments (Phase 11) ──
+CREATE TABLE hifz_assignments (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  organization_id UUID NOT NULL REFERENCES organizations(id) ON DELETE CASCADE,
+  branch_id UUID NOT NULL REFERENCES branches(id) ON DELETE CASCADE,
   student_id UUID NOT NULL REFERENCES students(id) ON DELETE CASCADE,
   teacher_id UUID NOT NULL REFERENCES teachers(id) ON DELETE CASCADE,
-  organization_id UUID NOT NULL REFERENCES organizations(id) ON DELETE CASCADE,
+  class_id UUID REFERENCES classes(id) ON DELETE SET NULL,
   start_surah INTEGER NOT NULL,
   start_ayah INTEGER NOT NULL,
   end_surah INTEGER NOT NULL,
   end_ayah INTEGER NOT NULL,
-  session_type session_type NOT NULL,
-  duration_minutes INTEGER,
-  accuracy_score DECIMAL(5,2),
-  tajwid_score DECIMAL(5,2),
-  fluency_score DECIMAL(5,2),
-  pronunciation_score DECIMAL(5,2),
-  confidence_score DECIMAL(5,2),
-  overall_rating DECIMAL(5,2),
+  type TEXT NOT NULL DEFAULT 'new_memorization',
+  status assignment_status NOT NULL DEFAULT 'pending',
+  due_date TIMESTAMPTZ,
+  notes TEXT,
+  quality_target INTEGER,
+  completed_at TIMESTAMPTZ,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- ──────────────────────────────────────────────
+-- TASMI
+-- ──────────────────────────────────────────────
+
+CREATE TABLE tasmi_sessions (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  organization_id UUID NOT NULL REFERENCES organizations(id) ON DELETE CASCADE,
+  branch_id UUID REFERENCES branches(id) ON DELETE SET NULL,
+  student_id UUID NOT NULL REFERENCES students(id) ON DELETE CASCADE,
+  teacher_id UUID NOT NULL REFERENCES teachers(id) ON DELETE CASCADE,
+  session_id UUID,
+  class_id UUID REFERENCES classes(id) ON DELETE SET NULL,
+  start_surah INTEGER NOT NULL,
+  start_ayah INTEGER NOT NULL,
+  end_surah INTEGER NOT NULL,
+  end_ayah INTEGER NOT NULL,
+  session_type tasmi_session_type NOT NULL,
   outcome tasmi_outcome,
+  accuracy_score INTEGER,
+  tajwid_score INTEGER,
+  fluency_score INTEGER,
+  overall_rating INTEGER,
   teacher_notes TEXT,
   recorded_at TIMESTAMPTZ DEFAULT NOW(),
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
-
--- ── Tasmi Errors ──
-CREATE TYPE error_type AS ENUM (
-  'omission', 'addition', 'substitution', 'hesitation',
-  'repeated_mistake', 'tajwid_error', 'pronunciation_error',
-  'stopping_error', 'starting_error'
-);
-
-CREATE TYPE error_severity AS ENUM ('minor', 'moderate', 'major');
 
 CREATE TABLE tasmi_errors (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -307,76 +482,130 @@ CREATE TABLE tasmi_errors (
   ayah_number INTEGER NOT NULL,
   word_location TEXT,
   error_type error_type NOT NULL,
-  category TEXT,
   severity error_severity DEFAULT 'moderate',
-  is_resolved BOOLEAN DEFAULT false,
   notes TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- ── Revision Plans ──
-CREATE TYPE revision_frequency AS ENUM ('daily', 'weekly', 'spaced', 'teacher_defined');
+-- ──────────────────────────────────────────────
+-- REVISION
+-- ──────────────────────────────────────────────
 
-CREATE TABLE revision_plans (
+CREATE TABLE revisions (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  student_id UUID NOT NULL REFERENCES students(id) ON DELETE CASCADE,
   organization_id UUID NOT NULL REFERENCES organizations(id) ON DELETE CASCADE,
-  revision_frequency revision_frequency DEFAULT 'daily',
-  is_active BOOLEAN DEFAULT true,
-  created_at TIMESTAMPTZ DEFAULT NOW(),
-  updated_at TIMESTAMPTZ DEFAULT NOW()
-);
-
--- ── Revision Items ──
-CREATE TYPE revision_status AS ENUM ('due', 'completed', 'strong', 'weak', 'failed', 'rescheduled');
-
-CREATE TABLE revision_items (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  plan_id UUID NOT NULL REFERENCES revision_plans(id) ON DELETE CASCADE,
+  branch_id UUID REFERENCES branches(id) ON DELETE SET NULL,
   student_id UUID NOT NULL REFERENCES students(id) ON DELETE CASCADE,
-  start_surah INTEGER NOT NULL,
+  teacher_id UUID REFERENCES teachers(id) ON DELETE SET NULL,
+  class_id UUID REFERENCES classes(id) ON DELETE SET NULL,
+  surah_number INTEGER NOT NULL,
   start_ayah INTEGER NOT NULL,
-  end_surah INTEGER NOT NULL,
   end_ayah INTEGER NOT NULL,
-  status revision_status DEFAULT 'due',
-  next_review_date DATE,
-  last_reviewed_at TIMESTAMPTZ,
-  last_score DECIMAL(5,2),
+  status revision_status NOT NULL DEFAULT 'pending',
+  priority revision_priority NOT NULL DEFAULT 'medium',
+  due_date TIMESTAMPTZ,
+  completed_date TIMESTAMPTZ,
+  quality_score INTEGER,
   review_count INTEGER DEFAULT 0,
+  last_reviewed_at TIMESTAMPTZ,
+  next_review_at TIMESTAMPTZ,
+  notes TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- ── Notifications ──
-CREATE TYPE notification_type AS ENUM (
-  'absence', 'assignment', 'assessment', 'announcement',
-  'payment', 'schedule', 'achievement', 'emergency'
+-- ──────────────────────────────────────────────
+-- SCHEDULE / EVENTS
+-- ──────────────────────────────────────────────
+
+CREATE TABLE schedule_sessions (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  organization_id UUID NOT NULL REFERENCES organizations(id) ON DELETE CASCADE,
+  branch_id UUID NOT NULL REFERENCES branches(id) ON DELETE CASCADE,
+  title TEXT NOT NULL,
+  description TEXT,
+  type schedule_session_type NOT NULL,
+  date TIMESTAMPTZ NOT NULL,
+  start_time TEXT NOT NULL,
+  end_time TEXT NOT NULL,
+  class_id UUID NOT NULL REFERENCES classes(id) ON DELETE CASCADE,
+  teacher_id UUID NOT NULL REFERENCES teachers(id) ON DELETE CASCADE,
+  student_ids UUID[] DEFAULT '{}',
+  location TEXT,
+  status schedule_session_status DEFAULT 'scheduled',
+  notes TEXT,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
-CREATE TYPE notification_channel AS ENUM ('in_app', 'email', 'sms', 'push');
+CREATE TABLE schedule_events (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  organization_id UUID NOT NULL REFERENCES organizations(id) ON DELETE CASCADE,
+  branch_id UUID NOT NULL REFERENCES branches(id) ON DELETE CASCADE,
+  title TEXT NOT NULL,
+  description TEXT,
+  event_type event_type NOT NULL,
+  start_time TIMESTAMPTZ NOT NULL,
+  end_time TIMESTAMPTZ NOT NULL,
+  location TEXT,
+  class_id UUID REFERENCES classes(id) ON DELETE SET NULL,
+  teacher_id UUID REFERENCES teachers(id) ON DELETE SET NULL,
+  student_ids UUID[] DEFAULT '{}',
+  recurrence_days TEXT[] DEFAULT '{}',
+  recurrence_end_date TEXT,
+  status event_status DEFAULT 'scheduled',
+  notes TEXT,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- ──────────────────────────────────────────────
+-- NOTIFICATIONS
+-- ──────────────────────────────────────────────
 
 CREATE TABLE notifications (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   organization_id UUID NOT NULL REFERENCES organizations(id) ON DELETE CASCADE,
-  recipient_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-  sender_id UUID REFERENCES users(id) ON DELETE SET NULL,
+  branch_id UUID REFERENCES branches(id) ON DELETE SET NULL,
+  user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   type notification_type NOT NULL,
   title TEXT NOT NULL,
   body TEXT,
   data JSONB DEFAULT '{}',
+  action_url TEXT,
   is_read BOOLEAN DEFAULT false,
-  channel notification_channel DEFAULT 'in_app',
+  read_at TIMESTAMPTZ,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- ── Audit Logs ──
-CREATE TYPE audit_action AS ENUM ('create', 'update', 'delete', 'login', 'logout', 'permission_change');
+-- ──────────────────────────────────────────────
+-- REPORTS
+-- ──────────────────────────────────────────────
+
+CREATE TABLE reports (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  organization_id UUID NOT NULL REFERENCES organizations(id) ON DELETE CASCADE,
+  branch_id UUID REFERENCES branches(id) ON DELETE SET NULL,
+  generated_by_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  type report_type NOT NULL,
+  title TEXT NOT NULL,
+  parameters JSONB DEFAULT '{}',
+  data JSONB DEFAULT '{}',
+  format report_format,
+  file_path TEXT,
+  generated_at TIMESTAMPTZ,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- ──────────────────────────────────────────────
+-- AUDIT LOGS
+-- ──────────────────────────────────────────────
 
 CREATE TABLE audit_logs (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   organization_id UUID NOT NULL REFERENCES organizations(id) ON DELETE CASCADE,
   actor_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-  action audit_action NOT NULL,
+  action TEXT NOT NULL,
   entity_type TEXT NOT NULL,
   entity_id UUID,
   old_value JSONB,
@@ -386,7 +615,10 @@ CREATE TABLE audit_logs (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- ── Indexes ──
+-- ──────────────────────────────────────────────
+-- INDEXES
+-- ──────────────────────────────────────────────
+
 CREATE INDEX idx_branches_org ON branches(organization_id);
 CREATE INDEX idx_user_roles_org ON user_roles(organization_id);
 CREATE INDEX idx_user_roles_user ON user_roles(user_id);
@@ -394,6 +626,7 @@ CREATE INDEX idx_students_org ON students(organization_id);
 CREATE INDEX idx_students_branch ON students(branch_id);
 CREATE INDEX idx_students_status ON students(status);
 CREATE INDEX idx_teachers_org ON teachers(organization_id);
+CREATE INDEX idx_teachers_user ON teachers(user_id);
 CREATE INDEX idx_classes_org ON classes(organization_id);
 CREATE INDEX idx_classes_teacher ON classes(teacher_id);
 CREATE INDEX idx_class_enrollments_class ON class_enrollments(class_id);
@@ -401,15 +634,25 @@ CREATE INDEX idx_class_enrollments_student ON class_enrollments(student_id);
 CREATE INDEX idx_attendance_class ON attendance(class_id);
 CREATE INDEX idx_attendance_student ON attendance(student_id);
 CREATE INDEX idx_attendance_date ON attendance(date);
+CREATE INDEX idx_memorization_plans_student ON memorization_plans(student_id);
+CREATE INDEX idx_memorization_assignments_student ON memorization_assignments(student_id);
+CREATE INDEX idx_hifz_assignments_student ON hifz_assignments(student_id);
+CREATE INDEX idx_hifz_assignments_teacher ON hifz_assignments(teacher_id);
 CREATE INDEX idx_tasmi_sessions_student ON tasmi_sessions(student_id);
 CREATE INDEX idx_tasmi_sessions_teacher ON tasmi_sessions(teacher_id);
-CREATE INDEX idx_revision_items_student ON revision_items(student_id);
-CREATE INDEX idx_revision_items_status ON revision_items(status);
-CREATE INDEX idx_notifications_recipient ON notifications(recipient_id);
+CREATE INDEX idx_revisions_student ON revisions(student_id);
+CREATE INDEX idx_revisions_status ON revisions(status);
+CREATE INDEX idx_schedule_sessions_class ON schedule_sessions(class_id);
+CREATE INDEX idx_schedule_events_org ON schedule_events(organization_id);
+CREATE INDEX idx_notifications_user ON notifications(user_id);
+CREATE INDEX idx_reports_org ON reports(organization_id);
 CREATE INDEX idx_audit_logs_org ON audit_logs(organization_id);
 CREATE INDEX idx_audit_logs_entity ON audit_logs(entity_type, entity_id);
 
--- ── Updated At Trigger ──
+-- ──────────────────────────────────────────────
+-- UPDATED AT TRIGGER
+-- ──────────────────────────────────────────────
+
 CREATE OR REPLACE FUNCTION update_updated_at_column()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -430,5 +673,7 @@ CREATE TRIGGER update_memorization_plans_updated_at BEFORE UPDATE ON memorizatio
 CREATE TRIGGER update_memorization_assignments_updated_at BEFORE UPDATE ON memorization_assignments FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 CREATE TRIGGER update_memorization_progress_updated_at BEFORE UPDATE ON memorization_progress FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 CREATE TRIGGER update_tasmi_sessions_updated_at BEFORE UPDATE ON tasmi_sessions FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-CREATE TRIGGER update_revision_plans_updated_at BEFORE UPDATE ON revision_plans FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-CREATE TRIGGER update_revision_items_updated_at BEFORE UPDATE ON revision_items FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+CREATE TRIGGER update_revisions_updated_at BEFORE UPDATE ON revisions FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+CREATE TRIGGER update_schedule_sessions_updated_at BEFORE UPDATE ON schedule_sessions FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+CREATE TRIGGER update_schedule_events_updated_at BEFORE UPDATE ON schedule_events FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+CREATE TRIGGER update_hifz_assignments_updated_at BEFORE UPDATE ON hifz_assignments FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
