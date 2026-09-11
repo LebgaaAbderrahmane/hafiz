@@ -8,6 +8,25 @@ import 'package:hafiz/features/hifz/presentation/views/hifz_assignment_list_view
 import 'package:hafiz/features/hifz/presentation/views/hifz_assignment_form_view.dart';
 import 'package:hafiz/features/notifications/presentation/views/notification_view.dart';
 import 'package:hafiz/features/settings/presentation/views/settings_view.dart';
+import 'package:hafiz/features/students/presentation/views/student_list_view.dart';
+import 'package:hafiz/features/students/presentation/views/student_profile_view.dart';
+import 'package:hafiz/features/students/presentation/views/add_student_view.dart';
+import 'package:hafiz/features/teachers/presentation/views/teacher_list_view.dart';
+import 'package:hafiz/features/teachers/presentation/views/teacher_profile_view.dart';
+import 'package:hafiz/features/classes/presentation/views/class_list_view.dart';
+import 'package:hafiz/features/classes/presentation/views/class_detail_view.dart';
+import 'package:hafiz/features/attendance/presentation/views/attendance_marking_view.dart';
+import 'package:hafiz/features/tasmi/presentation/views/tasmi_eval_view.dart';
+import 'package:hafiz/features/schedule/presentation/views/calendar_view.dart';
+import 'package:hafiz/features/schedule/presentation/views/session_management_view.dart';
+import 'package:hafiz/features/quran/presentation/views/quran_browse_view.dart';
+import 'package:hafiz/features/quran/presentation/views/memorization_plan_view.dart';
+import 'package:hafiz/features/revision/presentation/views/revision_tracking_view.dart';
+import 'package:hafiz/features/guardians/presentation/views/guardian_list_view.dart';
+import 'package:hafiz/features/guardians/presentation/views/guardian_profile_view.dart';
+import 'package:hafiz/features/reports/presentation/views/reports_view.dart';
+import 'package:hafiz/features/parent_portal/presentation/views/parent_portal_view.dart';
+import 'package:hafiz/features/dashboard/presentation/views/owner_dashboard_view.dart';
 import 'package:hafiz/core/theme/theme.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
@@ -40,19 +59,72 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         routes: [
           GoRoute(
             path: '/dashboard',
-            builder: (context, state) => const _PlaceholderPage(title: 'لوحة التحكم'),
+            builder: (context, state) => const OwnerDashboardView(),
           ),
           GoRoute(
             path: '/students',
-            builder: (context, state) => const _PlaceholderPage(title: 'الطلاب'),
+            builder: (context, state) => const StudentListView(),
+            routes: [
+              GoRoute(
+                path: 'add',
+                builder: (context, state) => const AddStudentView(),
+              ),
+              GoRoute(
+                path: ':id',
+                builder: (context, state) => StudentProfileView(
+                  studentId: state.pathParameters['id']!,
+                ),
+              ),
+            ],
           ),
           GoRoute(
             path: '/teachers',
-            builder: (context, state) => const _PlaceholderPage(title: 'المعلمون'),
+            builder: (context, state) => const TeacherListView(),
+            routes: [
+              GoRoute(
+                path: ':id',
+                builder: (context, state) => TeacherProfileView(
+                  teacherId: state.pathParameters['id']!,
+                ),
+              ),
+            ],
           ),
           GoRoute(
             path: '/classes',
-            builder: (context, state) => const _PlaceholderPage(title: 'الفصول'),
+            builder: (context, state) => const ClassListView(),
+            routes: [
+              GoRoute(
+                path: ':id',
+                builder: (context, state) => ClassDetailView(
+                  classId: state.pathParameters['id']!,
+                ),
+              ),
+            ],
+          ),
+          GoRoute(
+            path: '/attendance',
+            builder: (context, state) => const AttendanceMarkingView(
+              sessionId: '',
+              classId: '',
+            ),
+          ),
+          GoRoute(
+            path: '/tasmi',
+            builder: (context, state) => const TasmiEvalView(
+              studentId: '',
+              teacherId: '',
+              sessionId: '',
+            ),
+          ),
+          GoRoute(
+            path: '/schedule',
+            builder: (context, state) => const CalendarView(),
+            routes: [
+              GoRoute(
+                path: 'sessions',
+                builder: (context, state) => const SessionManagementView(),
+              ),
+            ],
           ),
           GoRoute(
             path: '/hifz/assignments',
@@ -71,8 +143,46 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             ],
           ),
           GoRoute(
+            path: '/quran',
+            builder: (context, state) => const QuranBrowseView(),
+            routes: [
+              GoRoute(
+                path: 'plan/:studentId',
+                builder: (context, state) => MemorizationPlanView(
+                  studentId: state.pathParameters['studentId']!,
+                ),
+              ),
+            ],
+          ),
+          GoRoute(
+            path: '/revision/:studentId',
+            builder: (context, state) => RevisionTrackingView(
+              studentId: state.pathParameters['studentId']!,
+            ),
+          ),
+          GoRoute(
+            path: '/guardians',
+            builder: (context, state) => const GuardianListView(),
+            routes: [
+              GoRoute(
+                path: ':id',
+                builder: (context, state) => GuardianProfileView(
+                  guardianId: state.pathParameters['id']!,
+                ),
+              ),
+            ],
+          ),
+          GoRoute(
+            path: '/reports',
+            builder: (context, state) => const ReportsView(),
+          ),
+          GoRoute(
             path: '/notifications',
             builder: (context, state) => const NotificationView(),
+          ),
+          GoRoute(
+            path: '/parent-portal',
+            builder: (context, state) => const ParentPortalView(),
           ),
           GoRoute(
             path: '/settings',
@@ -96,20 +206,6 @@ class GoRouterRefreshStream extends ChangeNotifier {
   }
 }
 
-class _PlaceholderPage extends StatelessWidget {
-  const _PlaceholderPage({required this.title});
-  final String title;
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(title)),
-      body: Center(
-        child: Text(title, style: AppTextStyles.headlineMedium),
-      ),
-    );
-  }
-}
-
 class _AdminShell extends StatelessWidget {
   const _AdminShell({required this.child});
   final Widget child;
@@ -130,9 +226,17 @@ class _AdminShell extends StatelessWidget {
                 _navItem(context, 'الطلاب', '/students', Icons.people),
                 _navItem(context, 'المعلمون', '/teachers', Icons.person),
                 _navItem(context, 'الفصول', '/classes', Icons.class_),
-                _navItem(context, 'تعيينات الحفظ', '/hifz/assignments', Icons.book),
+                _navItem(context, 'الحضور', '/attendance', Icons.check_circle),
+                _navItem(context, 'التسميع', '/tasmi', Icons.mic),
+                _navItem(context, 'الجدول', '/schedule', Icons.calendar_today),
+                _navItem(context, 'الحفظ', '/hifz/assignments', Icons.book),
+                _navItem(context, 'القرآن', '/quran', Icons.menu_book),
+                _navItem(context, 'الأولياء', '/guardians', Icons.family_restroom),
+                _navItem(context, 'التقارير', '/reports', Icons.assessment),
                 _navItem(context, 'الإشعارات', '/notifications', Icons.notifications),
+                const Spacer(),
                 _navItem(context, 'الإعدادات', '/settings', Icons.settings),
+                const SizedBox(height: 16),
               ],
             ),
           ),

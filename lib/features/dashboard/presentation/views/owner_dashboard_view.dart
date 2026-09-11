@@ -2,11 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/theme.dart';
-import '../../../../core/localization/app_localizations.dart';
 import '../../../auth/domain/repositories/auth_provider.dart';
-import '../../../students/domain/repositories/student_provider.dart';
-import '../../../teachers/domain/repositories/teacher_provider.dart';
-import '../../../classes/domain/repositories/class_provider.dart';
+import '../../domain/repositories/dashboard_provider.dart';
 
 /// Owner dashboard — main control center.
 class OwnerDashboardView extends ConsumerWidget {
@@ -14,7 +11,6 @@ class OwnerDashboardView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = AppLocalizations.of(context);
     final currentUser = ref.watch(currentUserProvider);
 
     return Scaffold(
@@ -24,19 +20,12 @@ class OwnerDashboardView extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Header
               _buildHeader(context, currentUser?.fullName ?? 'المالك'),
               Gap.l,
-
-              // Quick stats
               _buildQuickStats(context, ref),
               Gap.xl,
-
-              // Quick actions
               _buildQuickActions(context),
               Gap.xl,
-
-              // Recent activity
               _buildRecentActivity(context, ref),
             ],
           ),
@@ -68,80 +57,74 @@ class OwnerDashboardView extends ConsumerWidget {
         ),
         IconButton(
           icon: const Icon(Icons.notifications_outlined),
-          onPressed: () {},
+          onPressed: () => context.push('/notifications'),
         ),
       ],
     );
   }
 
   Widget _buildQuickStats(BuildContext context, WidgetRef ref) {
-    final studentsAsync = ref.watch(branchStudentsProvider(''));
-    final teachersAsync = ref.watch(branchTeachersProvider(''));
-    final classesAsync = ref.watch(branchClassesProvider(''));
+    final statsAsync = ref.watch(dashboardStatsProvider);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('نظرة عامة', style: AppTextStyles.titleLarge),
         Gap.m,
-        Row(
-          children: [
-            Expanded(
-              child: _buildStatCard(
-                context,
-                'الطلاب',
-                studentsAsync.when(
-                  data: (s) => s.length.toString(),
-                  loading: () => '...',
-                  error: (_, __) => '0',
-                ),
-                Icons.people,
-                AppColors.primary,
+        statsAsync.when(
+          data: (stats) => Column(
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: _buildStatCard(
+                      context,
+                      'الطلاب',
+                      stats.totalStudents.toString(),
+                      Icons.people,
+                      AppColors.primary,
+                    ),
+                  ),
+                  Gap.m,
+                  Expanded(
+                    child: _buildStatCard(
+                      context,
+                      'المعلمون',
+                      stats.totalTeachers.toString(),
+                      Icons.person,
+                      AppColors.accent,
+                    ),
+                  ),
+                ],
               ),
-            ),
-            Gap.m,
-            Expanded(
-              child: _buildStatCard(
-                context,
-                'المعلمون',
-                teachersAsync.when(
-                  data: (t) => t.length.toString(),
-                  loading: () => '...',
-                  error: (_, __) => '0',
-                ),
-                Icons.person,
-                AppColors.accent,
+              Gap.m,
+              Row(
+                children: [
+                  Expanded(
+                    child: _buildStatCard(
+                      context,
+                      'الفصول',
+                      stats.totalClasses.toString(),
+                      Icons.class_,
+                      AppColors.success,
+                    ),
+                  ),
+                  Gap.m,
+                  Expanded(
+                    child: _buildStatCard(
+                      context,
+                      'التعيينات المعلقة',
+                      stats.pendingAssignments.toString(),
+                      Icons.assignment,
+                      AppColors.warning,
+                    ),
+                  ),
+                ],
               ),
-            ),
-          ],
-        ),
-        Gap.m,
-        Row(
-          children: [
-            Expanded(
-              child: _buildStatCard(
-                context,
-                'الفصول',
-                classesAsync.when(
-                  data: (c) => c.length.toString(),
-                  loading: () => '...',
-                  error: (_, __) => '0',
-                ),
-                Icons.class_,
-                AppColors.success,
-              ),
-            ),
-            Gap.m,
-            Expanded(
-              child: _buildStatCard(
-                context,
-                'الحصص اليوم',
-                '0',
-                Icons.schedule,
-                AppColors.warning,
-              ),
-            ),
-          ],
+            ],
+          ),
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (e, _) => Center(child: Text('خطأ: $e')),
         ),
       ],
     );
