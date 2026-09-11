@@ -27,12 +27,12 @@ class MemorizationPlanView extends ConsumerWidget {
         error: (e, _) => Center(child: Text(e.toString())),
         data: (plans) {
           if (plans.isEmpty) {
-            return EmptyState(
+            return AppEmptyState(
               icon: Icons.menu_book_outlined,
               title: context.l.noPlans,
-              message: context.l.noPlansMessage,
-              actionLabel: context.l.createPlan,
-              onAction: () {
+              description: context.l.noPlansMessage,
+              primaryActionLabel: context.l.createPlan,
+              onPrimaryAction: () {
                 // TODO: Navigate to create plan
               },
             );

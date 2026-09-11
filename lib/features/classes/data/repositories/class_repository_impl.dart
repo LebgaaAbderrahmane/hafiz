@@ -1,5 +1,4 @@
 import 'package:dartz/dartz.dart';
-import 'package:hafiz/core/errors/exceptions.dart';
 import 'package:hafiz/core/errors/failures.dart';
 import 'package:hafiz/core/network/supabase_client.dart';
 import 'package:hafiz/features/classes/domain/entities/school_class.dart';
@@ -21,36 +20,33 @@ class ClassRepositoryImpl implements ClassRepository {
       var query = supabase
           .from('classes')
           .select()
-          .eq('organization_id', organizationId)
-          .order('created_at', ascending: false)
-          .range(offset, offset + limit - 1);
+          .eq('organization_id', organizationId);
 
       if (branchId != null) {
         query = query.eq('branch_id', branchId);
       }
-
       if (status != null) {
         query = query.eq('status', status.name);
       }
-
       if (level != null) {
         query = query.eq('level', level.name);
       }
-
       if (teacherId != null) {
         query = query.eq('teacher_id', teacherId);
       }
-
       if (search != null && search.isNotEmpty) {
         query = query.or('name.ilike.%$search%,description.ilike.%$search%');
       }
 
-      final data = await query;
+      final data = await query
+          .order('created_at', ascending: false)
+          .range(offset, offset + limit - 1);
+
       final classes =
           data.map((json) => SchoolClass.fromJson(json)).toList();
       return Right(classes);
-    } on SupabaseException catch (e) {
-      return Left(ServerFailure(message: e.message));
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
     }
   }
 
@@ -58,10 +54,10 @@ class ClassRepositoryImpl implements ClassRepository {
   Future<Either<Failure, SchoolClass>> getClass(String id) async {
     try {
       final data =
-          await supabase.from('classes').eq('id', id).select().single();
+          await supabase.from('classes').select().eq('id', id).single();
       return Right(SchoolClass.fromJson(data));
-    } on SupabaseException catch (e) {
-      return Left(ServerFailure(message: e.message));
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
     }
   }
 
@@ -98,8 +94,8 @@ class ClassRepositoryImpl implements ClassRepository {
           .select()
           .single();
       return Right(SchoolClass.fromJson(data));
-    } on SupabaseException catch (e) {
-      return Left(ServerFailure(message: e.message));
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
     }
   }
 
@@ -150,8 +146,8 @@ class ClassRepositoryImpl implements ClassRepository {
           .select()
           .single();
       return Right(SchoolClass.fromJson(data));
-    } on SupabaseException catch (e) {
-      return Left(ServerFailure(message: e.message));
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
     }
   }
 
@@ -160,8 +156,8 @@ class ClassRepositoryImpl implements ClassRepository {
     try {
       await supabase.from('classes').delete().eq('id', id);
       return const Right(null);
-    } on SupabaseException catch (e) {
-      return Left(ServerFailure(message: e.message));
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
     }
   }
 

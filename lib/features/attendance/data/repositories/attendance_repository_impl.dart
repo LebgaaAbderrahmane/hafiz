@@ -77,7 +77,6 @@ class AttendanceRepositoryImpl implements AttendanceRepository {
       studentId: studentId,
       sessionId: sessionId,
       classId: classId,
-      date: DateTime.now(),
       status: status,
       notes: notes,
       markedBy: markedBy,

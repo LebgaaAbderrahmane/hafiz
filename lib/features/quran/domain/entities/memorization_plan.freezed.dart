@@ -576,7 +576,7 @@ class __$$MemorizationCheckpointImplCopyWithImpl<$Res>
 
 /// @nodoc
 class _$MemorizationCheckpointImpl implements _MemorizationCheckpoint {
-  const _$MemorizationCheckpointImpl(
+  _$MemorizationCheckpointImpl(
       {required this.id,
       required this.surahNumber,
       required this.startAyah,
@@ -821,7 +821,7 @@ class __$$MemorizationSessionImplCopyWithImpl<$Res>
 
 /// @nodoc
 class _$MemorizationSessionImpl implements _MemorizationSession {
-  const _$MemorizationSessionImpl(
+  _$MemorizationSessionImpl(
       {required this.id,
       required this.date,
       required this.durationMinutes,

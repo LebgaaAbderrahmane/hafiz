@@ -83,7 +83,7 @@ class _GuardianListViewState extends ConsumerState<GuardianListView> {
                       _buildGuardianCard(context, filtered[index]),
                 );
               },
-              loading: const Center(child: CircularProgressIndicator()),
+              loading: () => const Center(child: CircularProgressIndicator()),
               error: (e, st) => Center(child: Text('Error: $e')),
             ),
           ),

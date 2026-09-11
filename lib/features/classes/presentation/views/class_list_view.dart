@@ -49,7 +49,7 @@ class _ClassListViewState extends ConsumerState<ClassListView> {
         children: [
           Padding(
             padding: const EdgeInsets.all(16),
-            child: app.SearchBar(
+            child: app.AppSearchBar(
               controller: _searchController,
               hintText: context.l.searchHint,
               onChanged: (value) {
@@ -65,12 +65,12 @@ class _ClassListViewState extends ConsumerState<ClassListView> {
               data: (classes) {
                 final filtered = _filterClasses(classes);
                 if (filtered.isEmpty) {
-                  return EmptyState(
+                  return AppEmptyState(
                     icon: Icons.class_outlined,
                     title: context.l.emptyTitle,
-                    message: context.l.emptyMessage,
-                    actionLabel: context.l.addClass,
-                    onAction: () => context.push('/classes/add'),
+                    description: context.l.emptyMessage,
+                    primaryActionLabel: context.l.addClass,
+                    onPrimaryAction: () => context.push('/classes/add'),
                   );
                 }
                 return _buildClassList(filtered);

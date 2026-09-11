@@ -113,12 +113,12 @@ class _SessionManagementViewState extends ConsumerState<SessionManagementView> {
       error: (e, _) => Center(child: Text(e.toString())),
       data: (sessions) {
         if (sessions.isEmpty) {
-          return EmptyState(
+          return AppEmptyState(
             icon: Icons.event_available_outlined,
             title: context.l.noSessions,
-            message: context.l.noSessionsMessage,
-            actionLabel: context.l.addSession,
-            onAction: () {
+            description: context.l.noSessionsMessage,
+            primaryActionLabel: context.l.addSession,
+            onPrimaryAction: () {
               // TODO: Navigate to add session
             },
           );

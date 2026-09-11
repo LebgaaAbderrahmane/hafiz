@@ -1,17 +1,12 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:hafiz/features/revision/domain/entities/revision.dart';
 import 'package:hafiz/features/revision/domain/repositories/revision_repository.dart';
 import 'package:hafiz/features/revision/data/repositories/revision_repository_impl.dart';
 
-/// Supabase client provider.
-final supabaseClientProvider = Provider<SupabaseClient>((ref) {
-  return Supabase.instance.client;
-});
-
 /// Revision repository provider.
 final revisionRepositoryProvider = Provider<RevisionRepository>((ref) {
-  final client = ref.watch(supabaseClientProvider);
-  return RevisionRepositoryImpl(client);
+  return RevisionRepositoryImpl(Supabase.instance.client);
 });
 
 /// Student revisions provider.
@@ -60,38 +55,38 @@ final branchRevisionsProvider =
 class RevisionNotifier extends StateNotifier<AsyncValue<void>> {
   final RevisionRepository _repository;
 
-  RevisionNotifier(this._repository) : super(const AsyncValue.data(null));
+  RevisionNotifier(this._repository) : super(const AsyncData(null));
 
   Future<Revision> createRevision(Revision revision) async {
-    state = const AsyncValue.loading();
+    state = const AsyncLoading();
     try {
       final created = await _repository.createRevision(revision);
-      state = const AsyncValue.data(null);
+      state = const AsyncData(null);
       return created;
     } catch (e, st) {
-      state = AsyncValue.error(e, st);
+      state = AsyncError(e, st);
       rethrow;
     }
   }
 
   Future<void> updateRevision(Revision revision) async {
-    state = const AsyncValue.loading();
+    state = const AsyncLoading();
     try {
       await _repository.updateRevision(revision);
-      state = const AsyncValue.data(null);
+      state = const AsyncData(null);
     } catch (e, st) {
-      state = AsyncValue.error(e, st);
+      state = AsyncError(e, st);
       rethrow;
     }
   }
 
   Future<void> deleteRevision(String revisionId) async {
-    state = const AsyncValue.loading();
+    state = const AsyncLoading();
     try {
       await _repository.deleteRevision(revisionId);
-      state = const AsyncValue.data(null);
+      state = const AsyncData(null);
     } catch (e, st) {
-      state = AsyncValue.error(e, st);
+      state = AsyncError(e, st);
       rethrow;
     }
   }
@@ -100,15 +95,15 @@ class RevisionNotifier extends StateNotifier<AsyncValue<void>> {
     required String revisionId,
     required int qualityScore,
   }) async {
-    state = const AsyncValue.loading();
+    state = const AsyncLoading();
     try {
       await _repository.completeRevision(
         revisionId: revisionId,
         qualityScore: qualityScore,
       );
-      state = const AsyncValue.data(null);
+      state = const AsyncData(null);
     } catch (e, st) {
-      state = AsyncValue.error(e, st);
+      state = AsyncError(e, st);
       rethrow;
     }
   }

@@ -49,7 +49,7 @@ class _StudentListViewState extends ConsumerState<StudentListView> {
         children: [
           Padding(
             padding: const EdgeInsets.all(16),
-            child: app.SearchBar(
+            child: app.AppSearchBar(
               controller: _searchController,
               hintText: context.l.searchHint,
               onChanged: (value) {
@@ -65,12 +65,12 @@ class _StudentListViewState extends ConsumerState<StudentListView> {
               data: (students) {
                 final filtered = _filterStudents(students);
                 if (filtered.isEmpty) {
-                  return EmptyState(
+                  return AppEmptyState(
                     icon: Icons.school_outlined,
                     title: context.l.emptyTitle,
-                    message: context.l.emptyMessage,
-                    actionLabel: context.l.addStudent,
-                    onAction: () => context.push('/students/add'),
+                    description: context.l.emptyMessage,
+                    primaryActionLabel: context.l.addStudent,
+                    onPrimaryAction: () => context.push('/students/add'),
                   );
                 }
                 return _buildStudentList(filtered);

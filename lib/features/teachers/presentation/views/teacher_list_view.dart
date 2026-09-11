@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/theme.dart';
-import '../../../../core/widgets/widgets.dart';
 import '../../domain/entities/teacher.dart';
 import '../../domain/repositories/teacher_provider.dart';
 

@@ -11,12 +11,14 @@ class AppBadge extends StatelessWidget {
     super.key,
     required this.label,
     this.variant = AppBadgeVariant.neutral,
+    this.color,
     this.icon,
     this.size = AppBadgeSize.small,
   });
 
   final String label;
   final AppBadgeVariant variant;
+  final Color? color;
   final IconData? icon;
   final AppBadgeSize size;
 
@@ -30,6 +32,8 @@ class AppBadge extends StatelessWidget {
       AppBadgeVariant.neutral => (AppColors.surfaceVariant, AppColors.textSecondary, null),
     };
 
+    final effectiveBackgroundColor = color != null ? color!.withValues(alpha: 0.15) : backgroundColor;
+    final effectiveForegroundColor = color ?? foregroundColor;
     final effectiveIcon = icon ?? iconData;
     final fontSize = switch (size) {
       AppBadgeSize.small => 12.0,
@@ -50,14 +54,14 @@ class AppBadge extends StatelessWidget {
         vertical: verticalPadding,
       ),
       decoration: BoxDecoration(
-        color: backgroundColor,
+        color: effectiveBackgroundColor,
         borderRadius: AppSpacing.radiusPill,
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           if (effectiveIcon != null) ...[
-            Icon(effectiveIcon, size: fontSize + 2, color: foregroundColor),
+            Icon(effectiveIcon, size: fontSize + 2, color: effectiveForegroundColor),
             SizedBox(width: horizontalPadding * 0.5),
           ],
           Text(
@@ -65,7 +69,7 @@ class AppBadge extends StatelessWidget {
             style: TextStyle(
               fontSize: fontSize,
               fontWeight: FontWeight.w600,
-              color: foregroundColor,
+              color: effectiveForegroundColor,
             ),
           ),
         ],
