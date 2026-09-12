@@ -171,7 +171,7 @@ class TeacherDashboardView extends ConsumerWidget {
             Text('المراجعات المعلقة', style: AppTextStyles.titleLarge),
             const Spacer(),
             TextButton(
-              onPressed: () => context.push('/quran'),
+              onPressed: () => context.push('/revision/me'),
               child: const Text('عرض الكل'),
             ),
           ],

@@ -3,6 +3,7 @@ import "package:hafiz/core/localization/app_localizations.dart";
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hafiz/core/localization/localization.dart';
+import 'package:hafiz/core/theme/theme.dart';
 import 'package:hafiz/core/widgets/loading.dart';
 import 'package:hafiz/features/classes/domain/entities/school_class.dart';
 import 'package:hafiz/features/classes/domain/repositories/class_provider.dart';
@@ -175,28 +176,95 @@ class _InfoTab extends StatelessWidget {
   }
 }
 
-class _StudentsTab extends StatelessWidget {
+class _StudentsTab extends ConsumerWidget {
   const _StudentsTab({required this.schoolClass});
 
   final SchoolClass schoolClass;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Center(
-      child: Text(context.l.studentsComingSoon),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(Icons.people_outline, size: 64, color: AppColors.textHint),
+          Gap.l,
+          Text('طلاب الفصل', style: AppTextStyles.bodyLarge),
+          Gap.s,
+          Text(
+            'سيتم عرض طلاب الفصل هنا',
+            style: AppTextStyles.bodySmall.copyWith(
+              color: AppColors.textSecondary,
+            ),
+          ),
+          Gap.m,
+          OutlinedButton.icon(
+            onPressed: () => context.push('/students/add'),
+            icon: const Icon(Icons.person_add),
+            label: const Text('إضافة طالب'),
+          ),
+        ],
+      ),
     );
   }
 }
 
-class _ScheduleTab extends StatelessWidget {
+class _ScheduleTab extends ConsumerWidget {
   const _ScheduleTab({required this.schoolClass});
 
   final SchoolClass schoolClass;
 
   @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text(context.l.scheduleComingSoon),
+  Widget build(BuildContext context, WidgetRef ref) {
+    final days = schoolClass.daysOfWeek;
+    final startTime = schoolClass.startTime;
+    final endTime = schoolClass.endTime;
+
+    if (days.isEmpty && startTime == null) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.schedule, size: 64, color: AppColors.textHint),
+            Gap.l,
+            Text('جدول الحصص', style: AppTextStyles.bodyLarge),
+            Gap.s,
+            Text(
+              'لم يتم تعيين جدول بعد',
+              style: AppTextStyles.bodySmall.copyWith(
+                color: AppColors.textSecondary,
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    return ListView(
+      padding: EdgeInsets.all(AppSpacing.m),
+      children: [
+        if (days.isNotEmpty) ...[
+          Text('أيام الأسبوع', style: AppTextStyles.titleMedium),
+          Gap.s,
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: days.map((day) => Chip(label: Text(day))).toList(),
+          ),
+          Gap.m,
+        ],
+        if (startTime != null && endTime != null) ...[
+          Text('التوقيت', style: AppTextStyles.titleMedium),
+          Gap.s,
+          Card(
+            child: ListTile(
+              leading: const Icon(Icons.access_time),
+              title: Text('$startTime - $endTime'),
+              subtitle: const Text('مدة الحصة'),
+            ),
+          ),
+        ],
+      ],
     );
   }
 }
