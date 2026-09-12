@@ -6,6 +6,8 @@ import 'package:hafiz/core/theme/theme.dart';
 import 'package:hafiz/core/widgets/loading.dart';
 import 'package:hafiz/features/classes/domain/entities/school_class.dart';
 import 'package:hafiz/features/classes/domain/repositories/class_provider.dart';
+import 'package:hafiz/features/students/domain/entities/student.dart';
+import 'package:hafiz/features/students/domain/repositories/student_provider.dart';
 
 class ClassDetailView extends ConsumerWidget {
   const ClassDetailView({super.key, required this.classId});
@@ -182,28 +184,94 @@ class _StudentsTab extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(Icons.people_outline, size: 64, color: AppColors.textHint),
-          Gap.l,
-          Text('طلاب الفصل', style: AppTextStyles.bodyLarge),
-          Gap.s,
-          Text(
-            'سيتم عرض طلاب الفصل هنا',
-            style: AppTextStyles.bodySmall.copyWith(
-              color: AppColors.textSecondary,
+    final studentsAsync = ref.watch(studentsProvider);
+
+    return studentsAsync.when(
+      loading: () => const AppLoading(),
+      error: (e, _) => Center(child: Text(e.toString())),
+      data: (students) {
+        if (students.isEmpty) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.people_outline, size: 64, color: AppColors.textHint),
+                Gap.l,
+                Text('لا يوجد طلاب', style: AppTextStyles.bodyLarge),
+                Gap.s,
+                Text(
+                  'لم يتم إضافة أي طلاب بعد',
+                  style: AppTextStyles.bodySmall.copyWith(
+                    color: AppColors.textSecondary,
+                  ),
+                ),
+                Gap.m,
+                OutlinedButton.icon(
+                  onPressed: () => context.push('/students/add'),
+                  icon: const Icon(Icons.person_add),
+                  label: const Text('إضافة طالب'),
+                ),
+              ],
             ),
-          ),
-          Gap.m,
-          OutlinedButton.icon(
-            onPressed: () => context.push('/students/add'),
-            icon: const Icon(Icons.person_add),
-            label: const Text('إضافة طالب'),
-          ),
-        ],
-      ),
+          );
+        }
+
+        return Column(
+          children: [
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+              color: Theme.of(context).colorScheme.secondaryContainer,
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.info_outline,
+                    size: 18,
+                    color: Theme.of(context).colorScheme.onSecondaryContainer,
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      'يتم عرض جميع طلاب المؤسسة — سيتم ربط الطلاب بالفصول قريباً',
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onSecondaryContainer,
+                          ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: ListView.separated(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                itemCount: students.length,
+                separatorBuilder: (_, _) => const Divider(height: 1),
+                itemBuilder: (context, index) {
+                  final student = students[index];
+                  final displayName =
+                      student.preferredName ?? student.fullName;
+                  return ListTile(
+                    leading: CircleAvatar(
+                      child: Text(
+                        displayName.isNotEmpty ? displayName[0] : '?',
+                      ),
+                    ),
+                    title: Text(displayName),
+                    subtitle: Text(
+                      student.status.displayNameAr,
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: AppColors.textSecondary,
+                          ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }
