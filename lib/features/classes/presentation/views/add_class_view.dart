@@ -1,9 +1,11 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/theme.dart';
 import '../../../auth/domain/repositories/user_role_provider.dart';
 import '../../domain/entities/school_class.dart';
+import '../../domain/repositories/branch_provider.dart';
 import '../../domain/repositories/class_provider.dart';
 
 /// Add class view.
@@ -21,6 +23,7 @@ class _AddClassViewState extends ConsumerState<AddClassView> {
   final _capacityController = TextEditingController(text: '30');
 
   ClassLevel _level = ClassLevel.beginner;
+  String? _selectedBranchId;
   String? _startTime;
   String? _endTime;
   final List<String> _selectedDays = [];
@@ -94,8 +97,9 @@ class _AddClassViewState extends ConsumerState<AddClassView> {
                       },
                     ),
                     Gap.m,
+                    _buildBranchDropdown(context, ref),
+                    Gap.m,
                     TextFormField(
-                      controller: _capacityController,
                       keyboardType: TextInputType.number,
                       decoration: const InputDecoration(
                         labelText: 'الحد الأقصى للطلاب',
@@ -220,6 +224,32 @@ class _AddClassViewState extends ConsumerState<AddClassView> {
     );
   }
 
+  Widget _buildBranchDropdown(BuildContext context, WidgetRef ref) {
+    final branchesAsync = ref.watch(orgBranchesProvider);
+
+    return branchesAsync.when(
+      loading: () => const LinearProgressIndicator(),
+      error: (e, _) => Text('خطأ في تحميل الفروع: $e'),
+      data: (branches) {
+        if (branches.isEmpty) {
+          return const Text('لا توجد فروع متاحة', style: TextStyle(color: AppColors.error));
+        }
+        return DropdownButtonFormField<String>(
+          initialValue: _selectedBranchId,
+          decoration: const InputDecoration(
+            labelText: 'الفرع *',
+            border: OutlineInputBorder(),
+          ),
+          items: branches.map((b) {
+            return DropdownMenuItem(value: b.id, child: Text(b.name));
+          }).toList(),
+          onChanged: (v) => setState(() => _selectedBranchId = v),
+          validator: (v) => v == null ? 'مطلوب' : null,
+        );
+      },
+    );
+  }
+
   Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) return;
 
@@ -227,7 +257,14 @@ class _AddClassViewState extends ConsumerState<AddClassView> {
 
     try {
       final orgId = ref.read(activeOrganizationIdProvider) ?? '';
-      final branchId = ref.read(activeBranchIdProvider) ?? '';
+      final branchId = _selectedBranchId ?? ref.read(activeBranchIdProvider) ?? '';
+
+      if (orgId.isEmpty || branchId.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('يرجى اختيار الفرع'), backgroundColor: AppColors.error),
+        );
+        return;
+      }
 
       final result = await ref.read(classRepositoryProvider).createClass(
             organizationId: orgId,
@@ -245,8 +282,9 @@ class _AddClassViewState extends ConsumerState<AddClassView> {
 
       result.fold(
         (failure) {
+          debugPrint('CLASS CREATE ERROR: $failure');
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(failure.toString()), backgroundColor: AppColors.error),
+            SnackBar(content: Text('خطأ: $failure'), backgroundColor: AppColors.error),
           );
         },
         (_) {
