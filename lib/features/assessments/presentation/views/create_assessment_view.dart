@@ -79,7 +79,7 @@ class _CreateAssessmentViewState extends ConsumerState<CreateAssessmentView> {
                     ),
                     Gap.m,
                     DropdownButtonFormField<AssessmentType>(
-                      value: _type,
+                      initialValue: _type,
                       decoration: const InputDecoration(
                         labelText: 'نوع التقييم',
                         border: OutlineInputBorder(),

@@ -23,7 +23,7 @@ class _AddClassViewState extends ConsumerState<AddClassView> {
   ClassLevel _level = ClassLevel.beginner;
   String? _startTime;
   String? _endTime;
-  List<String> _selectedDays = [];
+  final List<String> _selectedDays = [];
   bool _isLoading = false;
 
   final _days = const ['الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
@@ -78,7 +78,7 @@ class _AddClassViewState extends ConsumerState<AddClassView> {
                     ),
                     Gap.m,
                     DropdownButtonFormField<ClassLevel>(
-                      value: _level,
+                      initialValue: _level,
                       decoration: const InputDecoration(
                         labelText: 'المستوى',
                         border: OutlineInputBorder(),

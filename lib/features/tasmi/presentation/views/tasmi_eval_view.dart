@@ -97,7 +97,7 @@ class _TasmiEvalViewState extends ConsumerState<TasmiEvalView> {
               children: [
                 Expanded(
                   child: DropdownButtonFormField<int>(
-                    value: _startSurah,
+                    initialValue: _startSurah,
                     decoration: const InputDecoration(
                       labelText: 'من سورة',
                       border: OutlineInputBorder(),
@@ -115,7 +115,7 @@ class _TasmiEvalViewState extends ConsumerState<TasmiEvalView> {
                 Gap.s,
                 Expanded(
                   child: DropdownButtonFormField<int>(
-                    value: _startAyah,
+                    initialValue: _startAyah,
                     decoration: const InputDecoration(
                       labelText: 'من آية',
                       border: OutlineInputBorder(),
@@ -137,7 +137,7 @@ class _TasmiEvalViewState extends ConsumerState<TasmiEvalView> {
               children: [
                 Expanded(
                   child: DropdownButtonFormField<int>(
-                    value: _endSurah,
+                    initialValue: _endSurah,
                     decoration: const InputDecoration(
                       labelText: 'إلى سورة',
                       border: OutlineInputBorder(),
@@ -155,7 +155,7 @@ class _TasmiEvalViewState extends ConsumerState<TasmiEvalView> {
                 Gap.s,
                 Expanded(
                   child: DropdownButtonFormField<int>(
-                    value: _endAyah,
+                    initialValue: _endAyah,
                     decoration: const InputDecoration(
                       labelText: 'إلى آية',
                       border: OutlineInputBorder(),
@@ -471,7 +471,7 @@ class _TasmiEvalViewState extends ConsumerState<TasmiEvalView> {
         );
         Navigator.of(context).pop();
       }
-    } catch (e, st) {
+    } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('خطأ: $e')),

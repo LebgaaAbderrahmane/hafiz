@@ -1,5 +1,4 @@
 import 'package:dartz/dartz.dart';
-import 'package:hafiz/core/errors/exceptions.dart';
 import 'package:hafiz/core/errors/failures.dart';
 import 'package:hafiz/core/network/supabase_client.dart';
 import 'package:hafiz/features/quran/domain/entities/surah.dart';
@@ -17,7 +16,7 @@ class CurriculumRepositoryImpl implements CurriculumRepository {
           .order('number', ascending: true);
       final surahs = data.map((json) => Surah.fromJson(json)).toList();
       return Right(surahs);
-    } catch (e, st) {
+    } catch (e) {
       return Left(ServerFailure(message: e.toString()));
     }
   }
@@ -31,7 +30,7 @@ class CurriculumRepositoryImpl implements CurriculumRepository {
           .eq('number', number)
           .single();
       return Right(Surah.fromJson(data));
-    } catch (e, st) {
+    } catch (e) {
       return Left(ServerFailure(message: e.toString()));
     }
   }
@@ -45,7 +44,7 @@ class CurriculumRepositoryImpl implements CurriculumRepository {
           .order('number', ascending: true);
       final juzs = data.map((json) => Juz.fromJson(json)).toList();
       return Right(juzs);
-    } catch (e, st) {
+    } catch (e) {
       return Left(ServerFailure(message: e.toString()));
     }
   }
@@ -59,7 +58,7 @@ class CurriculumRepositoryImpl implements CurriculumRepository {
           .eq('number', number)
           .single();
       return Right(Juz.fromJson(data));
-    } catch (e, st) {
+    } catch (e) {
       return Left(ServerFailure(message: e.toString()));
     }
   }
@@ -77,7 +76,7 @@ class CurriculumRepositoryImpl implements CurriculumRepository {
       final plans =
           data.map((json) => MemorizationPlan.fromJson(json)).toList();
       return Right(plans);
-    } catch (e, st) {
+    } catch (e) {
       return Left(ServerFailure(message: e.toString()));
     }
   }
@@ -95,7 +94,7 @@ class CurriculumRepositoryImpl implements CurriculumRepository {
       final plans =
           data.map((json) => MemorizationPlan.fromJson(json)).toList();
       return Right(plans);
-    } catch (e, st) {
+    } catch (e) {
       return Left(ServerFailure(message: e.toString()));
     }
   }
@@ -109,7 +108,7 @@ class CurriculumRepositoryImpl implements CurriculumRepository {
           .eq('id', id)
           .single();
       return Right(MemorizationPlan.fromJson(data));
-    } catch (e, st) {
+    } catch (e) {
       return Left(ServerFailure(message: e.toString()));
     }
   }
@@ -144,7 +143,7 @@ class CurriculumRepositoryImpl implements CurriculumRepository {
           .select()
           .single();
       return Right(MemorizationPlan.fromJson(data));
-    } catch (e, st) {
+    } catch (e) {
       return Left(ServerFailure(message: e.toString()));
     }
   }
@@ -184,7 +183,7 @@ class CurriculumRepositoryImpl implements CurriculumRepository {
           .select()
           .single();
       return Right(MemorizationPlan.fromJson(data));
-    } catch (e, st) {
+    } catch (e) {
       return Left(ServerFailure(message: e.toString()));
     }
   }
@@ -209,7 +208,7 @@ class CurriculumRepositoryImpl implements CurriculumRepository {
           .select()
           .single();
       return Right(MemorizationCheckpoint.fromJson(data));
-    } catch (e, st) {
+    } catch (e) {
       return Left(ServerFailure(message: e.toString()));
     }
   }
@@ -239,7 +238,7 @@ class CurriculumRepositoryImpl implements CurriculumRepository {
           .select()
           .single();
       return Right(MemorizationCheckpoint.fromJson(data));
-    } catch (e, st) {
+    } catch (e) {
       return Left(ServerFailure(message: e.toString()));
     }
   }
@@ -273,7 +272,7 @@ class CurriculumRepositoryImpl implements CurriculumRepository {
           .select()
           .single();
       return Right(MemorizationSession.fromJson(data));
-    } catch (e, st) {
+    } catch (e) {
       return Left(ServerFailure(message: e.toString()));
     }
   }
@@ -283,7 +282,7 @@ class CurriculumRepositoryImpl implements CurriculumRepository {
     try {
       await supabase.from('memorization_plans').delete().eq('id', id);
       return const Right(null);
-    } catch (e, st) {
+    } catch (e) {
       return Left(ServerFailure(message: e.toString()));
     }
   }

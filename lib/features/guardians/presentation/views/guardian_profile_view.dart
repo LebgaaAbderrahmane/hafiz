@@ -19,7 +19,7 @@ class GuardianProfileView extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(l10n?.teachers ?? 'ولي الأمر'),
+        title: Text(l10n.teachers),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => context.pop(),

@@ -74,7 +74,7 @@ class _AddTeacherViewState extends ConsumerState<AddTeacherView> {
                 ),
                 Gap.m,
                 DropdownButtonFormField<Gender>(
-                  value: _gender,
+                  initialValue: _gender,
                   decoration: const InputDecoration(
                     labelText: 'الجنس',
                     border: OutlineInputBorder(),

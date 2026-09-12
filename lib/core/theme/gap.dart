@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'app_spacing.dart';
-import 'app_colors.dart';
 
 /// Shortcut for vertical gaps between widgets.
 abstract final class Gap {

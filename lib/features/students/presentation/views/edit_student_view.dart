@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/theme.dart';
-import '../../../auth/domain/repositories/user_role_provider.dart';
 import '../../domain/entities/student.dart';
 import '../../domain/repositories/student_provider.dart';
 
@@ -102,7 +101,7 @@ class _EditStudentViewState extends ConsumerState<EditStudentView> {
                         ),
                         Gap.m,
                         DropdownButtonFormField<Gender>(
-                          value: _gender,
+                          initialValue: _gender,
                           decoration: const InputDecoration(
                             labelText: 'الجنس',
                             border: OutlineInputBorder(),

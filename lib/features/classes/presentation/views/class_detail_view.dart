@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import "package:hafiz/core/localization/app_localizations.dart";
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:hafiz/core/localization/localization.dart';
 import 'package:hafiz/core/theme/theme.dart';
 import 'package:hafiz/core/widgets/loading.dart';
 import 'package:hafiz/features/classes/domain/entities/school_class.dart';
