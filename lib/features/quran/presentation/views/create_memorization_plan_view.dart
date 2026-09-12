@@ -121,7 +121,7 @@ class _CreateMemorizationPlanViewState
                     ],
                     Gap.m,
                     DropdownButtonFormField<MemorizationPriority>(
-                      value: _priority,
+                      initialValue: _priority,
                       decoration: const InputDecoration(
                         labelText: 'الأولوية',
                         border: OutlineInputBorder(),
@@ -153,7 +153,7 @@ class _CreateMemorizationPlanViewState
                       children: [
                         Expanded(
                           child: DropdownButtonFormField<int>(
-                            value: _startSurah,
+                            initialValue: _startSurah,
                             decoration: const InputDecoration(
                               labelText: 'من السورة',
                               border: OutlineInputBorder(),
@@ -174,7 +174,7 @@ class _CreateMemorizationPlanViewState
                         Gap.s,
                         Expanded(
                           child: DropdownButtonFormField<int>(
-                            value: _startAyah,
+                            initialValue: _startAyah,
                             decoration: const InputDecoration(
                               labelText: 'من الآية',
                               border: OutlineInputBorder(),
@@ -199,7 +199,7 @@ class _CreateMemorizationPlanViewState
                       children: [
                         Expanded(
                           child: DropdownButtonFormField<int>(
-                            value: _targetSurah,
+                            initialValue: _targetSurah,
                             decoration: const InputDecoration(
                               labelText: 'إلى السورة',
                               border: OutlineInputBorder(),
@@ -220,7 +220,7 @@ class _CreateMemorizationPlanViewState
                         Gap.s,
                         Expanded(
                           child: DropdownButtonFormField<int>(
-                            value: _targetAyah,
+                            initialValue: _targetAyah,
                             decoration: const InputDecoration(
                               labelText: 'إلى الآية',
                               border: OutlineInputBorder(),

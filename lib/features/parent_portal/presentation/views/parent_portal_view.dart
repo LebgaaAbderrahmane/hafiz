@@ -3,16 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/theme.dart';
 import '../../../auth/domain/repositories/auth_provider.dart';
-import '../../../auth/domain/repositories/user_role_provider.dart';
-import '../../../schedule/domain/repositories/schedule_provider.dart';
 
 class ParentPortalView extends ConsumerWidget {
   const ParentPortalView({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentUser = ref.watch(currentUserProvider);
-
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(

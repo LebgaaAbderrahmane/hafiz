@@ -47,9 +47,9 @@ class AuthRepositoryImpl implements AuthRepository {
         throw const AuthException(message: 'Login failed');
       }
       return _mapUser(response.user!);
-    } on AuthException catch (e, st) {
+    } on AuthException catch (e) {
       throw AuthException(message: e.toString());
-    } catch (e, st) {
+    } catch (e) {
       throw AuthException(message: e.toString());
     }
   }
@@ -75,9 +75,9 @@ class AuthRepositoryImpl implements AuthRepository {
         throw const AuthException(message: 'Sign up failed');
       }
       return _mapUser(response.user!);
-    } on AuthException catch (e, st) {
+    } on AuthException catch (e) {
       throw AuthException(message: e.toString());
-    } catch (e, st) {
+    } catch (e) {
       throw AuthException(message: e.toString());
     }
   }
@@ -86,7 +86,7 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<void> signOut() async {
     try {
       await _auth.signOut();
-    } catch (e, st) {
+    } catch (e) {
       throw AuthException(message: e.toString());
     }
   }
@@ -95,7 +95,7 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<void> resetPassword({required String email}) async {
     try {
       await _auth.resetPasswordForEmail(email);
-    } catch (e, st) {
+    } catch (e) {
       throw AuthException(message: e.toString());
     }
   }
@@ -124,7 +124,7 @@ class AuthRepositoryImpl implements AuthRepository {
         throw const AuthException(message: 'Update failed');
       }
       return _mapUser(response.user!);
-    } catch (e, st) {
+    } catch (e) {
       throw AuthException(message: e.toString());
     }
   }
@@ -140,7 +140,7 @@ class AuthRepositoryImpl implements AuthRepository {
       return (response as List)
           .map((json) => UserRole.fromJson(json))
           .toList();
-    } catch (e, st) {
+    } catch (e) {
       throw ServerException(message: e.toString());
     }
   }
@@ -159,7 +159,7 @@ class AuthRepositoryImpl implements AuthRepository {
           .limit(1);
 
       return (response as List).isNotEmpty;
-    } catch (e, st) {
+    } catch (e) {
       return false;
     }
   }

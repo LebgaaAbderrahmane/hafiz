@@ -26,7 +26,7 @@ class _GuardianListViewState extends ConsumerState<GuardianListView> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(l10n?.teachers ?? 'أولياء الأمور'),
+        title: Text(l10n.teachers),
         actions: [
           IconButton(
             icon: const Icon(Icons.person_add),

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import "package:hafiz/core/localization/app_localizations.dart";
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hafiz/core/localization/localization.dart';
 import 'package:hafiz/core/widgets/loading.dart';
 import 'package:hafiz/features/quran/domain/entities/surah.dart';
 import 'package:hafiz/features/quran/domain/entities/juz.dart';

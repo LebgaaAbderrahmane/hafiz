@@ -1,6 +1,8 @@
 /// Date utility functions for the Hafiz app.
 ///
 /// Supports both Hijri and Gregorian calendar display.
+library;
+
 import 'package:intl/intl.dart';
 import 'package:hijri/hijri_calendar.dart';
 

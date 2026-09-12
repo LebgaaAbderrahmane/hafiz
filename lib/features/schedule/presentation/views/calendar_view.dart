@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import "package:hafiz/core/localization/app_localizations.dart";
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hafiz/core/localization/localization.dart';
 import 'package:hafiz/core/widgets/loading.dart';
 import 'package:hafiz/features/schedule/domain/entities/schedule_event.dart';
 import 'package:hafiz/features/schedule/domain/repositories/schedule_provider.dart';
@@ -232,7 +231,7 @@ class _EventCard extends StatelessWidget {
         trailing: Container(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           decoration: BoxDecoration(
-            color: color.withOpacity(0.1),
+            color: color.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(4),
           ),
           child: Text(

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import "package:hafiz/core/localization/app_localizations.dart";
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hafiz/core/localization/localization.dart';
 import 'package:hafiz/core/widgets/badge.dart';
 import 'package:hafiz/core/widgets/card.dart';
 import 'package:hafiz/core/widgets/empty_state.dart';

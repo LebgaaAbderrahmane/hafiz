@@ -159,7 +159,7 @@ class _HifzAssignmentFormViewState extends ConsumerState<HifzAssignmentFormView>
           children: [
             Expanded(
               child: DropdownButtonFormField<int>(
-                value: _startSurah,
+                initialValue: _startSurah,
                 decoration: const InputDecoration(
                   labelText: 'من السورة',
                   border: OutlineInputBorder(),
@@ -179,7 +179,7 @@ class _HifzAssignmentFormViewState extends ConsumerState<HifzAssignmentFormView>
             Gap.s,
             Expanded(
               child: DropdownButtonFormField<int>(
-                value: _startAyah,
+                initialValue: _startAyah,
                 decoration: const InputDecoration(
                   labelText: 'من الآية',
                   border: OutlineInputBorder(),
@@ -203,7 +203,7 @@ class _HifzAssignmentFormViewState extends ConsumerState<HifzAssignmentFormView>
           children: [
             Expanded(
               child: DropdownButtonFormField<int>(
-                value: _endSurah,
+                initialValue: _endSurah,
                 decoration: const InputDecoration(
                   labelText: 'إلى السورة',
                   border: OutlineInputBorder(),
@@ -223,7 +223,7 @@ class _HifzAssignmentFormViewState extends ConsumerState<HifzAssignmentFormView>
             Gap.s,
             Expanded(
               child: DropdownButtonFormField<int>(
-                value: _endAyah,
+                initialValue: _endAyah,
                 decoration: const InputDecoration(
                   labelText: 'إلى الآية',
                   border: OutlineInputBorder(),
@@ -408,7 +408,7 @@ class _HifzAssignmentFormViewState extends ConsumerState<HifzAssignmentFormView>
           ),
         );
       }
-    } catch (e, st) {
+    } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('خطأ: $e'), backgroundColor: AppColors.error),
@@ -436,12 +436,11 @@ class _HifzAssignmentFormViewState extends ConsumerState<HifzAssignmentFormView>
               await ref
                   .read(hifzAssignmentNotifierProvider.notifier)
                   .deleteAssignment(widget.assignmentId!);
-              if (mounted) {
-                context.pop();
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('تم حذف التعيين')),
-                );
-              }
+              if (!context.mounted) return;
+              context.pop();
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('تم حذف التعيين')),
+              );
             },
             style: ElevatedButton.styleFrom(backgroundColor: AppColors.error),
             child: const Text('حذف'),

@@ -45,7 +45,7 @@ class ScheduleRepositoryImpl implements ScheduleRepository {
       final events =
           data.map((json) => ScheduleEvent.fromJson(json)).toList();
       return Right(events);
-    } catch (e, st) {
+    } catch (e) {
       return Left(ServerFailure(message: e.toString()));
     }
   }
@@ -59,7 +59,7 @@ class ScheduleRepositoryImpl implements ScheduleRepository {
           .eq('id', id)
           .single();
       return Right(ScheduleEvent.fromJson(data));
-    } catch (e, st) {
+    } catch (e) {
       return Left(ServerFailure(message: e.toString()));
     }
   }
@@ -101,7 +101,7 @@ class ScheduleRepositoryImpl implements ScheduleRepository {
           .select()
           .single();
       return Right(ScheduleEvent.fromJson(data));
-    } catch (e, st) {
+    } catch (e) {
       return Left(ServerFailure(message: e.toString()));
     }
   }
@@ -155,7 +155,7 @@ class ScheduleRepositoryImpl implements ScheduleRepository {
           .select()
           .single();
       return Right(ScheduleEvent.fromJson(data));
-    } catch (e, st) {
+    } catch (e) {
       return Left(ServerFailure(message: e.toString()));
     }
   }
@@ -165,7 +165,7 @@ class ScheduleRepositoryImpl implements ScheduleRepository {
     try {
       await supabase.from('schedule_events').delete().eq('id', id);
       return const Right(null);
-    } catch (e, st) {
+    } catch (e) {
       return Left(ServerFailure(message: e.toString()));
     }
   }
@@ -208,7 +208,7 @@ class ScheduleRepositoryImpl implements ScheduleRepository {
       final data = await query.order('date', ascending: true);
       final sessions = data.map((json) => Session.fromJson(json)).toList();
       return Right(sessions);
-    } catch (e, st) {
+    } catch (e) {
       return Left(ServerFailure(message: e.toString()));
     }
   }
@@ -222,7 +222,7 @@ class ScheduleRepositoryImpl implements ScheduleRepository {
           .eq('id', id)
           .single();
       return Right(Session.fromJson(data));
-    } catch (e, st) {
+    } catch (e) {
       return Left(ServerFailure(message: e.toString()));
     }
   }
@@ -262,7 +262,7 @@ class ScheduleRepositoryImpl implements ScheduleRepository {
           .select()
           .single();
       return Right(Session.fromJson(data));
-    } catch (e, st) {
+    } catch (e) {
       return Left(ServerFailure(message: e.toString()));
     }
   }
@@ -308,7 +308,7 @@ class ScheduleRepositoryImpl implements ScheduleRepository {
           .select()
           .single();
       return Right(Session.fromJson(data));
-    } catch (e, st) {
+    } catch (e) {
       return Left(ServerFailure(message: e.toString()));
     }
   }
@@ -318,7 +318,7 @@ class ScheduleRepositoryImpl implements ScheduleRepository {
     try {
       await supabase.from('sessions').delete().eq('id', id);
       return const Right(null);
-    } catch (e, st) {
+    } catch (e) {
       return Left(ServerFailure(message: e.toString()));
     }
   }

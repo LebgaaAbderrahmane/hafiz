@@ -259,43 +259,31 @@ class SettingsView extends ConsumerWidget {
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('اختيار اللغة'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            RadioListTile<String>(
-              title: const Text('العربية'),
-              value: 'ar',
-              groupValue: 'ar',
-              onChanged: (_) {
-                Navigator.pop(context);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('تم تغيير اللغة إلى العربية')),
-                );
-              },
-            ),
-            RadioListTile<String>(
-              title: const Text('English'),
-              value: 'en',
-              groupValue: 'ar',
-              onChanged: (_) {
-                Navigator.pop(context);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Language changed to English')),
-                );
-              },
-            ),
-            RadioListTile<String>(
-              title: const Text('Français'),
-              value: 'fr',
-              groupValue: 'ar',
-              onChanged: (_) {
-                Navigator.pop(context);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Langue changée en Français')),
-                );
-              },
-            ),
-          ],
+        content: RadioGroup<String>(
+          groupValue: 'ar',
+          onChanged: (_) {
+            Navigator.pop(context);
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('تم تغيير اللغة')),
+            );
+          },
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              RadioListTile<String>(
+                title: const Text('العربية'),
+                value: 'ar',
+              ),
+              RadioListTile<String>(
+                title: const Text('English'),
+                value: 'en',
+              ),
+              RadioListTile<String>(
+                title: const Text('Français'),
+                value: 'fr',
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -306,43 +294,31 @@ class SettingsView extends ConsumerWidget {
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('اختيار المظهر'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            RadioListTile<String>(
-              title: const Text('فاتح'),
-              value: 'light',
-              groupValue: 'light',
-              onChanged: (_) {
-                Navigator.pop(context);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('المظهر الفاتح')),
-                );
-              },
-            ),
-            RadioListTile<String>(
-              title: const Text('داكن'),
-              value: 'dark',
-              groupValue: 'light',
-              onChanged: (_) {
-                Navigator.pop(context);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('الوضع الداكن قيد التطوير')),
-                );
-              },
-            ),
-            RadioListTile<String>(
-              title: const Text('تلقائي'),
-              value: 'system',
-              groupValue: 'light',
-              onChanged: (_) {
-                Navigator.pop(context);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('يتم اتباع إعدادات النظام')),
-                );
-              },
-            ),
-          ],
+        content: RadioGroup<String>(
+          groupValue: 'light',
+          onChanged: (_) {
+            Navigator.pop(context);
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('تم تغيير المظهر')),
+            );
+          },
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              RadioListTile<String>(
+                title: const Text('فاتح'),
+                value: 'light',
+              ),
+              RadioListTile<String>(
+                title: const Text('داكن'),
+                value: 'dark',
+              ),
+              RadioListTile<String>(
+                title: const Text('تلقائي'),
+                value: 'system',
+              ),
+            ],
+          ),
         ),
       ),
     );

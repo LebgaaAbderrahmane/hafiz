@@ -1,6 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hafiz/features/auth/domain/entities/user.dart';
-import 'package:hafiz/features/auth/domain/repositories/auth_repository.dart';
 import 'package:hafiz/features/auth/domain/repositories/auth_provider.dart';
 
 /// Fetches all roles for the current authenticated user.

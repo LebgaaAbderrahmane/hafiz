@@ -21,7 +21,7 @@ class RevisionTrackingView extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(l10n?.quranProgress ?? 'المراجعة'),
+        title: Text(l10n.quranProgress),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => context.pop(),

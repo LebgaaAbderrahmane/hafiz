@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import "package:hafiz/core/localization/app_localizations.dart";
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:hafiz/core/localization/localization.dart';
 import 'package:hafiz/core/widgets/button.dart';
 import 'package:hafiz/core/widgets/text_field.dart';
 import 'package:hafiz/features/auth/domain/repositories/user_role_provider.dart';
@@ -164,7 +163,7 @@ class _AddStudentViewState extends ConsumerState<AddStudentView> {
             ),
             const SizedBox(height: 16),
             DropdownButtonFormField<Gender>(
-              value: _gender,
+              initialValue: _gender,
               decoration: InputDecoration(
                 labelText: context.l.gender,
                 border: const OutlineInputBorder(),
@@ -243,7 +242,7 @@ class _AddStudentViewState extends ConsumerState<AddStudentView> {
           ),
           const SizedBox(height: 24),
           DropdownButtonFormField<String>(
-            value: _previousQuranEducation,
+            initialValue: _previousQuranEducation,
             decoration: InputDecoration(
               labelText: context.l.previousEducation,
               border: const OutlineInputBorder(),
@@ -258,7 +257,7 @@ class _AddStudentViewState extends ConsumerState<AddStudentView> {
           ),
           const SizedBox(height: 16),
           DropdownButtonFormField<String>(
-            value: _currentQuranLevel,
+            initialValue: _currentQuranLevel,
             decoration: InputDecoration(
               labelText: context.l.currentQuranLevel,
               border: const OutlineInputBorder(),
@@ -274,7 +273,7 @@ class _AddStudentViewState extends ConsumerState<AddStudentView> {
           ),
           const SizedBox(height: 16),
           DropdownButtonFormField<String>(
-            value: _readingLevel,
+            initialValue: _readingLevel,
             decoration: InputDecoration(
               labelText: context.l.readingLevel,
               border: const OutlineInputBorder(),
@@ -289,7 +288,7 @@ class _AddStudentViewState extends ConsumerState<AddStudentView> {
           ),
           const SizedBox(height: 16),
           DropdownButtonFormField<String>(
-            value: _tajwidLevel,
+            initialValue: _tajwidLevel,
             decoration: InputDecoration(
               labelText: context.l.tajwidLevel,
               border: const OutlineInputBorder(),
@@ -304,7 +303,7 @@ class _AddStudentViewState extends ConsumerState<AddStudentView> {
           ),
           const SizedBox(height: 16),
           DropdownButtonFormField<String>(
-            value: _memorizationLevel,
+            initialValue: _memorizationLevel,
             decoration: InputDecoration(
               labelText: context.l.memorizationLevel,
               border: const OutlineInputBorder(),

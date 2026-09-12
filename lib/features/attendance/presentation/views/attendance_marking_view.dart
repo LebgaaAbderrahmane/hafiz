@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import "package:hafiz/core/localization/app_localizations.dart";
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hafiz/core/localization/localization.dart';
 import 'package:hafiz/core/widgets/button.dart';
 import 'package:hafiz/core/widgets/loading.dart';
 import 'package:hafiz/features/attendance/domain/entities/attendance.dart';
@@ -183,7 +182,7 @@ class _AttendanceMarkingViewState
         );
         Navigator.of(context).pop();
       }
-    } catch (e, st) {
+    } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(e.toString())),
@@ -222,7 +221,7 @@ class _AttendanceTile extends StatelessWidget {
       trailing: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
         decoration: BoxDecoration(
-          color: Color(status.colorValue).withOpacity(0.15),
+          color: Color(status.colorValue).withValues(alpha: 0.15),
           borderRadius: BorderRadius.circular(16),
         ),
         child: Text(
