@@ -178,7 +178,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
                         ),
                         TextButton(
                           onPressed: () {
-                            // TODO: Navigate to sign up
+                            context.go('/sign-up');
                           },
                           child: const Text('إنشاء حساب'),
                         ),

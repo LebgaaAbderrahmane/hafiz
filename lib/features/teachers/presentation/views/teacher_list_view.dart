@@ -35,7 +35,7 @@ class _TeacherListViewState extends ConsumerState<TeacherListView> {
         actions: [
           IconButton(
             icon: const Icon(Icons.add),
-            onPressed: () {},
+            onPressed: () => context.push('/teachers/add'),
           ),
         ],
       ),

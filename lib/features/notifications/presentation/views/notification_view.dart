@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import '../../../../core/theme/theme.dart';
 import '../../../../core/localization/app_localizations.dart';
+import '../../../auth/domain/repositories/auth_provider.dart';
 import '../../domain/entities/notification.dart';
 import '../../domain/repositories/notification_provider.dart';
 
@@ -14,7 +15,8 @@ class NotificationView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
-    final notificationsAsync = ref.watch(userNotificationsProvider(''));
+    final userId = ref.watch(currentUserProvider)?.id ?? '';
+    final notificationsAsync = ref.watch(userNotificationsProvider(userId));
 
     return Scaffold(
       appBar: AppBar(
@@ -23,8 +25,9 @@ class NotificationView extends ConsumerWidget {
           IconButton(
             icon: const Icon(Icons.done_all),
             onPressed: () {
-              ref.read(notificationNotifierProvider.notifier).markAllAsRead('');
-              ref.invalidate(userNotificationsProvider(''));
+              final userId = ref.read(currentUserProvider)?.id ?? '';
+              ref.read(notificationNotifierProvider.notifier).markAllAsRead(userId);
+              ref.invalidate(userNotificationsProvider(userId));
             },
           ),
           PopupMenuButton(
@@ -85,7 +88,8 @@ class NotificationView extends ConsumerWidget {
       ),
       onDismissed: (direction) {
         ref.read(notificationNotifierProvider.notifier).deleteNotification(notification.id);
-        ref.invalidate(userNotificationsProvider(''));
+        final userId = ref.read(currentUserProvider)?.id ?? '';
+        ref.invalidate(userNotificationsProvider(userId));
       },
       child: ListTile(
         leading: Container(
@@ -143,7 +147,8 @@ class NotificationView extends ConsumerWidget {
         onTap: () {
           if (!notification.isRead) {
             ref.read(notificationNotifierProvider.notifier).markAsRead(notification.id);
-            ref.invalidate(userNotificationsProvider(''));
+            final userId = ref.read(currentUserProvider)?.id ?? '';
+            ref.invalidate(userNotificationsProvider(userId));
           }
           if (notification.actionUrl != null) {
             context.push(notification.actionUrl!);
@@ -183,8 +188,9 @@ class NotificationView extends ConsumerWidget {
           ),
           ElevatedButton(
             onPressed: () {
-              ref.read(notificationNotifierProvider.notifier).deleteAllNotifications('');
-              ref.invalidate(userNotificationsProvider(''));
+              final userId = ref.read(currentUserProvider)?.id ?? '';
+              ref.read(notificationNotifierProvider.notifier).deleteAllNotifications(userId);
+              ref.invalidate(userNotificationsProvider(userId));
               Navigator.of(context).pop();
             },
             child: const Text('حذف'),
