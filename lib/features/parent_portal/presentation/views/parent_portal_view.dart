@@ -2,16 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/theme.dart';
-import '../../../../core/localization/app_localizations.dart';
 import '../../../auth/domain/repositories/auth_provider.dart';
+import '../../../auth/domain/repositories/user_role_provider.dart';
+import '../../../schedule/domain/repositories/schedule_provider.dart';
 
-/// Parent portal — view for guardians to track their children.
 class ParentPortalView extends ConsumerWidget {
   const ParentPortalView({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = AppLocalizations.of(context);
     final currentUser = ref.watch(currentUserProvider);
 
     return Scaffold(
@@ -21,15 +20,10 @@ class ParentPortalView extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Header
-              _buildHeader(context, currentUser?.fullName ?? 'ولي الأمر'),
+              _buildHeader(context, ref),
               Gap.l,
-
-              // Children list
               _buildChildrenSection(context),
               Gap.xl,
-
-              // Quick actions
               _buildQuickActions(context),
             ],
           ),
@@ -38,7 +32,8 @@ class ParentPortalView extends ConsumerWidget {
     );
   }
 
-  Widget _buildHeader(BuildContext context, String name) {
+  Widget _buildHeader(BuildContext context, WidgetRef ref) {
+    final user = ref.watch(currentUserProvider);
     return Row(
       children: [
         Expanded(
@@ -46,7 +41,7 @@ class ParentPortalView extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'مرحباً، $name',
+                'مرحباً، ${user?.fullName ?? 'ولي الأمر'}',
                 style: AppTextStyles.headlineMedium,
               ),
               Gap.xs,
@@ -61,7 +56,7 @@ class ParentPortalView extends ConsumerWidget {
         ),
         IconButton(
           icon: const Icon(Icons.notifications_outlined),
-          onPressed: () {},
+          onPressed: () => context.push('/notifications'),
         ),
       ],
     );
@@ -87,6 +82,13 @@ class ParentPortalView extends ConsumerWidget {
                       color: AppColors.textSecondary,
                     ),
                   ),
+                  Gap.m,
+                  Text(
+                    'سيظهر أبناؤك هنا بعد ربطهم بحسابك',
+                    style: AppTextStyles.bodySmall.copyWith(
+                      color: AppColors.textHint,
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -107,11 +109,11 @@ class ParentPortalView extends ConsumerWidget {
             Expanded(
               child: _buildActionCard(
                 context,
-                'الحصور',
+                'الحضور',
                 'متابعة الحصور اليومية',
                 Icons.check_circle,
                 AppColors.success,
-                () {},
+                () => context.push('/attendance'),
               ),
             ),
             Gap.m,
@@ -122,7 +124,7 @@ class ParentPortalView extends ConsumerWidget {
                 'متابعة التقييمات والدرجات',
                 Icons.star,
                 AppColors.accent,
-                () {},
+                () => context.push('/assessments'),
               ),
             ),
           ],
@@ -137,7 +139,7 @@ class ParentPortalView extends ConsumerWidget {
                 'جدول المراجعات',
                 Icons.book,
                 AppColors.primary,
-                () {},
+                () => context.push('/revision/me'),
               ),
             ),
             Gap.m,
@@ -148,7 +150,7 @@ class ParentPortalView extends ConsumerWidget {
                 'التواصل مع المعلم',
                 Icons.chat,
                 AppColors.warning,
-                () {},
+                () => context.push('/notifications'),
               ),
             ),
           ],

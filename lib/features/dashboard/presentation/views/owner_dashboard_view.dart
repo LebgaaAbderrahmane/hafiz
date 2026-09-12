@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/theme/theme.dart';
 import '../../../auth/domain/repositories/auth_provider.dart';
 import '../../domain/repositories/dashboard_provider.dart';
+import '../../../notifications/domain/repositories/notification_provider.dart';
+import '../../../notifications/domain/entities/notification.dart';
 
 /// Owner dashboard — main control center.
 class OwnerDashboardView extends ConsumerWidget {
@@ -244,31 +246,126 @@ class OwnerDashboardView extends ConsumerWidget {
   }
 
   Widget _buildRecentActivity(BuildContext context, WidgetRef ref) {
+    final user = ref.watch(currentUserProvider);
+    final notificationsAsync = user != null
+        ? ref.watch(userNotificationsProvider(user.id))
+        : const AsyncValue.data([]);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('النشاط الأخير', style: AppTextStyles.titleLarge),
+        Row(
+          children: [
+            Text('النشاط الأخير', style: AppTextStyles.titleLarge),
+            const Spacer(),
+            TextButton(
+              onPressed: () => context.push('/notifications'),
+              child: const Text('عرض الكل'),
+            ),
+          ],
+        ),
         Gap.m,
-        Card(
-          child: Padding(
-            padding: EdgeInsets.all(AppSpacing.l),
-            child: Center(
-              child: Column(
-                children: [
-                  Icon(Icons.history, size: 48, color: AppColors.textHint),
-                  Gap.m,
-                  Text(
-                    'لا يوجد نشاط حديث',
-                    style: AppTextStyles.bodyMedium.copyWith(
-                      color: AppColors.textSecondary,
-                    ),
-                  ),
-                ],
-              ),
+        notificationsAsync.when(
+          loading: () => const Card(
+            child: Padding(
+              padding: EdgeInsets.all(AppSpacing.xl),
+              child: Center(child: CircularProgressIndicator()),
             ),
           ),
+          error: (e, _) => Card(
+            child: Padding(
+              padding: EdgeInsets.all(AppSpacing.l),
+              child: Text('خطأ في تحميل النشاط: $e'),
+            ),
+          ),
+          data: (notifications) {
+            if (notifications.isEmpty) {
+              return Card(
+                child: Padding(
+                  padding: EdgeInsets.all(AppSpacing.l),
+                  child: Center(
+                    child: Column(
+                      children: [
+                        Icon(Icons.history, size: 48, color: AppColors.textHint),
+                        Gap.m,
+                        Text(
+                          'لا يوجد نشاط حديث',
+                          style: AppTextStyles.bodyMedium.copyWith(
+                            color: AppColors.textSecondary,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            }
+
+            return Card(
+              child: Column(
+                children: notifications.take(5).map((notification) {
+                  return ListTile(
+                    leading: CircleAvatar(
+                      backgroundColor: AppColors.primary.withValues(alpha: 0.1),
+                      child: Icon(
+                        _getNotificationIcon(notification.type),
+                        color: AppColors.primary,
+                        size: 20,
+                      ),
+                    ),
+                    title: Text(
+                      notification.title,
+                      style: AppTextStyles.bodyMedium,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    subtitle: Text(
+                      notification.body,
+                      style: AppTextStyles.bodySmall.copyWith(
+                        color: AppColors.textSecondary,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    trailing: Text(
+                      _formatTimeAgo(notification.createdAt),
+                      style: AppTextStyles.bodySmall.copyWith(
+                        color: AppColors.textHint,
+                      ),
+                    ),
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: AppSpacing.m,
+                      vertical: 2,
+                    ),
+                  );
+                }).toList(),
+              ),
+            );
+          },
         ),
       ],
     );
+  }
+
+  IconData _getNotificationIcon(NotificationType type) {
+    return switch (type) {
+      NotificationType.attendance => Icons.check_circle,
+      NotificationType.tasmi => Icons.mic,
+      NotificationType.assignment => Icons.book,
+      NotificationType.reminder => Icons.alarm,
+      NotificationType.memorization => Icons.book,
+      NotificationType.schedule => Icons.calendar_today,
+      NotificationType.report => Icons.assessment,
+      NotificationType.system => Icons.settings,
+    };
+  }
+
+  String _formatTimeAgo(DateTime dateTime) {
+    final diff = DateTime.now().difference(dateTime);
+    if (diff.inMinutes < 1) return 'الآن';
+    if (diff.inMinutes < 60) return '${diff.inMinutes} د';
+    if (diff.inHours < 24) return '${diff.inHours} س';
+    if (diff.inDays < 7) return '${diff.inDays} ي';
+    return '${(diff.inDays / 7).floor()} أ';
   }
 }
