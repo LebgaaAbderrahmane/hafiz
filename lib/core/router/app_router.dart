@@ -29,6 +29,8 @@ import 'package:hafiz/features/quran/presentation/views/quran_browse_view.dart';
 import 'package:hafiz/features/quran/presentation/views/memorization_plan_view.dart';
 import 'package:hafiz/features/quran/presentation/views/create_memorization_plan_view.dart';
 import 'package:hafiz/features/revision/presentation/views/revision_tracking_view.dart';
+import 'package:hafiz/features/assessments/presentation/views/assessment_list_view.dart';
+import 'package:hafiz/features/assessments/presentation/views/create_assessment_view.dart';
 import 'package:hafiz/features/guardians/presentation/views/guardian_list_view.dart';
 import 'package:hafiz/features/guardians/presentation/views/guardian_profile_view.dart';
 import 'package:hafiz/features/reports/presentation/views/reports_view.dart';
@@ -213,6 +215,16 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             ],
           ),
           GoRoute(
+            path: '/assessments',
+            builder: (context, state) => const AssessmentListView(),
+            routes: [
+              GoRoute(
+                path: 'create',
+                builder: (context, state) => const CreateAssessmentView(),
+              ),
+            ],
+          ),
+          GoRoute(
             path: '/reports',
             builder: (context, state) => const ReportsView(),
           ),
@@ -272,7 +284,8 @@ class _AdminShell extends StatelessWidget {
                 _navItem(context, 'الحفظ', '/hifz/assignments', Icons.book),
                 _navItem(context, 'القرآن', '/quran', Icons.menu_book),
                 _navItem(context, 'الأولياء', '/guardians', Icons.family_restroom),
-                _navItem(context, 'التقارير', '/reports', Icons.assessment),
+                _navItem(context, 'التقييمات', '/assessments', Icons.assessment),
+                _navItem(context, 'التقارير', '/reports', Icons.summarize),
                 _navItem(context, 'الإشعارات', '/notifications', Icons.notifications),
                 const Spacer(),
                 _navItem(context, 'الإعدادات', '/settings', Icons.settings),
