@@ -19,6 +19,7 @@ class _HifzAssignmentListViewState extends ConsumerState<HifzAssignmentListView>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   AssignmentStatus? _selectedFilter;
+  AssignmentType? _selectedTypeFilter;
 
   @override
   void initState() {
@@ -69,9 +70,13 @@ class _HifzAssignmentListViewState extends ConsumerState<HifzAssignmentListView>
       ),
       body: assignmentsAsync.when(
         data: (assignments) {
-          final filtered = _selectedFilter != null
-              ? assignments.where((a) => a.status == _selectedFilter).toList()
-              : assignments;
+          var filtered = assignments;
+          if (_selectedFilter != null) {
+            filtered = filtered.where((a) => a.status == _selectedFilter).toList();
+          }
+          if (_selectedTypeFilter != null) {
+            filtered = filtered.where((a) => a.type == _selectedTypeFilter).toList();
+          }
 
           if (filtered.isEmpty) {
             return Center(
@@ -265,21 +270,21 @@ class _HifzAssignmentListViewState extends ConsumerState<HifzAssignmentListView>
             ListTile(
               title: const Text('الكل'),
               onTap: () {
-                setState(() => _selectedFilter = null);
+                setState(() => _selectedTypeFilter = null);
                 Navigator.pop(context);
               },
             ),
             ListTile(
               title: const Text('حفظ جديد'),
               onTap: () {
-                setState(() => _selectedFilter = null);
+                setState(() => _selectedTypeFilter = AssignmentType.newMemorization);
                 Navigator.pop(context);
               },
             ),
             ListTile(
               title: const Text('مراجعة'),
               onTap: () {
-                setState(() => _selectedFilter = null);
+                setState(() => _selectedTypeFilter = AssignmentType.revision);
                 Navigator.pop(context);
               },
             ),
