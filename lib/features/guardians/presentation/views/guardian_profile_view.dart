@@ -27,7 +27,12 @@ class GuardianProfileView extends ConsumerWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.edit),
-            onPressed: () {},
+            onPressed: () {
+              // TODO: Show edit dialog when create/edit guardian view is built
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('قريباً: تعديل بيانات ولي الأمر')),
+              );
+            },
           ),
         ],
       ),
