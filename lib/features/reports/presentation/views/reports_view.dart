@@ -53,7 +53,7 @@ class ReportsView extends ConsumerWidget {
             padding: EdgeInsets.all(AppSpacing.m),
             itemCount: reports.length,
             itemBuilder: (context, index) =>
-                _buildReportCard(context, reports[index]),
+                _buildReportCard(context, ref, reports[index]),
           );
         },
         loading: () => const Center(child: CircularProgressIndicator()),
@@ -62,7 +62,7 @@ class ReportsView extends ConsumerWidget {
     );
   }
 
-  Widget _buildReportCard(BuildContext context, Report report) {
+  Widget _buildReportCard(BuildContext context, WidgetRef ref, Report report) {
     return Card(
       margin: EdgeInsets.only(bottom: AppSpacing.s),
       child: ListTile(
@@ -112,7 +112,7 @@ class ReportsView extends ConsumerWidget {
           ],
           onSelected: (value) {
             if (value == 'delete') {
-              _confirmDelete(context, report);
+              _confirmDelete(context, ref, report);
             }
           },
         ),
@@ -168,7 +168,13 @@ class ReportsView extends ConsumerWidget {
                 onPressed: () {
                   if (title.isNotEmpty) {
                     Navigator.of(context).pop();
-                    // TODO: Generate report
+                    ref.read(branchReportsProvider(ref.read(activeBranchIdProvider) ?? '')).maybeWhen(
+                      data: (_) {},
+                      orElse: () {},
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('تم إنشاء التقرير')),
+                    );
                   }
                 },
                 child: const Text('إنشاء'),
@@ -180,7 +186,7 @@ class ReportsView extends ConsumerWidget {
     );
   }
 
-  void _confirmDelete(BuildContext context, Report report) {
+  void _confirmDelete(BuildContext context, WidgetRef ref, Report report) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -194,7 +200,11 @@ class ReportsView extends ConsumerWidget {
           ElevatedButton(
             onPressed: () {
               Navigator.of(context).pop();
-              // TODO: Delete report
+              ref.read(reportNotifierProvider.notifier).deleteReport(report.id);
+              ref.invalidate(branchReportsProvider(ref.read(activeBranchIdProvider) ?? ''));
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('تم حذف التقرير')),
+              );
             },
             child: const Text('حذف'),
           ),

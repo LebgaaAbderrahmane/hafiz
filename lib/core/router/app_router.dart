@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hafiz/features/auth/presentation/views/login_view.dart';
 import 'package:hafiz/features/auth/presentation/views/forgot_password_view.dart';
+import 'package:hafiz/features/auth/presentation/views/sign_up_view.dart';
 import 'package:hafiz/features/auth/domain/repositories/auth_provider.dart';
 import 'package:hafiz/features/auth/domain/repositories/user_role_provider.dart';
 import 'package:hafiz/features/auth/domain/entities/user.dart' show Role;
@@ -13,16 +14,20 @@ import 'package:hafiz/features/settings/presentation/views/settings_view.dart';
 import 'package:hafiz/features/students/presentation/views/student_list_view.dart';
 import 'package:hafiz/features/students/presentation/views/student_profile_view.dart';
 import 'package:hafiz/features/students/presentation/views/add_student_view.dart';
+import 'package:hafiz/features/students/presentation/views/edit_student_view.dart';
 import 'package:hafiz/features/teachers/presentation/views/teacher_list_view.dart';
 import 'package:hafiz/features/teachers/presentation/views/teacher_profile_view.dart';
+import 'package:hafiz/features/teachers/presentation/views/add_teacher_view.dart';
 import 'package:hafiz/features/classes/presentation/views/class_list_view.dart';
 import 'package:hafiz/features/classes/presentation/views/class_detail_view.dart';
+import 'package:hafiz/features/classes/presentation/views/add_class_view.dart';
 import 'package:hafiz/features/attendance/presentation/views/attendance_marking_view.dart';
 import 'package:hafiz/features/tasmi/presentation/views/tasmi_eval_view.dart';
 import 'package:hafiz/features/schedule/presentation/views/calendar_view.dart';
 import 'package:hafiz/features/schedule/presentation/views/session_management_view.dart';
 import 'package:hafiz/features/quran/presentation/views/quran_browse_view.dart';
 import 'package:hafiz/features/quran/presentation/views/memorization_plan_view.dart';
+import 'package:hafiz/features/quran/presentation/views/create_memorization_plan_view.dart';
 import 'package:hafiz/features/revision/presentation/views/revision_tracking_view.dart';
 import 'package:hafiz/features/guardians/presentation/views/guardian_list_view.dart';
 import 'package:hafiz/features/guardians/presentation/views/guardian_profile_view.dart';
@@ -62,6 +67,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const LoginView(),
       ),
       GoRoute(
+        path: '/sign-up',
+        builder: (context, state) => const SignUpView(),
+      ),
+      GoRoute(
         path: '/forgot-password',
         builder: (context, state) => const ForgotPasswordView(),
       ),
@@ -85,6 +94,14 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                 builder: (context, state) => StudentProfileView(
                   studentId: state.pathParameters['id']!,
                 ),
+                routes: [
+                  GoRoute(
+                    path: 'edit',
+                    builder: (context, state) => EditStudentView(
+                      studentId: state.pathParameters['id']!,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
@@ -92,6 +109,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             path: '/teachers',
             builder: (context, state) => const TeacherListView(),
             routes: [
+              GoRoute(
+                path: 'add',
+                builder: (context, state) => const AddTeacherView(),
+              ),
               GoRoute(
                 path: ':id',
                 builder: (context, state) => TeacherProfileView(
@@ -104,6 +125,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             path: '/classes',
             builder: (context, state) => const ClassListView(),
             routes: [
+              GoRoute(
+                path: 'add',
+                builder: (context, state) => const AddClassView(),
+              ),
               GoRoute(
                 path: ':id',
                 builder: (context, state) => ClassDetailView(
@@ -158,10 +183,14 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             builder: (context, state) => const QuranBrowseView(),
             routes: [
               GoRoute(
-                path: 'plan/:studentId',
-                builder: (context, state) => MemorizationPlanView(
-                  studentId: state.pathParameters['studentId']!,
-                ),
+                path: 'plans',
+                builder: (context, state) => const MemorizationPlanView(),
+                routes: [
+                  GoRoute(
+                    path: 'create',
+                    builder: (context, state) => const CreateMemorizationPlanView(),
+                  ),
+                ],
               ),
             ],
           ),

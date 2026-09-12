@@ -10,13 +10,15 @@ import 'package:hafiz/features/quran/domain/entities/memorization_plan.dart';
 import 'package:hafiz/features/quran/domain/repositories/curriculum_provider.dart';
 
 class MemorizationPlanView extends ConsumerWidget {
-  const MemorizationPlanView({super.key, required this.studentId});
+  const MemorizationPlanView({super.key, this.studentId});
 
-  final String studentId;
+  final String? studentId;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final plansAsync = ref.watch(studentPlansProvider(studentId));
+    final plansAsync = studentId != null
+        ? ref.watch(studentPlansProvider(studentId!))
+        : AsyncValue<List<MemorizationPlan>>.data([]);
 
     return Scaffold(
       appBar: AppBar(
