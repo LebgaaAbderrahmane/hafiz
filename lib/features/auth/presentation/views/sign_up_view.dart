@@ -195,7 +195,7 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('تم إنشاء الحساب بنجاح. تحقق من بريدك الإلكتروني.'),
+            content: Text('تم إنشاء الحساب بنجاح. يمكنك تسجيل الدخول الآن.'),
           ),
         );
         context.go('/login');
