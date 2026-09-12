@@ -262,37 +262,49 @@ class GoRouterRefreshStream extends ChangeNotifier {
 class _AdminShell extends StatelessWidget {
   const _AdminShell({required this.child});
   final Widget child;
+
+  static const _navItems = [
+    _NavItem('لوحة التحكم', '/dashboard', Icons.dashboard),
+    _NavItem('الطلاب', '/students', Icons.people),
+    _NavItem('المعلمون', '/teachers', Icons.person),
+    _NavItem('الفصول', '/classes', Icons.class_),
+    _NavItem('الحضور', '/attendance', Icons.check_circle),
+    _NavItem('التسميع', '/tasmi', Icons.mic),
+    _NavItem('الجدول', '/schedule', Icons.calendar_today),
+    _NavItem('الحفظ', '/hifz/assignments', Icons.book),
+    _NavItem('القرآن', '/quran', Icons.menu_book),
+    _NavItem('الأولياء', '/guardians', Icons.family_restroom),
+    _NavItem('التقييمات', '/assessments', Icons.assessment),
+    _NavItem('التقارير', '/reports', Icons.summarize),
+    _NavItem('الإشعارات', '/notifications', Icons.notifications),
+  ];
+
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.sizeOf(context).width;
+    final isMobile = screenWidth < 768;
+
+    if (isMobile) {
+      return Scaffold(
+        appBar: AppBar(
+          title: Text('حفيظ', style: AppTextStyles.headlineMedium.copyWith(color: AppColors.primary)),
+          backgroundColor: AppColors.surface,
+        ),
+        drawer: Drawer(
+          child: SafeArea(
+            child: _buildSidebarContent(context, isMobile: true),
+          ),
+        ),
+        body: child,
+      );
+    }
+
     return Scaffold(
       body: Row(
         children: [
-          Container(
+          SizedBox(
             width: 248,
-            color: AppColors.surface,
-            child: Column(
-              children: [
-                const SizedBox(height: 48),
-                Text('حفيظ', style: AppTextStyles.headlineMedium.copyWith(color: AppColors.primary)),
-                const SizedBox(height: 32),
-                _navItem(context, 'لوحة التحكم', '/dashboard', Icons.dashboard),
-                _navItem(context, 'الطلاب', '/students', Icons.people),
-                _navItem(context, 'المعلمون', '/teachers', Icons.person),
-                _navItem(context, 'الفصول', '/classes', Icons.class_),
-                _navItem(context, 'الحضور', '/attendance', Icons.check_circle),
-                _navItem(context, 'التسميع', '/tasmi', Icons.mic),
-                _navItem(context, 'الجدول', '/schedule', Icons.calendar_today),
-                _navItem(context, 'الحفظ', '/hifz/assignments', Icons.book),
-                _navItem(context, 'القرآن', '/quran', Icons.menu_book),
-                _navItem(context, 'الأولياء', '/guardians', Icons.family_restroom),
-                _navItem(context, 'التقييمات', '/assessments', Icons.assessment),
-                _navItem(context, 'التقارير', '/reports', Icons.summarize),
-                _navItem(context, 'الإشعارات', '/notifications', Icons.notifications),
-                const Spacer(),
-                _navItem(context, 'الإعدادات', '/settings', Icons.settings),
-                const SizedBox(height: 16),
-              ],
-            ),
+            child: _buildSidebarContent(context),
           ),
           Expanded(child: child),
         ],
@@ -300,7 +312,34 @@ class _AdminShell extends StatelessWidget {
     );
   }
 
-  Widget _navItem(BuildContext context, String title, String path, IconData icon) {
+  Widget _buildSidebarContent(BuildContext context, {bool isMobile = false}) {
+    return Material(
+      color: AppColors.surface,
+      child: Column(
+        children: [
+          if (!isMobile) const SizedBox(height: 48),
+          Padding(
+            padding: EdgeInsets.all(AppSpacing.m),
+            child: Text('حفيظ', style: AppTextStyles.headlineMedium.copyWith(color: AppColors.primary)),
+          ),
+          const SizedBox(height: 8),
+          Expanded(
+            child: ListView(
+              padding: EdgeInsets.zero,
+              children: [
+                for (final item in _navItems)
+                  _navItem(context, item.title, item.path, item.icon, isMobile: isMobile),
+              ],
+            ),
+          ),
+          _navItem(context, 'الإعدادات', '/settings', Icons.settings, isMobile: isMobile),
+          const SizedBox(height: 16),
+        ],
+      ),
+    );
+  }
+
+  Widget _navItem(BuildContext context, String title, String path, IconData icon, {bool isMobile = false}) {
     final isSelected = GoRouterState.of(context).matchedLocation == path;
     return ListTile(
       leading: Icon(icon, color: isSelected ? AppColors.primary : AppColors.textSecondary),
@@ -312,7 +351,17 @@ class _AdminShell extends StatelessWidget {
         ),
       ),
       selected: isSelected,
-      onTap: () => context.go(path),
+      onTap: () {
+        context.go(path);
+        if (isMobile) Navigator.pop(context);
+      },
     );
   }
+}
+
+class _NavItem {
+  final String title;
+  final String path;
+  final IconData icon;
+  const _NavItem(this.title, this.path, this.icon);
 }
