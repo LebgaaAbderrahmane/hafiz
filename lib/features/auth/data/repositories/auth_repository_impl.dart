@@ -48,7 +48,7 @@ class AuthRepositoryImpl implements AuthRepository {
       }
       return _mapUser(response.user!);
     } on AuthException catch (e) {
-      throw AuthException(message: e.toString());
+      throw AuthException(message: e.message);
     } catch (e) {
       throw AuthException(message: e.toString());
     }

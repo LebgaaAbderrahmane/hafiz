@@ -53,9 +53,9 @@ final appRouterProvider = Provider<GoRouter>((ref) {
 
       if (!isLoggedIn && !isAuthRoute) return '/login';
       if (isLoggedIn && isAuthRoute) {
-        // Route based on role
+        // Route based on role — if no role yet, send to dashboard (will show empty state)
         return switch (activeRole) {
-          null => '/login',
+          null => '/dashboard',
           Role.teacher || Role.assistant => '/calendar',
           Role.parent => '/parent-portal',
           _ => '/dashboard',
