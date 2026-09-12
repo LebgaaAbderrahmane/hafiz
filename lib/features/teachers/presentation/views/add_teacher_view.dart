@@ -5,6 +5,7 @@ import '../../../../core/theme/theme.dart';
 import '../../../auth/domain/repositories/user_role_provider.dart';
 import '../../domain/entities/teacher.dart';
 import '../../domain/repositories/teacher_provider.dart';
+import '../../../classes/domain/repositories/branch_provider.dart';
 
 /// Add teacher view.
 class AddTeacherView extends ConsumerStatefulWidget {
@@ -25,6 +26,7 @@ class _AddTeacherViewState extends ConsumerState<AddTeacherView> {
 
   Gender? _gender;
   DateTime? _hireDate;
+  String? _selectedBranchId;
   bool _isLoading = false;
 
   @override
@@ -85,6 +87,8 @@ class _AddTeacherViewState extends ConsumerState<AddTeacherView> {
                   ],
                   onChanged: (v) => setState(() => _gender = v),
                 ),
+                Gap.m,
+                _buildBranchDropdown(),
               ],
             ),
             Gap.m,
@@ -198,6 +202,34 @@ class _AddTeacherViewState extends ConsumerState<AddTeacherView> {
     );
   }
 
+  Widget _buildBranchDropdown() {
+    final branchesAsync = ref.watch(orgBranchesProvider);
+    return branchesAsync.when(
+      loading: () => const Padding(
+        padding: EdgeInsets.all(8),
+        child: LinearProgressIndicator(),
+      ),
+      error: (e, _) => Text('خطأ: $e'),
+      data: (branches) {
+        if (branches.isEmpty) {
+          return const Text('لا توجد فروع', style: TextStyle(color: AppColors.error));
+        }
+        return DropdownButtonFormField<String>(
+          initialValue: _selectedBranchId,
+          decoration: const InputDecoration(
+            labelText: 'الفرع *',
+            border: OutlineInputBorder(),
+          ),
+          items: branches
+              .map((b) => DropdownMenuItem(value: b.id, child: Text(b.name)))
+              .toList(),
+          onChanged: (v) => setState(() => _selectedBranchId = v),
+          validator: (v) => v == null ? 'مطلوب' : null,
+        );
+      },
+    );
+  }
+
   Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) return;
 
@@ -205,7 +237,20 @@ class _AddTeacherViewState extends ConsumerState<AddTeacherView> {
 
     try {
       final orgId = ref.read(activeOrganizationIdProvider) ?? '';
-      final branchId = ref.read(activeBranchIdProvider) ?? '';
+      final branchId =
+          _selectedBranchId ?? ref.read(activeBranchIdProvider) ?? '';
+
+      if (orgId.isEmpty || branchId.isEmpty) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('يجب اختيار الفرع قبل الإضافة'),
+              backgroundColor: AppColors.error,
+            ),
+          );
+        }
+        return;
+      }
 
       final teacher = Teacher(
         id: '',
