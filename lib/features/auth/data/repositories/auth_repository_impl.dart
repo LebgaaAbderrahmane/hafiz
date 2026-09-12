@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' hide AuthException;
 import 'package:hafiz/features/auth/domain/entities/user.dart';
 import 'package:hafiz/features/auth/domain/repositories/auth_repository.dart';
@@ -39,17 +40,19 @@ class AuthRepositoryImpl implements AuthRepository {
     required String password,
   }) async {
     try {
+      debugPrint('AUTH: Signing in with email: $email');
       final response = await _auth.signInWithPassword(
         email: email,
         password: password,
       );
       if (response.user == null) {
-        throw const AuthException(message: 'Login failed');
+        throw const AuthException(message: 'Login failed — no user returned');
       }
+      debugPrint('AUTH: Login successful for ${response.user!.id}');
       return _mapUser(response.user!);
-    } on AuthException catch (e) {
-      throw AuthException(message: e.message);
-    } catch (e) {
+    } catch (e, st) {
+      debugPrint('AUTH: Sign-in error: $e');
+      debugPrint('AUTH: Stack trace: $st');
       throw AuthException(message: e.toString());
     }
   }

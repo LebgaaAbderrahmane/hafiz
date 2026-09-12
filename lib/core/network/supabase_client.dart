@@ -11,7 +11,7 @@ class SupabaseConfig {
 
   static const String _supabaseUrl = String.fromEnvironment(
     'SUPABASE_URL',
-    defaultValue: 'http://127.0.0.1:54421',
+    defaultValue: 'http://192.168.1.66:54421',
   );
 
   static const String _supabasePublishableKey = String.fromEnvironment(
