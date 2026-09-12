@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import "package:hafiz/core/localization/app_localizations.dart";
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hafiz/core/widgets/badge.dart';
 import 'package:hafiz/core/widgets/card.dart';
 import 'package:hafiz/core/widgets/empty_state.dart';
@@ -33,9 +34,7 @@ class MemorizationPlanView extends ConsumerWidget {
               title: context.l.noPlans,
               description: context.l.noPlansMessage,
               primaryActionLabel: context.l.createPlan,
-              onPrimaryAction: () {
-                // TODO: Navigate to create plan
-              },
+              onPrimaryAction: () => context.push('/quran/plans/create'),
             );
           }
           return _buildPlanList(plans);

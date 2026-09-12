@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import "package:hafiz/core/localization/app_localizations.dart";
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hafiz/core/widgets/badge.dart';
 import 'package:hafiz/core/widgets/card.dart';
 import 'package:hafiz/core/widgets/empty_state.dart';
@@ -117,9 +118,7 @@ class _SessionManagementViewState extends ConsumerState<SessionManagementView> {
             title: context.l.noSessions,
             description: context.l.noSessionsMessage,
             primaryActionLabel: context.l.addSession,
-            onPrimaryAction: () {
-              // TODO: Navigate to add session
-            },
+            onPrimaryAction: () => context.push('/schedule'),
           );
         }
         return _buildSessionList(sessions);
@@ -128,9 +127,16 @@ class _SessionManagementViewState extends ConsumerState<SessionManagementView> {
   }
 
   Widget _buildSessionList(List<Session> sessions) {
+    final startOfDay = DateTime(
+      _selectedDate.year,
+      _selectedDate.month,
+      _selectedDate.day,
+    );
+    final endOfDay = startOfDay.add(const Duration(days: 1));
+
     return RefreshIndicator(
       onRefresh: () async {
-        // Refresh
+        ref.invalidate(sessionsProvider((start: startOfDay, end: endOfDay)));
       },
       child: ListView.builder(
         padding: const EdgeInsets.all(16),
