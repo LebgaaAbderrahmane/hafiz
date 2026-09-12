@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import '../../../../core/theme/theme.dart';
 import '../../../../core/localization/app_localizations.dart';
+import '../../../auth/domain/repositories/user_role_provider.dart';
 import '../../domain/entities/report.dart';
 import '../../domain/repositories/report_provider.dart';
 
@@ -14,7 +15,8 @@ class ReportsView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
-    final reportsAsync = ref.watch(branchReportsProvider(''));
+    final branchId = ref.watch(activeBranchIdProvider) ?? '';
+    final reportsAsync = ref.watch(branchReportsProvider(branchId));
 
     return Scaffold(
       appBar: AppBar(

@@ -116,6 +116,8 @@ class AttendanceRepositoryImpl implements AttendanceRepository {
 
   @override
   Future<List<Attendance>> bulkMarkAttendance({
+    required String organizationId,
+    required String branchId,
     required String sessionId,
     required String classId,
     required Map<String, AttendanceStatus> studentStatuses,
@@ -123,6 +125,8 @@ class AttendanceRepositoryImpl implements AttendanceRepository {
   }) async {
     final records = studentStatuses.entries
         .map((entry) => {
+              'organization_id': organizationId,
+              'branch_id': branchId,
               'student_id': entry.key,
               'session_id': sessionId,
               'class_id': classId,

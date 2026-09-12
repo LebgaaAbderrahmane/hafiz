@@ -6,6 +6,7 @@ import 'package:hafiz/core/widgets/button.dart';
 import 'package:hafiz/core/widgets/loading.dart';
 import 'package:hafiz/features/attendance/domain/entities/attendance.dart';
 import 'package:hafiz/features/attendance/domain/repositories/attendance_provider.dart';
+import 'package:hafiz/features/auth/domain/repositories/user_role_provider.dart';
 import 'package:hafiz/features/students/domain/entities/student.dart';
 import 'package:hafiz/features/students/domain/repositories/student_provider.dart';
 
@@ -165,7 +166,11 @@ class _AttendanceMarkingViewState
     setState(() => _saving = true);
 
     try {
+      final orgId = ref.read(activeOrganizationIdProvider) ?? '';
+      final branchId = ref.read(activeBranchIdProvider) ?? '';
       await ref.read(attendanceRepositoryProvider).bulkMarkAttendance(
+            organizationId: orgId,
+            branchId: branchId,
             sessionId: widget.sessionId,
             classId: widget.classId,
             studentStatuses: _statusMap,

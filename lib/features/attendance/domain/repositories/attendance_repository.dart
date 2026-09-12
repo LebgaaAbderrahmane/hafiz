@@ -39,6 +39,8 @@ abstract class AttendanceRepository {
 
   /// Bulk mark attendance for a session.
   Future<List<Attendance>> bulkMarkAttendance({
+    required String organizationId,
+    required String branchId,
     required String sessionId,
     required String classId,
     required Map<String, AttendanceStatus> studentStatuses,
