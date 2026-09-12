@@ -147,28 +147,56 @@ class _InfoTab extends StatelessWidget {
   }
 }
 
-class _ClassesTab extends StatelessWidget {
+class _ClassesTab extends ConsumerWidget {
   const _ClassesTab({required this.teacher});
 
   final Teacher teacher;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Center(
-      child: Text('قريباً...', style: AppTextStyles.bodyLarge),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(Icons.class_outlined, size: 64, color: AppColors.textHint),
+          Gap.l,
+          Text('فصول المعلم', style: AppTextStyles.bodyLarge),
+          Gap.s,
+          Text(
+            'سيتم عرض الفصول التي يُدرّسها المعلم هنا',
+            style: AppTextStyles.bodySmall.copyWith(
+              color: AppColors.textSecondary,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
 
-class _ScheduleTab extends StatelessWidget {
+class _ScheduleTab extends ConsumerWidget {
   const _ScheduleTab({required this.teacher});
 
   final Teacher teacher;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Center(
-      child: Text('قريباً...', style: AppTextStyles.bodyLarge),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(Icons.schedule, size: 64, color: AppColors.textHint),
+          Gap.l,
+          Text('جدول المعلم', style: AppTextStyles.bodyLarge),
+          Gap.s,
+          Text(
+            'سيتم عرض جدول حصص المعلم هنا',
+            style: AppTextStyles.bodySmall.copyWith(
+              color: AppColors.textSecondary,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
