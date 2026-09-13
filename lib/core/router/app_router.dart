@@ -22,6 +22,7 @@ import 'package:hafiz/features/classes/presentation/views/class_list_view.dart';
 import 'package:hafiz/features/classes/presentation/views/class_detail_view.dart';
 import 'package:hafiz/features/classes/presentation/views/add_class_view.dart';
 import 'package:hafiz/features/attendance/presentation/views/attendance_marking_view.dart';
+import 'package:hafiz/features/attendance/presentation/views/attendance_history_view.dart';
 import 'package:hafiz/features/tasmi/presentation/views/tasmi_eval_view.dart';
 import 'package:hafiz/features/tasmi/presentation/views/tasmi_session_list_view.dart';
 import 'package:hafiz/features/tasmi/presentation/views/tasmi_session_detail_view.dart';
@@ -145,10 +146,24 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           ),
           GoRoute(
             path: '/attendance',
-            builder: (context, state) => const AttendanceMarkingView(
-              sessionId: '',
-              classId: '',
-            ),
+            builder: (context, state) => const AttendanceHistoryView(),
+            routes: [
+              GoRoute(
+                path: 'mark',
+                builder: (context, state) {
+                  final classId = state.uri.queryParameters['classId'] ?? '';
+                  final sessionId = state.uri.queryParameters['sessionId'] ?? '';
+                  return AttendanceMarkingView(
+                    sessionId: sessionId,
+                    classId: classId,
+                  );
+                },
+              ),
+              GoRoute(
+                path: 'history',
+                builder: (context, state) => const AttendanceHistoryView(),
+              ),
+            ],
           ),
           GoRoute(
             path: '/tasmi',
