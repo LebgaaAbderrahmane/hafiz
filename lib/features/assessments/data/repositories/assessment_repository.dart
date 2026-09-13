@@ -31,6 +31,20 @@ class AssessmentRepository {
         .toList();
   }
 
+  /// Get assessments for an organization.
+  Future<List<Assessment>> getOrgAssessments({
+    required String organizationId,
+  }) async {
+    final data = await _client
+        .from('assessments')
+        .select()
+        .eq('organization_id', organizationId)
+        .order('assessment_date', ascending: false);
+    return (data as List)
+        .map((json) => Assessment.fromJson(json))
+        .toList();
+  }
+
   /// Get a single assessment.
   Future<Assessment> getAssessment(String id) async {
     final data = await _client

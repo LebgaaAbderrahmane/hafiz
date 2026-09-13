@@ -28,6 +28,24 @@ class TeacherRepositoryImpl implements TeacherRepository {
   }
 
   @override
+  Future<List<Teacher>> getOrgTeachers({
+    required String organizationId,
+    String? search,
+  }) async {
+    var query = _supabase
+        .from('teachers')
+        .select()
+        .eq('organization_id', organizationId);
+
+    if (search != null && search.isNotEmpty) {
+      query = query.or('full_name.ilike.%$search%,email.ilike.%$search%');
+    }
+
+    final data = await query.order('full_name');
+    return (data as List).map((json) => Teacher.fromJson(json)).toList();
+  }
+
+  @override
   Future<Teacher?> getTeacherById(String teacherId) async {
     final data = await _supabase
         .from('teachers')

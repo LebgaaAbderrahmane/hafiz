@@ -8,6 +8,12 @@ abstract class TeacherRepository {
     String? search,
   });
 
+  /// Get all teachers for an organization.
+  Future<List<Teacher>> getOrgTeachers({
+    required String organizationId,
+    String? search,
+  });
+
   /// Get a single teacher by ID.
   Future<Teacher?> getTeacherById(String teacherId);
 

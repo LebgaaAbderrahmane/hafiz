@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:hafiz/features/assessments/data/repositories/assessment_repository.dart';
 import 'package:hafiz/features/assessments/domain/entities/assessment.dart';
+import 'package:hafiz/features/auth/domain/repositories/user_role_provider.dart';
 
 /// Assessment repository provider.
 final assessmentRepositoryProvider = Provider<AssessmentRepository>((ref) {
@@ -10,10 +11,13 @@ final assessmentRepositoryProvider = Provider<AssessmentRepository>((ref) {
 
 /// Branch assessments provider.
 final branchAssessmentsProvider = FutureProvider.autoDispose
-    .family<List<Assessment>, String>((ref, branchId) async {
-  return ref.read(assessmentRepositoryProvider).getBranchAssessments(
-        branchId: branchId,
-      );
+    .family<List<Assessment>, String?>((ref, branchId) async {
+  if (branchId != null) {
+    return ref.read(assessmentRepositoryProvider).getBranchAssessments(branchId: branchId);
+  }
+  final orgId = ref.watch(activeOrganizationIdProvider);
+  if (orgId == null) return [];
+  return ref.read(assessmentRepositoryProvider).getOrgAssessments(organizationId: orgId);
 });
 
 /// Single assessment provider.

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import '../../../../core/theme/theme.dart';
+import '../../../../core/widgets/drawer_icon_button.dart';
 import '../../../auth/domain/repositories/user_role_provider.dart';
 import '../../domain/entities/assessment.dart';
 import '../../domain/repositories/assessment_provider.dart';
@@ -20,11 +21,12 @@ class _AssessmentListViewState extends ConsumerState<AssessmentListView> {
 
   @override
   Widget build(BuildContext context) {
-    final branchId = ref.watch(activeBranchIdProvider) ?? '';
+    final branchId = ref.watch(activeBranchIdProvider);
     final assessmentsAsync = ref.watch(branchAssessmentsProvider(branchId));
 
     return Scaffold(
       appBar: AppBar(
+        leading: const DrawerIconButton(),
         title: const Text('التقييمات'),
         actions: [
           IconButton(
