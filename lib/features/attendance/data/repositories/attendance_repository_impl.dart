@@ -64,30 +64,30 @@ class AttendanceRepositoryImpl implements AttendanceRepository {
   @override
   Future<Attendance> markAttendance({
     required String organizationId,
-    required String branchId,
+    String? branchId,
     required String studentId,
-    required String sessionId,
+    String? sessionId,
     required String classId,
     required AttendanceStatus status,
+    DateTime? date,
     String? notes,
     String? markedBy,
   }) async {
-    final attendance = Attendance(
-      id: '',
-      organizationId: organizationId,
-      branchId: branchId,
-      studentId: studentId,
-      sessionId: sessionId,
-      classId: classId,
-      status: status,
-      notes: notes,
-      markedBy: markedBy,
-      createdAt: DateTime.now(),
-    );
+    final record = {
+      'organization_id': organizationId,
+      if (branchId != null) 'branch_id': branchId,
+      'student_id': studentId,
+      if (sessionId != null) 'session_id': sessionId,
+      'class_id': classId,
+      'status': status.name,
+      'date': (date ?? DateTime.now()).toIso8601String().split('T')[0],
+      if (notes != null) 'notes': notes,
+      if (markedBy != null) 'marked_by': markedBy,
+    };
 
     final data = await _supabase
         .from('attendance')
-        .insert(attendance.toJson()..remove('id'))
+        .insert(record)
         .select()
         .single();
     return Attendance.fromJson(data);
@@ -117,21 +117,24 @@ class AttendanceRepositoryImpl implements AttendanceRepository {
   @override
   Future<List<Attendance>> bulkMarkAttendance({
     required String organizationId,
-    required String branchId,
-    required String sessionId,
+    String? branchId,
+    String? sessionId,
     required String classId,
     required Map<String, AttendanceStatus> studentStatuses,
+    DateTime? date,
     String? markedBy,
   }) async {
+    final today = (date ?? DateTime.now()).toIso8601String().split('T')[0];
     final records = studentStatuses.entries
         .map((entry) => {
               'organization_id': organizationId,
-              'branch_id': branchId,
+              if (branchId != null) 'branch_id': branchId,
               'student_id': entry.key,
-              'session_id': sessionId,
+              if (sessionId != null) 'session_id': sessionId,
               'class_id': classId,
               'status': entry.value.name,
-              'marked_by': markedBy,
+              'date': today,
+              if (markedBy != null) 'marked_by': markedBy,
             })
         .toList();
 

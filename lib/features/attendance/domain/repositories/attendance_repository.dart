@@ -21,11 +21,12 @@ abstract class AttendanceRepository {
   /// Mark attendance for a student.
   Future<Attendance> markAttendance({
     required String organizationId,
-    required String branchId,
+    String? branchId,
     required String studentId,
-    required String sessionId,
+    String? sessionId,
     required String classId,
     required AttendanceStatus status,
+    DateTime? date,
     String? notes,
     String? markedBy,
   });
@@ -40,10 +41,11 @@ abstract class AttendanceRepository {
   /// Bulk mark attendance for a session.
   Future<List<Attendance>> bulkMarkAttendance({
     required String organizationId,
-    required String branchId,
-    required String sessionId,
+    String? branchId,
+    String? sessionId,
     required String classId,
     required Map<String, AttendanceStatus> studentStatuses,
+    DateTime? date,
     String? markedBy,
   });
 

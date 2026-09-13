@@ -3,6 +3,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:hafiz/features/guardians/domain/entities/guardian.dart';
 import 'package:hafiz/features/guardians/domain/repositories/guardian_repository.dart';
 import 'package:hafiz/features/guardians/data/repositories/guardian_repository_impl.dart';
+import 'package:hafiz/features/auth/domain/repositories/user_role_provider.dart';
 
 /// Guardian repository provider.
 final guardianRepositoryProvider = Provider<GuardianRepository>((ref) {
@@ -11,9 +12,12 @@ final guardianRepositoryProvider = Provider<GuardianRepository>((ref) {
 
 /// Branch guardians provider.
 final branchGuardiansProvider =
-    FutureProvider.autoDispose.family<List<Guardian>, String>((ref, branchId) async {
+    FutureProvider.autoDispose.family<List<Guardian>, String?>((ref, branchId) async {
   final repo = ref.watch(guardianRepositoryProvider);
-  return repo.getBranchGuardians(branchId: branchId);
+  if (branchId != null) return repo.getBranchGuardians(branchId: branchId);
+  final orgId = ref.watch(activeOrganizationIdProvider);
+  if (orgId == null) return [];
+  return repo.getOrgGuardians(organizationId: orgId);
 });
 
 /// Student guardians provider.

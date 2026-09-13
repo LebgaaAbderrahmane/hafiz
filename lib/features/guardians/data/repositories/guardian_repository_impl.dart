@@ -20,10 +20,28 @@ class GuardianRepositoryImpl implements GuardianRepository {
         .eq('branch_id', branchId);
 
     if (search != null && search.isNotEmpty) {
-      query = query.or('name.ilike.%$search%,phone.ilike.%$search%');
+      query = query.or('full_name.ilike.%$search%,phone.ilike.%$search%');
     }
 
-    final data = await query.order('name');
+    final data = await query.order('full_name');
+    return (data as List).map((json) => Guardian.fromJson(json)).toList();
+  }
+
+  @override
+  Future<List<Guardian>> getOrgGuardians({
+    required String organizationId,
+    String? search,
+  }) async {
+    var query = _supabase
+        .from('guardians')
+        .select()
+        .eq('organization_id', organizationId);
+
+    if (search != null && search.isNotEmpty) {
+      query = query.or('full_name.ilike.%$search%,phone.ilike.%$search%');
+    }
+
+    final data = await query.order('full_name');
     return (data as List).map((json) => Guardian.fromJson(json)).toList();
   }
 

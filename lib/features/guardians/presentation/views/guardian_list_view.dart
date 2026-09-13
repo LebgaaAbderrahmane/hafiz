@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/theme.dart';
+import '../../../../core/widgets/drawer_icon_button.dart';
 import '../../../../core/localization/app_localizations.dart';
 import '../../../auth/domain/repositories/user_role_provider.dart';
 import '../../domain/entities/guardian.dart';
@@ -21,12 +22,13 @@ class _GuardianListViewState extends ConsumerState<GuardianListView> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final branchId = ref.watch(activeBranchIdProvider) ?? '';
+    final branchId = ref.watch(activeBranchIdProvider);
     final guardiansAsync = ref.watch(branchGuardiansProvider(branchId));
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(l10n.teachers),
+        leading: const DrawerIconButton(),
+        title: Text(l10n.guardians),
         actions: [
           IconButton(
             icon: const Icon(Icons.person_add),
@@ -62,7 +64,7 @@ class _GuardianListViewState extends ConsumerState<GuardianListView> {
                             g.name
                                 .toLowerCase()
                                 .contains(_searchQuery.toLowerCase()) ||
-                            g.phone.contains(_searchQuery))
+                            (g.phone?.contains(_searchQuery) ?? false))
                         .toList();
 
                 if (filtered.isEmpty) {
@@ -107,7 +109,7 @@ class _GuardianListViewState extends ConsumerState<GuardianListView> {
         ),
         title: Text(guardian.name, style: AppTextStyles.titleSmall),
         subtitle: Text(
-          guardian.phone,
+          guardian.phone ?? '',
           style: AppTextStyles.bodySmall.copyWith(
             color: AppColors.textSecondary,
           ),

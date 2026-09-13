@@ -8,6 +8,12 @@ abstract class GuardianRepository {
     String? search,
   });
 
+  /// Get all guardians for an organization.
+  Future<List<Guardian>> getOrgGuardians({
+    required String organizationId,
+    String? search,
+  });
+
   /// Get all guardians for a student.
   Future<List<Guardian>> getStudentGuardians(String studentId);
 

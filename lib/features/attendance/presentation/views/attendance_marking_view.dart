@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import "package:hafiz/core/localization/app_localizations.dart";
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hafiz/core/widgets/button.dart';
+import 'package:hafiz/core/widgets/drawer_icon_button.dart';
 import 'package:hafiz/core/widgets/loading.dart';
 import 'package:hafiz/features/attendance/domain/entities/attendance.dart';
 import 'package:hafiz/features/attendance/domain/repositories/attendance_provider.dart';
@@ -42,6 +43,7 @@ class _AttendanceMarkingViewState
 
     return Scaffold(
       appBar: AppBar(
+        leading: const DrawerIconButton(),
         title: Text(context.l.markAttendance),
         actions: [
           _buildSummaryChip(),
@@ -165,10 +167,10 @@ class _AttendanceMarkingViewState
     setState(() => _saving = true);
 
     try {
-      final orgId = ref.read(activeOrganizationIdProvider) ?? '';
-      final branchId = ref.read(activeBranchIdProvider) ?? '';
+      final orgId = ref.read(activeOrganizationIdProvider);
+      final branchId = ref.read(activeBranchIdProvider);
       await ref.read(attendanceRepositoryProvider).bulkMarkAttendance(
-            organizationId: orgId,
+            organizationId: orgId!,
             branchId: branchId,
             sessionId: widget.sessionId,
             classId: widget.classId,
