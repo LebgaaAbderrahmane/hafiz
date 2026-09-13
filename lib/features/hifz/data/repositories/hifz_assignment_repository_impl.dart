@@ -90,6 +90,20 @@ class HifzAssignmentRepositoryImpl implements HifzAssignmentRepository {
   }
 
   @override
+  Future<List<HifzAssignment>> getOrgAssignments({
+    required String organizationId,
+  }) async {
+    final data = await _supabase
+        .from('hifz_assignments')
+        .select()
+        .eq('organization_id', organizationId)
+        .order('created_at', ascending: false);
+    return (data as List)
+        .map((json) => HifzAssignment.fromJson(json))
+        .toList();
+  }
+
+  @override
   Future<HifzAssignment?> getAssignmentById(String assignmentId) async {
     final data = await _supabase
         .from('hifz_assignments')

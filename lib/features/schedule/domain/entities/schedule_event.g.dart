@@ -13,7 +13,9 @@ _$ScheduleEventImpl _$$ScheduleEventImplFromJson(Map<String, dynamic> json) =>
       branchId: json['branch_id'] as String,
       title: json['title'] as String,
       description: json['description'] as String?,
-      eventType: $enumDecode(_$EventTypeEnumMap, json['event_type']),
+      eventType: EventType.values.firstWhere(
+          (e) => e.name == (json['event_type'] as String).toLowerCase(),
+          orElse: () => EventType.classSession),
       startTime: DateTime.parse(json['start_time'] as String),
       endTime: DateTime.parse(json['end_time'] as String),
       location: json['location'] as String?,
@@ -28,8 +30,11 @@ _$ScheduleEventImpl _$$ScheduleEventImplFromJson(Map<String, dynamic> json) =>
               .toList() ??
           const [],
       recurrenceEndDate: json['recurrence_end_date'] as String?,
-      status: $enumDecodeNullable(_$EventStatusEnumMap, json['status']) ??
-          EventStatus.scheduled,
+      status: json['status'] != null
+          ? EventStatus.values.firstWhere(
+              (e) => e.name == (json['status'] as String).toLowerCase(),
+              orElse: () => EventStatus.scheduled)
+          : EventStatus.scheduled,
       notes: json['notes'] as String?,
       createdAt: DateTime.parse(json['created_at'] as String),
       updatedAt: json['updated_at'] == null

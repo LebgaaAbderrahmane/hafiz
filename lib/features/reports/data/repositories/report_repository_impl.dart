@@ -28,6 +28,18 @@ class ReportRepositoryImpl implements ReportRepository {
   }
 
   @override
+  Future<List<Report>> getOrgReports({
+    required String organizationId,
+  }) async {
+    final data = await _supabase
+        .from('reports')
+        .select()
+        .eq('organization_id', organizationId)
+        .order('created_at', ascending: false);
+    return (data as List).map((json) => Report.fromJson(json)).toList();
+  }
+
+  @override
   Future<Report?> getReportById(String reportId) async {
     final data = await _supabase
         .from('reports')

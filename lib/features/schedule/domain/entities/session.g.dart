@@ -13,7 +13,9 @@ _$SessionImpl _$$SessionImplFromJson(Map<String, dynamic> json) =>
       branchId: json['branch_id'] as String,
       title: json['title'] as String,
       description: json['description'] as String?,
-      type: $enumDecode(_$SessionTypeEnumMap, json['type']),
+      type: SessionType.values.firstWhere(
+          (e) => e.name == (json['type'] as String).toLowerCase(),
+          orElse: () => SessionType.classSession),
       date: DateTime.parse(json['date'] as String),
       startTime: json['start_time'] as String,
       endTime: json['end_time'] as String,
@@ -24,8 +26,11 @@ _$SessionImpl _$$SessionImplFromJson(Map<String, dynamic> json) =>
               .toList() ??
           const [],
       location: json['location'] as String?,
-      status: $enumDecodeNullable(_$SessionStatusEnumMap, json['status']) ??
-          SessionStatus.scheduled,
+      status: json['status'] != null
+          ? SessionStatus.values.firstWhere(
+              (e) => e.name == (json['status'] as String).toLowerCase(),
+              orElse: () => SessionStatus.scheduled)
+          : SessionStatus.scheduled,
       notes: json['notes'] as String?,
       createdAt: DateTime.parse(json['created_at'] as String),
       updatedAt: json['updated_at'] == null

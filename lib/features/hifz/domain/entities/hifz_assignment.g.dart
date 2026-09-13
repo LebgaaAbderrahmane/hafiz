@@ -19,8 +19,12 @@ _$HifzAssignmentImpl _$$HifzAssignmentImplFromJson(
       startAyah: (json['start_ayah'] as num).toInt(),
       endSurah: (json['end_surah'] as num).toInt(),
       endAyah: (json['end_ayah'] as num).toInt(),
-      type: $enumDecode(_$AssignmentTypeEnumMap, json['type']),
-      status: $enumDecode(_$AssignmentStatusEnumMap, json['status']),
+      type: AssignmentType.values.firstWhere(
+          (e) => e.name == (json['type'] as String).toLowerCase(),
+          orElse: () => AssignmentType.newMemorization),
+      status: AssignmentStatus.values.firstWhere(
+          (e) => e.name == (json['status'] as String).toLowerCase(),
+          orElse: () => AssignmentStatus.pending),
       dueDate: json['due_date'] == null
           ? null
           : DateTime.parse(json['due_date'] as String),

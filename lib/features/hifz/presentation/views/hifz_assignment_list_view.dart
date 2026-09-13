@@ -5,7 +5,8 @@ import 'package:intl/intl.dart';
 import '../../../../core/theme/theme.dart';
 import '../../../auth/domain/repositories/user_role_provider.dart';
 import '../../domain/entities/hifz_assignment.dart';
-import '../../domain/repositories/hifz_assignment_provider.dart';
+import 'package:hafiz/core/widgets/drawer_icon_button.dart';
+import 'package:hafiz/features/hifz/domain/repositories/hifz_assignment_provider.dart';
 
 /// Hifz assignment list view.
 class HifzAssignmentListView extends ConsumerStatefulWidget {
@@ -35,11 +36,12 @@ class _HifzAssignmentListViewState extends ConsumerState<HifzAssignmentListView>
 
   @override
   Widget build(BuildContext context) {
-    final branchId = ref.watch(activeBranchIdProvider) ?? '';
+    final branchId = ref.watch(activeBranchIdProvider);
     final assignmentsAsync = ref.watch(branchHifzAssignmentsProvider(branchId));
 
     return Scaffold(
       appBar: AppBar(
+        leading: const DrawerIconButton(),
         title: const Text('تعيينات الحفظ'),
         actions: [
           IconButton(

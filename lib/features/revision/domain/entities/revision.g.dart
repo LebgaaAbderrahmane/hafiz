@@ -17,8 +17,12 @@ _$RevisionImpl _$$RevisionImplFromJson(Map<String, dynamic> json) =>
       surahNumber: (json['surah_number'] as num).toInt(),
       startAyah: (json['start_ayah'] as num).toInt(),
       endAyah: (json['end_ayah'] as num).toInt(),
-      status: $enumDecode(_$RevisionStatusEnumMap, json['status']),
-      priority: $enumDecode(_$RevisionPriorityEnumMap, json['priority']),
+      status: RevisionStatus.values.firstWhere(
+          (e) => e.name == (json['status'] as String).toLowerCase(),
+          orElse: () => RevisionStatus.pending),
+      priority: RevisionPriority.values.firstWhere(
+          (e) => e.name == (json['priority'] as String).toLowerCase(),
+          orElse: () => RevisionPriority.low),
       dueDate: json['due_date'] == null
           ? null
           : DateTime.parse(json['due_date'] as String),

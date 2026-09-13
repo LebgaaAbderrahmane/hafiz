@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/theme.dart';
+import '../../../../core/widgets/branch_dropdown.dart';
 import '../../../auth/domain/repositories/user_role_provider.dart';
 import '../../domain/entities/school_class.dart';
-import '../../domain/repositories/branch_provider.dart';
 import '../../domain/repositories/class_provider.dart';
 
 /// Add class view.
@@ -97,7 +97,10 @@ class _AddClassViewState extends ConsumerState<AddClassView> {
                       },
                     ),
                     Gap.m,
-                    _buildBranchDropdown(context, ref),
+                    BranchDropdown(
+                      selectedBranchId: _selectedBranchId,
+                      onChanged: (v) => setState(() => _selectedBranchId = v),
+                    ),
                     Gap.m,
                     TextFormField(
                       keyboardType: TextInputType.number,
@@ -221,32 +224,6 @@ class _AddClassViewState extends ConsumerState<AddClassView> {
           ],
         ),
       ),
-    );
-  }
-
-  Widget _buildBranchDropdown(BuildContext context, WidgetRef ref) {
-    final branchesAsync = ref.watch(orgBranchesProvider);
-
-    return branchesAsync.when(
-      loading: () => const LinearProgressIndicator(),
-      error: (e, _) => Text('خطأ في تحميل الفروع: $e'),
-      data: (branches) {
-        if (branches.isEmpty) {
-          return const Text('لا توجد فروع متاحة', style: TextStyle(color: AppColors.error));
-        }
-        return DropdownButtonFormField<String>(
-          initialValue: _selectedBranchId,
-          decoration: const InputDecoration(
-            labelText: 'الفرع *',
-            border: OutlineInputBorder(),
-          ),
-          items: branches.map((b) {
-            return DropdownMenuItem(value: b.id, child: Text(b.name));
-          }).toList(),
-          onChanged: (v) => setState(() => _selectedBranchId = v),
-          validator: (v) => v == null ? 'مطلوب' : null,
-        );
-      },
     );
   }
 

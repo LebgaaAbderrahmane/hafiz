@@ -3,6 +3,7 @@ import 'package:hafiz/features/notifications/domain/entities/notification.dart';
 import 'package:hafiz/features/notifications/domain/repositories/notification_repository.dart';
 import 'package:hafiz/features/notifications/data/repositories/notification_repository_impl.dart';
 import 'package:hafiz/core/network/supabase_client.dart';
+import 'package:hafiz/core/utils/app_logger.dart';
 
 /// Notification repository provider.
 final notificationRepositoryProvider = Provider<NotificationRepository>((ref) {
@@ -14,7 +15,14 @@ final notificationRepositoryProvider = Provider<NotificationRepository>((ref) {
 final userNotificationsProvider =
     FutureProvider.autoDispose.family<List<AppNotification>, String>((ref, userId) async {
   final repo = ref.watch(notificationRepositoryProvider);
-  return repo.getUserNotifications(userId: userId);
+  try {
+    final notifications = await repo.getUserNotifications(userId: userId);
+    await AppLogger.log('NOTIF', 'Loaded ${notifications.length} notifications for user $userId');
+    return notifications;
+  } catch (e, st) {
+    await AppLogger.logError('NOTIF', e, st);
+    rethrow;
+  }
 });
 
 /// Unread notification count provider.

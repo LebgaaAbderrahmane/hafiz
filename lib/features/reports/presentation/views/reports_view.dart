@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import '../../../../core/theme/theme.dart';
+import '../../../../core/widgets/drawer_icon_button.dart';
 import '../../../auth/domain/repositories/user_role_provider.dart';
 import '../../domain/entities/report.dart';
 import '../../domain/repositories/report_provider.dart';
@@ -12,11 +13,12 @@ class ReportsView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final branchId = ref.watch(activeBranchIdProvider) ?? '';
+    final branchId = ref.watch(activeBranchIdProvider);
     final reportsAsync = ref.watch(branchReportsProvider(branchId));
 
     return Scaffold(
       appBar: AppBar(
+        leading: const DrawerIconButton(),
         title: Text('التقارير'),
         actions: [
           IconButton(
@@ -165,10 +167,13 @@ class ReportsView extends ConsumerWidget {
                 onPressed: () {
                   if (title.isNotEmpty) {
                     Navigator.of(context).pop();
-                    ref.read(branchReportsProvider(ref.read(activeBranchIdProvider) ?? '')).maybeWhen(
-                      data: (_) {},
-                      orElse: () {},
-                    );
+                    final currentBranchId = ref.read(activeBranchIdProvider);
+                    if (currentBranchId != null) {
+                      ref.read(branchReportsProvider(currentBranchId)).maybeWhen(
+                        data: (_) {},
+                        orElse: () {},
+                      );
+                    }
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('تم إنشاء التقرير')),
                     );
@@ -198,7 +203,10 @@ class ReportsView extends ConsumerWidget {
             onPressed: () {
               Navigator.of(context).pop();
               ref.read(reportNotifierProvider.notifier).deleteReport(report.id);
-              ref.invalidate(branchReportsProvider(ref.read(activeBranchIdProvider) ?? ''));
+              final currentBranchId = ref.read(activeBranchIdProvider);
+              if (currentBranchId != null) {
+                ref.invalidate(branchReportsProvider(currentBranchId));
+              }
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text('تم حذف التقرير')),
               );

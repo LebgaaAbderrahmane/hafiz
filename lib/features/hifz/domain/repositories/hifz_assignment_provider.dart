@@ -3,6 +3,7 @@ import 'package:hafiz/features/hifz/domain/entities/hifz_assignment.dart';
 import 'package:hafiz/features/hifz/domain/repositories/hifz_assignment_repository.dart';
 import 'package:hafiz/features/hifz/data/repositories/hifz_assignment_repository_impl.dart';
 import 'package:hafiz/core/network/supabase_client.dart';
+import 'package:hafiz/features/auth/domain/repositories/user_role_provider.dart';
 
 /// Hifz assignment repository provider.
 final hifzAssignmentRepositoryProvider = Provider<HifzAssignmentRepository>((ref) {
@@ -26,9 +27,12 @@ final teacherHifzAssignmentsProvider =
 
 /// Branch hifz assignments provider.
 final branchHifzAssignmentsProvider =
-    FutureProvider.autoDispose.family<List<HifzAssignment>, String>((ref, branchId) async {
+    FutureProvider.autoDispose.family<List<HifzAssignment>, String?>((ref, branchId) async {
   final repo = ref.watch(hifzAssignmentRepositoryProvider);
-  return repo.getBranchAssignments(branchId: branchId);
+  if (branchId != null) return repo.getBranchAssignments(branchId: branchId);
+  final orgId = ref.watch(activeOrganizationIdProvider);
+  if (orgId == null) return [];
+  return repo.getOrgAssignments(organizationId: orgId);
 });
 
 /// Hifz assignment notifier for CRUD operations.

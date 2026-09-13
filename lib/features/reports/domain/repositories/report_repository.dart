@@ -8,6 +8,11 @@ abstract class ReportRepository {
     ReportType? type,
   });
 
+  /// Get all reports for an organization.
+  Future<List<Report>> getOrgReports({
+    required String organizationId,
+  });
+
   /// Get a single report by ID.
   Future<Report?> getReportById(String reportId);
 

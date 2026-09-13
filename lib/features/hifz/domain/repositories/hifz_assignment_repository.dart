@@ -26,6 +26,11 @@ abstract class HifzAssignmentRepository {
     String? status,
   });
 
+  /// Get all assignments for an organization.
+  Future<List<HifzAssignment>> getOrgAssignments({
+    required String organizationId,
+  });
+
   /// Get a single assignment by ID.
   Future<HifzAssignment?> getAssignmentById(String assignmentId);
 

@@ -15,7 +15,10 @@ _$SchoolClassImpl _$$SchoolClassImplFromJson(Map<String, dynamic> json) =>
       description: json['description'] as String?,
       roomId: json['room_id'] as String?,
       teacherId: json['teacher_id'] as String?,
-      level: $enumDecode(_$ClassLevelEnumMap, json['level']),
+      level: ClassLevel.values.firstWhere(
+        (e) => e.name == (json['level'] as String).toLowerCase(),
+        orElse: () => ClassLevel.beginner,
+      ),
       daysOfWeek: (json['days_of_week'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
@@ -23,8 +26,12 @@ _$SchoolClassImpl _$$SchoolClassImplFromJson(Map<String, dynamic> json) =>
       startTime: json['start_time'] as String?,
       endTime: json['end_time'] as String?,
       maxCapacity: (json['max_capacity'] as num?)?.toInt() ?? 30,
-      status: $enumDecodeNullable(_$ClassStatusEnumMap, json['status']) ??
-          ClassStatus.active,
+      status: (json['status'] as String?) != null
+          ? ClassStatus.values.firstWhere(
+              (e) => e.name == (json['status'] as String).toLowerCase(),
+              orElse: () => ClassStatus.active,
+            )
+          : ClassStatus.active,
       startDate: json['start_date'] == null
           ? null
           : DateTime.parse(json['start_date'] as String),
