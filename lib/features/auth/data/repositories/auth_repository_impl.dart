@@ -77,9 +77,37 @@ class AuthRepositoryImpl implements AuthRepository {
       if (response.user == null) {
         throw const AuthException(message: 'Sign up failed');
       }
+
+      final userId = response.user!.id;
+
+      // Auto-create organization, branch, and owner role for new users
+      try {
+        final orgResult = await _client.from('organizations').insert({
+          'name': '$fullName\'s Academy',
+          'slug': email.replaceAll(RegExp(r'[^a-zA-Z0-9]'), '-'),
+        }).select('id').single();
+
+        final orgId = orgResult['id'] as String;
+
+        final branchResult = await _client.from('branches').insert({
+          'organization_id': orgId,
+          'name': 'الفرع الرئيسي',
+        }).select('id').single();
+
+        final branchId = branchResult['id'] as String;
+
+        await _client.from('user_roles').insert({
+          'user_id': userId,
+          'organization_id': orgId,
+          'branch_id': branchId,
+          'role': 'owner',
+        });
+      } catch (e) {
+        debugPrint('AUTH: Failed to auto-create org for new user: $e');
+        // Don't fail sign-up — user can still be assigned to an org later
+      }
+
       return _mapUser(response.user!);
-    } on AuthException catch (e) {
-      throw AuthException(message: e.toString());
     } catch (e) {
       throw AuthException(message: e.toString());
     }

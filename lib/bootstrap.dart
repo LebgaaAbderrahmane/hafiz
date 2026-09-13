@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'core/network/supabase_client.dart';
+import 'core/utils/app_logger.dart';
 
 /// Bootstrap the app.
 ///
@@ -27,6 +28,15 @@ Future<void> bootstrap(Widget Function() appBuilder) async {
 
   // ── Initialize Services ──
   await initializeSupabase();
+  await AppLogger.init();
+  final logPath = await AppLogger.getLogPath();
+  await AppLogger.log('BOOT', 'Log file: $logPath');
+
+  // ── Global error handler — all errors go to log file ──
+  FlutterError.onError = (details) async {
+    await AppLogger.logError('FLUTTER', details.exception, details.stack);
+  };
+  ErrorWidget.builder = (details) => const SizedBox.shrink();
 
   // ── Run App ──
   runApp(
