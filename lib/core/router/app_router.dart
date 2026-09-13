@@ -37,6 +37,7 @@ import 'package:hafiz/features/reports/presentation/views/reports_view.dart';
 import 'package:hafiz/features/parent_portal/presentation/views/parent_portal_view.dart';
 import 'package:hafiz/features/dashboard/presentation/views/owner_dashboard_view.dart';
 import 'package:hafiz/core/theme/theme.dart';
+import 'package:hafiz/core/widgets/drawer_icon_button.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
   final authState = ref.watch(authStateProvider);
@@ -259,9 +260,18 @@ class GoRouterRefreshStream extends ChangeNotifier {
   }
 }
 
-class _AdminShell extends StatelessWidget {
+class _AdminShell extends StatefulWidget {
   const _AdminShell({required this.child});
   final Widget child;
+
+  @override
+  State<_AdminShell> createState() => _AdminShellState();
+}
+
+class _AdminShellState extends State<_AdminShell> {
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  void _openDrawer() => _scaffoldKey.currentState?.openDrawer();
 
   static const _navItems = [
     _NavItem('لوحة التحكم', '/dashboard', Icons.dashboard),
@@ -286,16 +296,16 @@ class _AdminShell extends StatelessWidget {
 
     if (isMobile) {
       return Scaffold(
-        appBar: AppBar(
-          title: Text('حفيظ', style: AppTextStyles.headlineMedium.copyWith(color: AppColors.primary)),
-          backgroundColor: AppColors.surface,
-        ),
+        key: _scaffoldKey,
         drawer: Drawer(
           child: SafeArea(
             child: _buildSidebarContent(context, isMobile: true),
           ),
         ),
-        body: child,
+        body: DrawerScope(
+          openDrawer: _openDrawer,
+          child: widget.child,
+        ),
       );
     }
 
@@ -306,7 +316,7 @@ class _AdminShell extends StatelessWidget {
             width: 248,
             child: _buildSidebarContent(context),
           ),
-          Expanded(child: child),
+          Expanded(child: widget.child),
         ],
       ),
     );

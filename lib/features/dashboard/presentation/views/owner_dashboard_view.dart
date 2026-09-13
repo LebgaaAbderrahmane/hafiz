@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/theme.dart';
+import '../../../../core/widgets/drawer_icon_button.dart';
+import '../../../../core/utils/app_logger.dart';
 import '../../../auth/domain/repositories/auth_provider.dart';
 import '../../domain/repositories/dashboard_provider.dart';
 import '../../../notifications/domain/repositories/notification_provider.dart';
@@ -16,6 +18,16 @@ class OwnerDashboardView extends ConsumerWidget {
     final currentUser = ref.watch(currentUserProvider);
 
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('لوحة التحكم'),
+        leading: const DrawerIconButton(),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.notifications_outlined),
+            onPressed: () => context.push('/notifications'),
+          ),
+        ],
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: EdgeInsets.all(AppSpacing.l),
@@ -37,29 +49,19 @@ class OwnerDashboardView extends ConsumerWidget {
   }
 
   Widget _buildHeader(BuildContext context, String name) {
-    return Row(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'مرحباً، $name',
-                style: AppTextStyles.headlineMedium,
-              ),
-              Gap.xs,
-              Text(
-                'لوحة التحكم',
-                style: AppTextStyles.bodyMedium.copyWith(
-                  color: AppColors.textSecondary,
-                ),
-              ),
-            ],
-          ),
+        Text(
+          'مرحباً، $name',
+          style: AppTextStyles.headlineMedium,
         ),
-        IconButton(
-          icon: const Icon(Icons.notifications_outlined),
-          onPressed: () => context.push('/notifications'),
+        Gap.xs,
+        Text(
+          'نظرة عامة على أداء مؤسستك',
+          style: AppTextStyles.bodyMedium.copyWith(
+            color: AppColors.textSecondary,
+          ),
         ),
       ],
     );
@@ -87,7 +89,7 @@ class OwnerDashboardView extends ConsumerWidget {
                       AppColors.primary,
                     ),
                   ),
-                  Gap.m,
+                  SizedBox(width: AppSpacing.m),
                   Expanded(
                     child: _buildStatCard(
                       context,
@@ -99,7 +101,7 @@ class OwnerDashboardView extends ConsumerWidget {
                   ),
                 ],
               ),
-              Gap.m,
+              SizedBox(height: AppSpacing.m),
               Row(
                 children: [
                   Expanded(
@@ -111,7 +113,7 @@ class OwnerDashboardView extends ConsumerWidget {
                       AppColors.success,
                     ),
                   ),
-                  Gap.m,
+                  SizedBox(width: AppSpacing.m),
                   Expanded(
                     child: _buildStatCard(
                       context,
@@ -126,7 +128,16 @@ class OwnerDashboardView extends ConsumerWidget {
             ],
           ),
           loading: () => const Center(child: CircularProgressIndicator()),
-          error: (e, _) => Center(child: Text('خطأ: $e')),
+          error: (e, _) {
+            final isConnectionError = e.toString().contains('Connection refused') ||
+                e.toString().contains('SocketException');
+            return Center(
+              child: Text(
+                isConnectionError ? 'تعذر الاتصال بالخادم' : 'خطأ في تحميل الإحصائيات',
+                style: TextStyle(color: AppColors.error),
+              ),
+            );
+          },
         ),
       ],
     );
@@ -182,7 +193,7 @@ class OwnerDashboardView extends ConsumerWidget {
                 () => context.push('/students/add'),
               ),
             ),
-            Gap.m,
+            SizedBox(width: AppSpacing.m),
             Expanded(
               child: _buildActionButton(
                 context,
@@ -194,7 +205,7 @@ class OwnerDashboardView extends ConsumerWidget {
             ),
           ],
         ),
-        Gap.m,
+        SizedBox(height: AppSpacing.m),
         Row(
           children: [
             Expanded(
@@ -206,7 +217,7 @@ class OwnerDashboardView extends ConsumerWidget {
                 () => context.push('/classes/add'),
               ),
             ),
-            Gap.m,
+            SizedBox(width: AppSpacing.m),
             Expanded(
               child: _buildActionButton(
                 context,
@@ -272,12 +283,47 @@ class OwnerDashboardView extends ConsumerWidget {
               child: Center(child: CircularProgressIndicator()),
             ),
           ),
-          error: (e, _) => Card(
-            child: Padding(
-              padding: EdgeInsets.all(AppSpacing.l),
-              child: Text('خطأ في تحميل النشاط: $e'),
-            ),
-          ),
+          error: (e, st) {
+            AppLogger.logError('DASHBOARD', e, st);
+            final isConnectionError = e.toString().contains('Connection refused') ||
+                e.toString().contains('SocketException');
+            return Card(
+              child: Padding(
+                padding: EdgeInsets.all(AppSpacing.l),
+                child: Row(
+                  children: [
+                    Icon(
+                      isConnectionError ? Icons.wifi_off : Icons.error_outline,
+                      color: AppColors.error,
+                    ),
+                    Gap.m,
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            isConnectionError
+                                ? 'تعذر الاتصال بالخادم'
+                                : 'خطأ في تحميل النشاط',
+                            style: AppTextStyles.bodyMedium.copyWith(
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          if (isConnectionError)
+                            Text(
+                              'تأكد من اتصالك بالإنترنت وأن الخادم يعمل',
+                              style: AppTextStyles.bodySmall.copyWith(
+                                color: AppColors.textSecondary,
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
           data: (notifications) {
             if (notifications.isEmpty) {
               return Card(

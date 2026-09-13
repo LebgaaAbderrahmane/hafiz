@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hafiz/core/widgets/button.dart';
 import 'package:hafiz/core/widgets/text_field.dart';
 import 'package:hafiz/features/auth/domain/repositories/user_role_provider.dart';
-import 'package:hafiz/features/classes/domain/repositories/branch_provider.dart';
+import 'package:hafiz/core/widgets/branch_dropdown.dart';
 import 'package:hafiz/features/students/domain/entities/student.dart';
 import 'package:hafiz/features/students/domain/repositories/student_provider.dart';
 
@@ -196,7 +196,10 @@ class _AddStudentViewState extends ConsumerState<AddStudentView> {
               ),
             ),
             const SizedBox(height: 16),
-            _buildBranchDropdown(),
+            BranchDropdown(
+              selectedBranchId: _selectedBranchId,
+              onChanged: (v) => setState(() => _selectedBranchId = v),
+            ),
             const SizedBox(height: 16),
             AppTextField(
               controller: TextEditingController(text: _nationality),
@@ -382,29 +385,6 @@ class _AddStudentViewState extends ConsumerState<AddStudentView> {
     if (date != null) {
       setState(() => _dateOfBirth = date);
     }
-  }
-
-  Widget _buildBranchDropdown() {
-    final branchesAsync = ref.watch(orgBranchesProvider);
-    return branchesAsync.when(
-      loading: () => const LinearProgressIndicator(),
-      error: (e, _) => Text('خطأ: $e'),
-      data: (branches) {
-        if (branches.isEmpty) {
-          return const Text('لا توجد فروع', style: TextStyle(color: Colors.red));
-        }
-        return DropdownButtonFormField<String>(
-          initialValue: _selectedBranchId,
-          decoration: const InputDecoration(
-            labelText: 'الفرع *',
-            border: OutlineInputBorder(),
-          ),
-          items: branches.map((b) => DropdownMenuItem(value: b.id, child: Text(b.name))).toList(),
-          onChanged: (v) => setState(() => _selectedBranchId = v),
-          validator: (v) => v == null ? 'مطلوب' : null,
-        );
-      },
-    );
   }
 
   Future<void> _submit() async {
