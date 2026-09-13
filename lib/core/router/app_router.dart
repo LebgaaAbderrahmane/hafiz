@@ -23,6 +23,8 @@ import 'package:hafiz/features/classes/presentation/views/class_detail_view.dart
 import 'package:hafiz/features/classes/presentation/views/add_class_view.dart';
 import 'package:hafiz/features/attendance/presentation/views/attendance_marking_view.dart';
 import 'package:hafiz/features/tasmi/presentation/views/tasmi_eval_view.dart';
+import 'package:hafiz/features/tasmi/presentation/views/tasmi_session_list_view.dart';
+import 'package:hafiz/features/tasmi/presentation/views/tasmi_session_detail_view.dart';
 import 'package:hafiz/features/schedule/presentation/views/calendar_view.dart';
 import 'package:hafiz/features/schedule/presentation/views/session_management_view.dart';
 import 'package:hafiz/features/quran/presentation/views/quran_browse_view.dart';
@@ -150,11 +152,23 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           ),
           GoRoute(
             path: '/tasmi',
-            builder: (context, state) => const TasmiEvalView(
-              studentId: '',
-              teacherId: '',
-              sessionId: '',
-            ),
+            builder: (context, state) => const TasmiSessionListView(),
+            routes: [
+              GoRoute(
+                path: 'add',
+                builder: (context, state) => const TasmiEvalView(
+                  studentId: '',
+                  teacherId: '',
+                  sessionId: '',
+                ),
+              ),
+              GoRoute(
+                path: ':id',
+                builder: (context, state) => TasmiSessionDetailView(
+                  sessionId: state.pathParameters['id']!,
+                ),
+              ),
+            ],
           ),
           GoRoute(
             path: '/schedule',
