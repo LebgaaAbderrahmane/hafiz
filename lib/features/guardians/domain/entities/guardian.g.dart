@@ -10,13 +10,17 @@ _$GuardianImpl _$$GuardianImplFromJson(Map<String, dynamic> json) =>
     _$GuardianImpl(
       id: json['id'] as String,
       organizationId: json['organization_id'] as String,
-      branchId: json['branch_id'] as String,
-      name: json['name'] as String,
-      phone: json['phone'] as String,
+      branchId: json['branch_id'] as String?,
+      name: (json['full_name'] ?? json['name']) as String,
+      phone: json['phone'] as String?,
       email: json['email'] as String?,
       address: json['address'] as String?,
       occupation: json['occupation'] as String?,
-      type: $enumDecodeNullable(_$GuardianTypeEnumMap, json['type']),
+      type: json['type'] != null
+          ? GuardianType.values.where(
+              (e) => e.name == (json['type'] as String).toLowerCase(),
+            ).firstOrNull
+          : null,
       notes: json['notes'] as String?,
       createdAt: DateTime.parse(json['created_at'] as String),
       updatedAt: json['updated_at'] == null

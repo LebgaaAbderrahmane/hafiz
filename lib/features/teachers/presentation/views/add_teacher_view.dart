@@ -5,6 +5,7 @@ import '../../../../core/theme/theme.dart';
 import '../../../auth/domain/repositories/user_role_provider.dart';
 import '../../domain/entities/teacher.dart';
 import '../../domain/repositories/teacher_provider.dart';
+import 'package:hafiz/core/widgets/branch_dropdown.dart';
 
 /// Add teacher view.
 class AddTeacherView extends ConsumerStatefulWidget {
@@ -25,6 +26,7 @@ class _AddTeacherViewState extends ConsumerState<AddTeacherView> {
 
   Gender? _gender;
   DateTime? _hireDate;
+  String? _selectedBranchId;
   bool _isLoading = false;
 
   @override
@@ -84,6 +86,11 @@ class _AddTeacherViewState extends ConsumerState<AddTeacherView> {
                     DropdownMenuItem(value: Gender.female, child: Text('أنثى')),
                   ],
                   onChanged: (v) => setState(() => _gender = v),
+                ),
+                Gap.m,
+                BranchDropdown(
+                  selectedBranchId: _selectedBranchId,
+                  onChanged: (v) => setState(() => _selectedBranchId = v),
                 ),
               ],
             ),
@@ -205,7 +212,20 @@ class _AddTeacherViewState extends ConsumerState<AddTeacherView> {
 
     try {
       final orgId = ref.read(activeOrganizationIdProvider) ?? '';
-      final branchId = ref.read(activeBranchIdProvider) ?? '';
+      final branchId =
+          _selectedBranchId ?? ref.read(activeBranchIdProvider) ?? '';
+
+      if (orgId.isEmpty || branchId.isEmpty) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('يجب اختيار الفرع قبل الإضافة'),
+              backgroundColor: AppColors.error,
+            ),
+          );
+        }
+        return;
+      }
 
       final teacher = Teacher(
         id: '',

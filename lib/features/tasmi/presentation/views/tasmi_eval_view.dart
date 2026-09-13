@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/theme/theme.dart';
+import '../../../../core/widgets/drawer_icon_button.dart';
 import '../../../../core/widgets/widgets.dart';
 import '../../../auth/domain/repositories/user_role_provider.dart';
 import '../../domain/entities/tasmi_session.dart';
@@ -48,6 +49,7 @@ class _TasmiEvalViewState extends ConsumerState<TasmiEvalView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: const DrawerIconButton(),
         title: const Text('تسجيل التسميع'),
       ),
       body: LoadingOverlay(

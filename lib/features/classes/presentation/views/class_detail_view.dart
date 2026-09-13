@@ -40,6 +40,13 @@ class _ClassDetail extends StatelessWidget {
           title: Text(schoolClass.name),
           actions: [
             IconButton(
+              icon: const Icon(Icons.check_circle_outline),
+              tooltip: context.l.markAttendance,
+              onPressed: () => context.push(
+                '/attendance/mark?classId=${schoolClass.id}',
+              ),
+            ),
+            IconButton(
               icon: const Icon(Icons.edit),
               onPressed: () => context.push('/classes/${schoolClass.id}/edit'),
             ),

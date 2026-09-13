@@ -13,7 +13,9 @@ _$AppNotificationImpl _$$AppNotificationImplFromJson(
       organizationId: json['organization_id'] as String,
       branchId: json['branch_id'] as String,
       userId: json['user_id'] as String,
-      type: $enumDecode(_$NotificationTypeEnumMap, json['type']),
+      type: NotificationType.values.firstWhere(
+          (e) => e.name == (json['type'] as String).toLowerCase(),
+          orElse: () => NotificationType.system),
       title: json['title'] as String,
       body: json['body'] as String,
       data: json['data'] as Map<String, dynamic>?,

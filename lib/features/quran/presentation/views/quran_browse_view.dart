@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import "package:hafiz/core/localization/app_localizations.dart";
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hafiz/core/widgets/drawer_icon_button.dart';
 import 'package:hafiz/core/widgets/loading.dart';
 import 'package:hafiz/features/quran/domain/entities/surah.dart';
 import 'package:hafiz/features/quran/domain/entities/juz.dart';
@@ -18,18 +19,22 @@ class _QuranBrowseViewState extends ConsumerState<QuranBrowseView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(context.l.title),
-        bottom: TabBar(
-          onTap: (index) => setState(() => _currentTab = index),
-          tabs: [
-            Tab(text: context.l.tabSurahs),
-            Tab(text: context.l.tabJuzs),
-          ],
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        appBar: AppBar(
+          leading: const DrawerIconButton(),
+          title: Text(context.l.title),
+          bottom: TabBar(
+            onTap: (index) => setState(() => _currentTab = index),
+            tabs: [
+              Tab(text: context.l.tabSurahs),
+              Tab(text: context.l.tabJuzs),
+            ],
+          ),
         ),
+        body: _currentTab == 0 ? _buildSurahList() : _buildJuzList(),
       ),
-      body: _currentTab == 0 ? _buildSurahList() : _buildJuzList(),
     );
   }
 

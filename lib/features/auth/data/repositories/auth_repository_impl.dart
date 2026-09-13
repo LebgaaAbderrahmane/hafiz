@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' hide AuthException;
 import 'package:hafiz/features/auth/domain/entities/user.dart';
 import 'package:hafiz/features/auth/domain/repositories/auth_repository.dart';
@@ -39,17 +40,19 @@ class AuthRepositoryImpl implements AuthRepository {
     required String password,
   }) async {
     try {
+      debugPrint('AUTH: Signing in with email: $email');
       final response = await _auth.signInWithPassword(
         email: email,
         password: password,
       );
       if (response.user == null) {
-        throw const AuthException(message: 'Login failed');
+        throw const AuthException(message: 'Login failed — no user returned');
       }
+      debugPrint('AUTH: Login successful for ${response.user!.id}');
       return _mapUser(response.user!);
-    } on AuthException catch (e) {
-      throw AuthException(message: e.toString());
-    } catch (e) {
+    } catch (e, st) {
+      debugPrint('AUTH: Sign-in error: $e');
+      debugPrint('AUTH: Stack trace: $st');
       throw AuthException(message: e.toString());
     }
   }
@@ -74,9 +77,37 @@ class AuthRepositoryImpl implements AuthRepository {
       if (response.user == null) {
         throw const AuthException(message: 'Sign up failed');
       }
+
+      final userId = response.user!.id;
+
+      // Auto-create organization, branch, and owner role for new users
+      try {
+        final orgResult = await _client.from('organizations').insert({
+          'name': '$fullName\'s Academy',
+          'slug': email.replaceAll(RegExp(r'[^a-zA-Z0-9]'), '-'),
+        }).select('id').single();
+
+        final orgId = orgResult['id'] as String;
+
+        final branchResult = await _client.from('branches').insert({
+          'organization_id': orgId,
+          'name': 'الفرع الرئيسي',
+        }).select('id').single();
+
+        final branchId = branchResult['id'] as String;
+
+        await _client.from('user_roles').insert({
+          'user_id': userId,
+          'organization_id': orgId,
+          'branch_id': branchId,
+          'role': 'owner',
+        });
+      } catch (e) {
+        debugPrint('AUTH: Failed to auto-create org for new user: $e');
+        // Don't fail sign-up — user can still be assigned to an org later
+      }
+
       return _mapUser(response.user!);
-    } on AuthException catch (e) {
-      throw AuthException(message: e.toString());
     } catch (e) {
       throw AuthException(message: e.toString());
     }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import "package:hafiz/core/localization/app_localizations.dart";
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hafiz/core/widgets/drawer_icon_button.dart';
 import 'package:hafiz/core/widgets/loading.dart';
 import 'package:hafiz/features/schedule/domain/entities/schedule_event.dart';
 import 'package:hafiz/features/schedule/domain/repositories/schedule_provider.dart';
@@ -21,6 +22,7 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: const DrawerIconButton(),
         title: Text(context.l.title),
       ),
       body: Column(

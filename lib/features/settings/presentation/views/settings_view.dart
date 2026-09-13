@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/theme.dart';
+import '../../../../core/widgets/drawer_icon_button.dart';
 import '../../../auth/domain/entities/user.dart' show Role;
 import '../../../auth/domain/repositories/auth_provider.dart';
 import '../../../auth/domain/repositories/user_role_provider.dart';
@@ -17,6 +18,7 @@ class SettingsView extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
+        leading: const DrawerIconButton(),
         title: const Text('الإعدادات'),
       ),
       body: ListView(

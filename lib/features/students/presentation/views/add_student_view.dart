@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hafiz/core/widgets/button.dart';
 import 'package:hafiz/core/widgets/text_field.dart';
 import 'package:hafiz/features/auth/domain/repositories/user_role_provider.dart';
+import 'package:hafiz/core/widgets/branch_dropdown.dart';
 import 'package:hafiz/features/students/domain/entities/student.dart';
 import 'package:hafiz/features/students/domain/repositories/student_provider.dart';
 
@@ -37,6 +38,9 @@ class _AddStudentViewState extends ConsumerState<AddStudentView> {
   String? _readingLevel;
   String? _tajwidLevel;
   String? _memorizationLevel;
+
+  // Branch
+  String? _selectedBranchId;
 
   final _formKey = GlobalKey<FormState>();
 
@@ -190,6 +194,11 @@ class _AddStudentViewState extends ConsumerState<AddStudentView> {
                 borderRadius: BorderRadius.circular(8),
                 side: BorderSide(color: Theme.of(context).colorScheme.outline),
               ),
+            ),
+            const SizedBox(height: 16),
+            BranchDropdown(
+              selectedBranchId: _selectedBranchId,
+              onChanged: (v) => setState(() => _selectedBranchId = v),
             ),
             const SizedBox(height: 16),
             AppTextField(
@@ -380,7 +389,15 @@ class _AddStudentViewState extends ConsumerState<AddStudentView> {
 
   Future<void> _submit() async {
     final orgId = ref.read(activeOrganizationIdProvider) ?? '';
-    final branchId = ref.read(activeBranchIdProvider) ?? '';
+    final branchId = _selectedBranchId ?? ref.read(activeBranchIdProvider) ?? '';
+
+    if (orgId.isEmpty || branchId.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('يرجى اختيار الفرع'), backgroundColor: Colors.red),
+      );
+      return;
+    }
+
     final result = await ref.read(studentRepositoryProvider).createStudent(
           organizationId: orgId,
           branchId: branchId,

@@ -31,3 +31,20 @@ final studentAttendanceProvider = FutureProvider.autoDispose
   final repo = ref.read(attendanceRepositoryProvider);
   return repo.getStudentAttendance(studentId);
 });
+
+/// Class attendance history for a date range provider.
+final classAttendanceHistoryProvider = FutureProvider.autoDispose
+    .family<List<Attendance>, ({String classId, DateTime startDate, DateTime endDate})>(
+        (ref, params) async {
+  final repo = ref.read(attendanceRepositoryProvider);
+  final allAttendance = <Attendance>[];
+
+  var date = params.startDate;
+  while (!date.isAfter(params.endDate)) {
+    final dayAttendance = await repo.getClassAttendance(params.classId, date);
+    allAttendance.addAll(dayAttendance);
+    date = date.add(const Duration(days: 1));
+  }
+
+  return allAttendance;
+});

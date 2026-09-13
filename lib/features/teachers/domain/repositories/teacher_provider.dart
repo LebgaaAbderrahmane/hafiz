@@ -3,6 +3,7 @@ import 'package:hafiz/features/teachers/domain/entities/teacher.dart';
 import 'package:hafiz/features/teachers/domain/repositories/teacher_repository.dart';
 import 'package:hafiz/features/teachers/data/repositories/teacher_repository_impl.dart';
 import 'package:hafiz/core/network/supabase_client.dart';
+import 'package:hafiz/features/auth/domain/repositories/user_role_provider.dart';
 
 /// Teacher repository provider.
 final teacherRepositoryProvider = Provider<TeacherRepository>((ref) {
@@ -12,9 +13,12 @@ final teacherRepositoryProvider = Provider<TeacherRepository>((ref) {
 
 /// Branch teachers provider.
 final branchTeachersProvider =
-    FutureProvider.autoDispose.family<List<Teacher>, String>((ref, branchId) async {
+    FutureProvider.autoDispose.family<List<Teacher>, String?>((ref, branchId) async {
   final repo = ref.watch(teacherRepositoryProvider);
-  return repo.getBranchTeachers(branchId: branchId);
+  if (branchId != null) return repo.getBranchTeachers(branchId: branchId);
+  final orgId = ref.watch(activeOrganizationIdProvider);
+  if (orgId == null) return [];
+  return repo.getOrgTeachers(organizationId: orgId);
 });
 
 /// Teacher notifier for CRUD operations.

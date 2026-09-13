@@ -10,11 +10,14 @@ _$AttendanceImpl _$$AttendanceImplFromJson(Map<String, dynamic> json) =>
     _$AttendanceImpl(
       id: json['id'] as String,
       organizationId: json['organization_id'] as String,
-      branchId: json['branch_id'] as String,
+      branchId: json['branch_id'] as String?,
       studentId: json['student_id'] as String,
-      sessionId: json['session_id'] as String,
+      sessionId: json['session_id'] as String?,
       classId: json['class_id'] as String,
       status: $enumDecode(_$AttendanceStatusEnumMap, json['status']),
+      date: json['date'] == null
+          ? null
+          : DateTime.parse(json['date'] as String),
       checkInTime: json['check_in_time'] as String?,
       checkOutTime: json['check_out_time'] as String?,
       notes: json['notes'] as String?,
@@ -34,6 +37,7 @@ Map<String, dynamic> _$$AttendanceImplToJson(_$AttendanceImpl instance) =>
       'session_id': instance.sessionId,
       'class_id': instance.classId,
       'status': _$AttendanceStatusEnumMap[instance.status]!,
+      'date': instance.date?.toIso8601String(),
       'check_in_time': instance.checkInTime,
       'check_out_time': instance.checkOutTime,
       'notes': instance.notes,

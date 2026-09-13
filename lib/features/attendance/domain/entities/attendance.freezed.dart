@@ -10,11 +10,12 @@ final _privateConstructorUsedError = UnsupportedError('');
 mixin _$Attendance {
   String get id => throw _privateConstructorUsedError;
   String get organizationId => throw _privateConstructorUsedError;
-  String get branchId => throw _privateConstructorUsedError;
+  String? get branchId => throw _privateConstructorUsedError;
   String get studentId => throw _privateConstructorUsedError;
-  String get sessionId => throw _privateConstructorUsedError;
+  String? get sessionId => throw _privateConstructorUsedError;
   String get classId => throw _privateConstructorUsedError;
   AttendanceStatus get status => throw _privateConstructorUsedError;
+  DateTime? get date => throw _privateConstructorUsedError;
   String? get checkInTime => throw _privateConstructorUsedError;
   String? get checkOutTime => throw _privateConstructorUsedError;
   String? get notes => throw _privateConstructorUsedError;
@@ -37,11 +38,12 @@ abstract class $AttendanceCopyWith<$Res> {
   $Res call({
     String id,
     String organizationId,
-    String branchId,
+    String? branchId,
     String studentId,
-    String sessionId,
+    String? sessionId,
     String classId,
     AttendanceStatus status,
+    DateTime? date,
     String? checkInTime,
     String? checkOutTime,
     String? notes,
@@ -64,11 +66,12 @@ class _$AttendanceCopyWithImpl<$Res, $Val extends Attendance>
   $Res call({
     Object? id = null,
     Object? organizationId = null,
-    Object? branchId = null,
+    Object? branchId = freezed,
     Object? studentId = null,
-    Object? sessionId = null,
+    Object? sessionId = freezed,
     Object? classId = null,
     Object? status = null,
+    Object? date = freezed,
     Object? checkInTime = freezed,
     Object? checkOutTime = freezed,
     Object? notes = freezed,
@@ -81,12 +84,13 @@ class _$AttendanceCopyWithImpl<$Res, $Val extends Attendance>
       organizationId: null == organizationId
           ? _value.organizationId
           : organizationId as String,
-      branchId: null == branchId ? _value.branchId : branchId as String,
+      branchId: freezed == branchId ? _value.branchId : branchId as String?,
       studentId: null == studentId ? _value.studentId : studentId as String,
       sessionId:
-          null == sessionId ? _value.sessionId : sessionId as String,
+          freezed == sessionId ? _value.sessionId : sessionId as String?,
       classId: null == classId ? _value.classId : classId as String,
       status: null == status ? _value.status : status as AttendanceStatus,
+      date: freezed == date ? _value.date : date as DateTime?,
       checkInTime: freezed == checkInTime
           ? _value.checkInTime
           : checkInTime as String?,
@@ -114,11 +118,12 @@ abstract class _$$AttendanceImplCopyWith<$Res>
   $Res call({
     String id,
     String organizationId,
-    String branchId,
+    String? branchId,
     String studentId,
-    String sessionId,
+    String? sessionId,
     String classId,
     AttendanceStatus status,
+    DateTime? date,
     String? checkInTime,
     String? checkOutTime,
     String? notes,
@@ -141,11 +146,12 @@ class __$$AttendanceImplCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? organizationId = null,
-    Object? branchId = null,
+    Object? branchId = freezed,
     Object? studentId = null,
-    Object? sessionId = null,
+    Object? sessionId = freezed,
     Object? classId = null,
     Object? status = null,
+    Object? date = freezed,
     Object? checkInTime = freezed,
     Object? checkOutTime = freezed,
     Object? notes = freezed,
@@ -158,12 +164,13 @@ class __$$AttendanceImplCopyWithImpl<$Res>
       organizationId: null == organizationId
           ? _value.organizationId
           : organizationId as String,
-      branchId: null == branchId ? _value.branchId : branchId as String,
+      branchId: freezed == branchId ? _value.branchId : branchId as String?,
       studentId: null == studentId ? _value.studentId : studentId as String,
       sessionId:
-          null == sessionId ? _value.sessionId : sessionId as String,
+          freezed == sessionId ? _value.sessionId : sessionId as String?,
       classId: null == classId ? _value.classId : classId as String,
       status: null == status ? _value.status : status as AttendanceStatus,
+      date: freezed == date ? _value.date : date as DateTime?,
       checkInTime: freezed == checkInTime
           ? _value.checkInTime
           : checkInTime as String?,
@@ -185,11 +192,12 @@ class _$AttendanceImpl implements _Attendance {
   _$AttendanceImpl(
       {required this.id,
       required this.organizationId,
-      required this.branchId,
+      this.branchId,
       required this.studentId,
-      required this.sessionId,
+      this.sessionId,
       required this.classId,
       required this.status,
+      this.date,
       this.checkInTime,
       this.checkOutTime,
       this.notes,
@@ -198,35 +206,37 @@ class _$AttendanceImpl implements _Attendance {
       this.updatedAt});
 
   @override
-  String id;
+  final String id;
   @override
-  String organizationId;
+  final String organizationId;
   @override
-  String branchId;
+  final String? branchId;
   @override
-  String studentId;
+  final String studentId;
   @override
-  String sessionId;
+  final String? sessionId;
   @override
-  String classId;
+  final String classId;
   @override
-  AttendanceStatus status;
+  final AttendanceStatus status;
   @override
-  String? checkInTime;
+  final DateTime? date;
   @override
-  String? checkOutTime;
+  final String? checkInTime;
   @override
-  String? notes;
+  final String? checkOutTime;
   @override
-  String? markedBy;
+  final String? notes;
   @override
-  DateTime createdAt;
+  final String? markedBy;
   @override
-  DateTime? updatedAt;
+  final DateTime createdAt;
+  @override
+  final DateTime? updatedAt;
 
   @override
   String toString() {
-    return 'Attendance(id: $id, organizationId: $organizationId, branchId: $branchId, studentId: $studentId, sessionId: $sessionId, classId: $classId, status: $status, checkInTime: $checkInTime, checkOutTime: $checkOutTime, notes: $notes, markedBy: $markedBy, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'Attendance(id: $id, organizationId: $organizationId, branchId: $branchId, studentId: $studentId, sessionId: $sessionId, classId: $classId, status: $status, date: $date, checkInTime: $checkInTime, checkOutTime: $checkOutTime, notes: $notes, markedBy: $markedBy, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -246,6 +256,7 @@ class _$AttendanceImpl implements _Attendance {
             (identical(other.classId, classId) ||
                 other.classId == classId) &&
             (identical(other.status, status) || other.status == status) &&
+            (identical(other.date, date) || other.date == date) &&
             (identical(other.checkInTime, checkInTime) ||
                 other.checkInTime == checkInTime) &&
             (identical(other.checkOutTime, checkOutTime) ||
@@ -269,6 +280,7 @@ class _$AttendanceImpl implements _Attendance {
       sessionId,
       classId,
       status,
+      date,
       checkInTime,
       checkOutTime,
       notes,
@@ -292,11 +304,12 @@ abstract class _Attendance implements Attendance {
   factory _Attendance(
       {required String id,
       required String organizationId,
-      required String branchId,
+      String? branchId,
       required String studentId,
-      required String sessionId,
+      String? sessionId,
       required String classId,
       required AttendanceStatus status,
+      DateTime? date,
       String? checkInTime,
       String? checkOutTime,
       String? notes,
@@ -309,15 +322,17 @@ abstract class _Attendance implements Attendance {
   @override
   String get organizationId;
   @override
-  String get branchId;
+  String? get branchId;
   @override
   String get studentId;
   @override
-  String get sessionId;
+  String? get sessionId;
   @override
   String get classId;
   @override
   AttendanceStatus get status;
+  @override
+  DateTime? get date;
   @override
   String? get checkInTime;
   @override

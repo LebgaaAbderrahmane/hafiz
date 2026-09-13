@@ -4,7 +4,8 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/theme/theme.dart';
 import '../../../auth/domain/repositories/user_role_provider.dart';
 import '../../domain/entities/teacher.dart';
-import '../../domain/repositories/teacher_provider.dart';
+import 'package:hafiz/core/widgets/drawer_icon_button.dart';
+import 'package:hafiz/features/teachers/domain/repositories/teacher_provider.dart';
 
 class TeacherListView extends ConsumerStatefulWidget {
   const TeacherListView({super.key});
@@ -26,11 +27,12 @@ class _TeacherListViewState extends ConsumerState<TeacherListView> {
 
   @override
   Widget build(BuildContext context) {
-    final branchId = ref.watch(activeBranchIdProvider) ?? '';
+    final branchId = ref.watch(activeBranchIdProvider);
     final teachersAsync = ref.watch(branchTeachersProvider(branchId));
 
     return Scaffold(
       appBar: AppBar(
+        leading: const DrawerIconButton(),
         title: const Text('المعلمون'),
         actions: [
           IconButton(
@@ -116,8 +118,10 @@ class _TeacherListViewState extends ConsumerState<TeacherListView> {
   Widget _buildTeacherList(List<Teacher> teachers) {
     return RefreshIndicator(
       onRefresh: () async {
-        final branchId = ref.read(activeBranchIdProvider) ?? '';
-        ref.invalidate(branchTeachersProvider(branchId));
+        final branchId = ref.read(activeBranchIdProvider);
+        if (branchId != null) {
+          ref.invalidate(branchTeachersProvider(branchId));
+        }
       },
       child: ListView.builder(
         padding: EdgeInsets.all(AppSpacing.m),

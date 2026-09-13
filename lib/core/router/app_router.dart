@@ -22,7 +22,10 @@ import 'package:hafiz/features/classes/presentation/views/class_list_view.dart';
 import 'package:hafiz/features/classes/presentation/views/class_detail_view.dart';
 import 'package:hafiz/features/classes/presentation/views/add_class_view.dart';
 import 'package:hafiz/features/attendance/presentation/views/attendance_marking_view.dart';
+import 'package:hafiz/features/attendance/presentation/views/attendance_history_view.dart';
 import 'package:hafiz/features/tasmi/presentation/views/tasmi_eval_view.dart';
+import 'package:hafiz/features/tasmi/presentation/views/tasmi_session_list_view.dart';
+import 'package:hafiz/features/tasmi/presentation/views/tasmi_session_detail_view.dart';
 import 'package:hafiz/features/schedule/presentation/views/calendar_view.dart';
 import 'package:hafiz/features/schedule/presentation/views/session_management_view.dart';
 import 'package:hafiz/features/quran/presentation/views/quran_browse_view.dart';
@@ -37,6 +40,7 @@ import 'package:hafiz/features/reports/presentation/views/reports_view.dart';
 import 'package:hafiz/features/parent_portal/presentation/views/parent_portal_view.dart';
 import 'package:hafiz/features/dashboard/presentation/views/owner_dashboard_view.dart';
 import 'package:hafiz/core/theme/theme.dart';
+import 'package:hafiz/core/widgets/drawer_icon_button.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
   final authState = ref.watch(authStateProvider);
@@ -48,13 +52,14 @@ final appRouterProvider = Provider<GoRouter>((ref) {
     redirect: (context, state) {
       final isLoggedIn = authState.valueOrNull != null;
       final isAuthRoute = state.matchedLocation == '/login' ||
-          state.matchedLocation == '/forgot-password';
+          state.matchedLocation == '/forgot-password' ||
+          state.matchedLocation == '/sign-up';
 
       if (!isLoggedIn && !isAuthRoute) return '/login';
       if (isLoggedIn && isAuthRoute) {
-        // Route based on role
+        // Route based on role — if no role yet, send to dashboard (will show empty state)
         return switch (activeRole) {
-          null => '/login',
+          null => '/dashboard',
           Role.teacher || Role.assistant => '/calendar',
           Role.parent => '/parent-portal',
           _ => '/dashboard',
@@ -141,18 +146,44 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           ),
           GoRoute(
             path: '/attendance',
-            builder: (context, state) => const AttendanceMarkingView(
-              sessionId: '',
-              classId: '',
-            ),
+            builder: (context, state) => const AttendanceHistoryView(),
+            routes: [
+              GoRoute(
+                path: 'mark',
+                builder: (context, state) {
+                  final classId = state.uri.queryParameters['classId'] ?? '';
+                  final sessionId = state.uri.queryParameters['sessionId'] ?? '';
+                  return AttendanceMarkingView(
+                    sessionId: sessionId,
+                    classId: classId,
+                  );
+                },
+              ),
+              GoRoute(
+                path: 'history',
+                builder: (context, state) => const AttendanceHistoryView(),
+              ),
+            ],
           ),
           GoRoute(
             path: '/tasmi',
-            builder: (context, state) => const TasmiEvalView(
-              studentId: '',
-              teacherId: '',
-              sessionId: '',
-            ),
+            builder: (context, state) => const TasmiSessionListView(),
+            routes: [
+              GoRoute(
+                path: 'add',
+                builder: (context, state) => const TasmiEvalView(
+                  studentId: '',
+                  teacherId: '',
+                  sessionId: '',
+                ),
+              ),
+              GoRoute(
+                path: ':id',
+                builder: (context, state) => TasmiSessionDetailView(
+                  sessionId: state.pathParameters['id']!,
+                ),
+              ),
+            ],
           ),
           GoRoute(
             path: '/schedule',
@@ -258,48 +289,96 @@ class GoRouterRefreshStream extends ChangeNotifier {
   }
 }
 
-class _AdminShell extends StatelessWidget {
+class _AdminShell extends StatefulWidget {
   const _AdminShell({required this.child});
   final Widget child;
+
+  @override
+  State<_AdminShell> createState() => _AdminShellState();
+}
+
+class _AdminShellState extends State<_AdminShell> {
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  void _openDrawer() => _scaffoldKey.currentState?.openDrawer();
+
+  static const _navItems = [
+    _NavItem('لوحة التحكم', '/dashboard', Icons.dashboard),
+    _NavItem('الطلاب', '/students', Icons.people),
+    _NavItem('المعلمون', '/teachers', Icons.person),
+    _NavItem('الفصول', '/classes', Icons.class_),
+    _NavItem('الحضور', '/attendance', Icons.check_circle),
+    _NavItem('التسميع', '/tasmi', Icons.mic),
+    _NavItem('الجدول', '/schedule', Icons.calendar_today),
+    _NavItem('الحفظ', '/hifz/assignments', Icons.book),
+    _NavItem('القرآن', '/quran', Icons.menu_book),
+    _NavItem('الأولياء', '/guardians', Icons.family_restroom),
+    _NavItem('التقييمات', '/assessments', Icons.assessment),
+    _NavItem('التقارير', '/reports', Icons.summarize),
+    _NavItem('الإشعارات', '/notifications', Icons.notifications),
+  ];
+
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.sizeOf(context).width;
+    final isMobile = screenWidth < 768;
+
+    if (isMobile) {
+      return Scaffold(
+        key: _scaffoldKey,
+        drawer: Drawer(
+          child: SafeArea(
+            child: _buildSidebarContent(context, isMobile: true),
+          ),
+        ),
+        body: DrawerScope(
+          openDrawer: _openDrawer,
+          child: widget.child,
+        ),
+      );
+    }
+
     return Scaffold(
       body: Row(
         children: [
-          Container(
+          SizedBox(
             width: 248,
-            color: AppColors.surface,
-            child: Column(
-              children: [
-                const SizedBox(height: 48),
-                Text('حفيظ', style: AppTextStyles.headlineMedium.copyWith(color: AppColors.primary)),
-                const SizedBox(height: 32),
-                _navItem(context, 'لوحة التحكم', '/dashboard', Icons.dashboard),
-                _navItem(context, 'الطلاب', '/students', Icons.people),
-                _navItem(context, 'المعلمون', '/teachers', Icons.person),
-                _navItem(context, 'الفصول', '/classes', Icons.class_),
-                _navItem(context, 'الحضور', '/attendance', Icons.check_circle),
-                _navItem(context, 'التسميع', '/tasmi', Icons.mic),
-                _navItem(context, 'الجدول', '/schedule', Icons.calendar_today),
-                _navItem(context, 'الحفظ', '/hifz/assignments', Icons.book),
-                _navItem(context, 'القرآن', '/quran', Icons.menu_book),
-                _navItem(context, 'الأولياء', '/guardians', Icons.family_restroom),
-                _navItem(context, 'التقييمات', '/assessments', Icons.assessment),
-                _navItem(context, 'التقارير', '/reports', Icons.summarize),
-                _navItem(context, 'الإشعارات', '/notifications', Icons.notifications),
-                const Spacer(),
-                _navItem(context, 'الإعدادات', '/settings', Icons.settings),
-                const SizedBox(height: 16),
-              ],
-            ),
+            child: _buildSidebarContent(context),
           ),
-          Expanded(child: child),
+          Expanded(child: widget.child),
         ],
       ),
     );
   }
 
-  Widget _navItem(BuildContext context, String title, String path, IconData icon) {
+  Widget _buildSidebarContent(BuildContext context, {bool isMobile = false}) {
+    return Material(
+      color: AppColors.surface,
+      child: Column(
+        children: [
+          if (!isMobile) const SizedBox(height: 48),
+          Padding(
+            padding: EdgeInsets.all(AppSpacing.m),
+            child: Text('حفيظ', style: AppTextStyles.headlineMedium.copyWith(color: AppColors.primary)),
+          ),
+          const SizedBox(height: 8),
+          Expanded(
+            child: ListView(
+              padding: EdgeInsets.zero,
+              children: [
+                for (final item in _navItems)
+                  _navItem(context, item.title, item.path, item.icon, isMobile: isMobile),
+              ],
+            ),
+          ),
+          _navItem(context, 'الإعدادات', '/settings', Icons.settings, isMobile: isMobile),
+          const SizedBox(height: 16),
+        ],
+      ),
+    );
+  }
+
+  Widget _navItem(BuildContext context, String title, String path, IconData icon, {bool isMobile = false}) {
     final isSelected = GoRouterState.of(context).matchedLocation == path;
     return ListTile(
       leading: Icon(icon, color: isSelected ? AppColors.primary : AppColors.textSecondary),
@@ -311,7 +390,17 @@ class _AdminShell extends StatelessWidget {
         ),
       ),
       selected: isSelected,
-      onTap: () => context.go(path),
+      onTap: () {
+        context.go(path);
+        if (isMobile) Navigator.pop(context);
+      },
     );
   }
+}
+
+class _NavItem {
+  final String title;
+  final String path;
+  final IconData icon;
+  const _NavItem(this.title, this.path, this.icon);
 }

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/theme.dart';
 import '../../../../core/localization/app_localizations.dart';
+import '../../../../core/widgets/drawer_icon_button.dart';
 import '../../domain/entities/guardian.dart';
 import '../../domain/repositories/guardian_provider.dart';
 
@@ -19,7 +20,7 @@ class GuardianProfileView extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(l10n.teachers),
+        title: Text(l10n.guardians),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => context.pop(),
@@ -109,7 +110,8 @@ class GuardianProfileView extends ConsumerWidget {
           children: [
             Text('المعلومات الشخصية', style: AppTextStyles.titleMedium),
             Gap.m,
-            _buildInfoRow(Icons.phone, 'الهاتف', guardian.phone),
+            if (guardian.phone != null && guardian.phone!.isNotEmpty)
+              _buildInfoRow(Icons.phone, 'الهاتف', guardian.phone!),
             if (guardian.email != null && guardian.email!.isNotEmpty)
               _buildInfoRow(Icons.email, 'البريد الإلكتروني', guardian.email!),
             if (guardian.address != null && guardian.address!.isNotEmpty)

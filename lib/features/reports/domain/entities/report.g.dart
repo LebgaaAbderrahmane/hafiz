@@ -12,11 +12,17 @@ _$ReportImpl _$$ReportImplFromJson(Map<String, dynamic> json) =>
       organizationId: json['organization_id'] as String,
       branchId: json['branch_id'] as String,
       generatedById: json['generated_by_id'] as String,
-      type: $enumDecode(_$ReportTypeEnumMap, json['type']),
+      type: ReportType.values.firstWhere(
+          (e) => e.name == (json['type'] as String).toLowerCase(),
+          orElse: () => ReportType.custom),
       title: json['title'] as String,
       parameters: json['parameters'] as Map<String, dynamic>?,
       data: json['data'] as Map<String, dynamic>?,
-      format: $enumDecodeNullable(_$ReportFormatEnumMap, json['format']),
+      format: json['format'] != null
+          ? ReportFormat.values.firstWhere(
+              (e) => e.name == (json['format'] as String).toLowerCase(),
+              orElse: () => ReportFormat.pdf)
+          : null,
       filePath: json['file_path'] as String?,
       generatedAt: json['generated_at'] == null
           ? null

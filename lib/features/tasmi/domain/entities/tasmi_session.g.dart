@@ -19,9 +19,12 @@ _$TasmiSessionImpl _$TasmiSessionFromJson(Map<String, dynamic> json) =>
       startAyah: (json['start_ayah'] as num).toInt(),
       endSurah: (json['end_surah'] as num).toInt(),
       endAyah: (json['end_ayah'] as num).toInt(),
-      sessionType:
-          $enumDecode(_$TasmiSessionTypeEnumMap, json['session_type']),
-      outcome: $enumDecode(_$TasmiOutcomeEnumMap, json['outcome']),
+      sessionType: TasmiSessionType.values.firstWhere(
+          (e) => e.name == (json['session_type'] as String).toLowerCase(),
+          orElse: () => TasmiSessionType.newMemorization),
+      outcome: TasmiOutcome.values.firstWhere(
+          (e) => e.name == (json['outcome'] as String).toLowerCase(),
+          orElse: () => TasmiOutcome.pass),
       accuracyScore: (json['accuracy_score'] as num?)?.toInt(),
       tajwidScore: (json['tajwid_score'] as num?)?.toInt(),
       fluencyScore: (json['fluency_score'] as num?)?.toInt(),
@@ -86,8 +89,14 @@ _$TasmiErrorImpl _$TasmiErrorFromJson(Map<String, dynamic> json) =>
       surahNumber: (json['surah_number'] as num).toInt(),
       ayahNumber: (json['ayah_number'] as num).toInt(),
       wordLocation: json['word_location'] as String?,
-      errorType: $enumDecode(_$ErrorTypeEnumMap, json['error_type']),
-      severity: $enumDecodeNullable(_$ErrorSeverityEnumMap, json['severity']),
+      errorType: ErrorType.values.firstWhere(
+          (e) => e.name == (json['error_type'] as String).toLowerCase(),
+          orElse: () => ErrorType.omission),
+      severity: json['severity'] != null
+          ? ErrorSeverity.values.firstWhere(
+              (e) => e.name == (json['severity'] as String).toLowerCase(),
+              orElse: () => ErrorSeverity.minor)
+          : null,
       notes: json['notes'] as String?,
     );
 

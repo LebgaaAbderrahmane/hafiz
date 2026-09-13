@@ -11,15 +11,15 @@ _$AppUserImpl _$$AppUserImplFromJson(Map<String, dynamic> json) =>
       id: json['id'] as String,
       email: json['email'] as String,
       phone: json['phone'] as String?,
-      fullName: json['fullName'] as String,
-      preferredName: json['preferredName'] as String?,
-      avatarUrl: json['avatarUrl'] as String?,
-      language: json['language'] as String? ?? 'ar',
-      isActive: json['isActive'] as bool? ?? true,
-      createdAt: DateTime.parse(json['createdAt'] as String),
-      updatedAt: json['updatedAt'] == null
+      fullName: (json['full_name'] ?? json['fullName']) as String,
+      preferredName: (json['preferred_name'] ?? json['preferredName']) as String?,
+      avatarUrl: (json['avatar_url'] ?? json['avatarUrl']) as String?,
+      language: (json['language'] as String?) ?? 'ar',
+      isActive: (json['is_active'] ?? json['isActive'] as bool?) ?? true,
+      createdAt: DateTime.parse((json['created_at'] ?? json['createdAt']) as String),
+      updatedAt: (json['updated_at'] ?? json['updatedAt']) == null
           ? null
-          : DateTime.parse(json['updatedAt'] as String),
+          : DateTime.parse((json['updated_at'] ?? json['updatedAt']) as String),
     );
 
 Map<String, dynamic> _$$AppUserImplToJson(_$AppUserImpl instance) =>
@@ -39,11 +39,13 @@ Map<String, dynamic> _$$AppUserImplToJson(_$AppUserImpl instance) =>
 _$UserRoleImpl _$$UserRoleImplFromJson(Map<String, dynamic> json) =>
     _$UserRoleImpl(
       id: json['id'] as String,
-      userId: json['userId'] as String,
-      organizationId: json['organizationId'] as String,
-      branchId: json['branchId'] as String?,
-      role: $enumDecode(_$RoleEnumMap, json['role']),
-      createdAt: DateTime.parse(json['createdAt'] as String),
+      userId: (json['user_id'] ?? json['userId']) as String,
+      organizationId: (json['organization_id'] ?? json['organizationId']) as String,
+      branchId: (json['branch_id'] ?? json['branchId']) as String?,
+      role: Role.values.firstWhere(
+          (e) => e.name == (json['role'] as String).toLowerCase(),
+          orElse: () => Role.owner),
+      createdAt: DateTime.parse((json['created_at'] ?? json['createdAt']) as String),
     );
 
 Map<String, dynamic> _$$UserRoleImplToJson(_$UserRoleImpl instance) =>

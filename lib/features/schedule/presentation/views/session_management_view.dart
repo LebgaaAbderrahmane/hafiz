@@ -3,6 +3,7 @@ import "package:hafiz/core/localization/app_localizations.dart";
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hafiz/core/widgets/badge.dart';
+import 'package:hafiz/core/widgets/drawer_icon_button.dart';
 import 'package:hafiz/core/widgets/card.dart';
 import 'package:hafiz/core/widgets/empty_state.dart';
 import 'package:hafiz/core/widgets/loading.dart';
@@ -25,6 +26,7 @@ class _SessionManagementViewState extends ConsumerState<SessionManagementView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: const DrawerIconButton(),
         title: Text(context.l.sessions),
       ),
       body: Column(

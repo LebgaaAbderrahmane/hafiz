@@ -11,9 +11,9 @@ abstract class Guardian with _$Guardian {
   factory Guardian({
     required String id,
     required String organizationId,
-    required String branchId,
-    required String name,
-    required String phone,
+    String? branchId,
+    @JsonKey(name: 'full_name') required String name,
+    String? phone,
     String? email,
     String? address,
     String? occupation,

@@ -72,15 +72,15 @@ class AuthNotifier extends StateNotifier<AsyncValue<AppUser?>> {
     required String fullName,
     String? phone,
   }) async {
-    state = const AsyncValue.loading();
     try {
-      final user = await _repository.signUpWithEmail(
+      await _repository.signUpWithEmail(
         email: email,
         password: password,
         fullName: fullName,
         phone: phone,
       );
-      state = AsyncValue.data(user);
+      // Don't set user as logged in — sign-up requires email confirmation or admin approval.
+      // Keep state as-is so redirect guard stays on auth routes.
     } catch (e, st) {
       state = AsyncValue.error(e, st);
     }

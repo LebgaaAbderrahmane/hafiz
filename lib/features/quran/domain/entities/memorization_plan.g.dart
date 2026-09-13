@@ -14,8 +14,12 @@ _$MemorizationPlanImpl _$$MemorizationPlanImplFromJson(
       teacherId: json['teacher_id'] as String,
       organizationId: json['organization_id'] as String,
       classId: json['class_id'] as String?,
-      status: $enumDecode(_$MemorizationStatusEnumMap, json['status']),
-      priority: $enumDecode(_$MemorizationPriorityEnumMap, json['priority']),
+      status: MemorizationStatus.values.firstWhere(
+          (e) => e.name == (json['status'] as String).toLowerCase(),
+          orElse: () => MemorizationStatus.notStarted),
+      priority: MemorizationPriority.values.firstWhere(
+          (e) => e.name == (json['priority'] as String).toLowerCase(),
+          orElse: () => MemorizationPriority.low),
       currentSurah: (json['current_surah'] as num).toInt(),
       currentAyah: (json['current_ayah'] as num).toInt(),
       targetSurah: (json['target_surah'] as num).toInt(),
@@ -83,7 +87,9 @@ _$MemorizationCheckpointImpl _$$MemorizationCheckpointImplFromJson(
       surahNumber: (json['surah_number'] as num).toInt(),
       startAyah: (json['start_ayah'] as num).toInt(),
       endAyah: (json['end_ayah'] as num).toInt(),
-      status: $enumDecode(_$CheckpointStatusEnumMap, json['status']),
+      status: CheckpointStatus.values.firstWhere(
+          (e) => e.name == (json['status'] as String).toLowerCase(),
+          orElse: () => CheckpointStatus.pending),
       qualityScore: (json['quality_score'] as num?)?.toInt(),
       teacherNotes: json['teacher_notes'] as String?,
       completedAt: json['completed_at'] == null

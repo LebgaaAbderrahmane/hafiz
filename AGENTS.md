@@ -1,9 +1,9 @@
 # AGENTS.md — Hafiz Development Guide
 
 ## Project Status
-- **Current Phase:** Phase 11 (Hifz Assignment Management)
-- **Current Branch:** feat/phase-11-hifz-assignment
-- **Last Updated:** 2026-09-10
+- **Current Phase:** Phase 14 (Stabilization & Bug Fixes)
+- **Current Branch:** feat/phase-14-auth-integration
+- **Last Updated:** 2026-09-13
 - **Flutter Version:** 3.47.2 stable
 - **Dart Version:** 3.13.2
 
@@ -67,13 +67,17 @@ supabase db diff
 - Use `mocktail` for mocking
 - Use `ProviderContainer.test()` for Riverpod providers
 
-## Current Sprint — Phase 11: Hifz Assignment Management
+## Current Sprint — Phase 14: Stabilization & Bug Fixes
 
 ### Tasks
-- [x] HifzAssignment repository + providers
-- [x] Hifz assignment list view
-- [x] Hifz assignment create/edit view
-- [x] Update router with hifz assignment routes
+- [x] Fix UserRole.fromJson snake_case/camelCase mismatch (branch dropdown)
+- [x] Fix all $enumDecode case sensitivity across 10+ .g.dart files
+- [x] Fix Guardian entity nullable fields (phone, branchId, name mapping)
+- [x] Fix Attendance entity nullable fields (branchId, sessionId, date)
+- [x] Fix ClassLevel enum Title Case DB values
+- [x] Dashboard spacing fixes
+- [x] Global error handler for log file
+- [x] Update AGENTS.md
 
 ## Key Files
 

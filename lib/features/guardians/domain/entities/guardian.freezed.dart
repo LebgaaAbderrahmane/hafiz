@@ -10,9 +10,9 @@ final _privateConstructorUsedError = UnsupportedError('');
 mixin _$Guardian {
   String get id => throw _privateConstructorUsedError;
   String get organizationId => throw _privateConstructorUsedError;
-  String get branchId => throw _privateConstructorUsedError;
+  String? get branchId => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
-  String get phone => throw _privateConstructorUsedError;
+  String? get phone => throw _privateConstructorUsedError;
   String? get email => throw _privateConstructorUsedError;
   String? get address => throw _privateConstructorUsedError;
   String? get occupation => throw _privateConstructorUsedError;
@@ -35,9 +35,9 @@ abstract class $GuardianCopyWith<$Res> {
   $Res call({
     String id,
     String organizationId,
-    String branchId,
+    String? branchId,
     String name,
-    String phone,
+    String? phone,
     String? email,
     String? address,
     String? occupation,
@@ -61,9 +61,9 @@ class _$GuardianCopyWithImpl<$Res, $Val extends Guardian>
   $Res call({
     Object? id = null,
     Object? organizationId = null,
-    Object? branchId = null,
+    Object? branchId = freezed,
     Object? name = null,
-    Object? phone = null,
+    Object? phone = freezed,
     Object? email = freezed,
     Object? address = freezed,
     Object? occupation = freezed,
@@ -77,9 +77,9 @@ class _$GuardianCopyWithImpl<$Res, $Val extends Guardian>
       organizationId: null == organizationId
           ? _value.organizationId
           : organizationId as String,
-      branchId: null == branchId ? _value.branchId : branchId as String,
+      branchId: freezed == branchId ? _value.branchId : branchId as String?,
       name: null == name ? _value.name : name as String,
-      phone: null == phone ? _value.phone : phone as String,
+      phone: freezed == phone ? _value.phone : phone as String?,
       email: freezed == email ? _value.email : email as String?,
       address: freezed == address ? _value.address : address as String?,
       occupation:
@@ -105,9 +105,9 @@ abstract class _$$GuardianImplCopyWith<$Res>
   $Res call({
     String id,
     String organizationId,
-    String branchId,
+    String? branchId,
     String name,
-    String phone,
+    String? phone,
     String? email,
     String? address,
     String? occupation,
@@ -131,9 +131,9 @@ class __$$GuardianImplCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? organizationId = null,
-    Object? branchId = null,
+    Object? branchId = freezed,
     Object? name = null,
-    Object? phone = null,
+    Object? phone = freezed,
     Object? email = freezed,
     Object? address = freezed,
     Object? occupation = freezed,
@@ -147,9 +147,9 @@ class __$$GuardianImplCopyWithImpl<$Res>
       organizationId: null == organizationId
           ? _value.organizationId
           : organizationId as String,
-      branchId: null == branchId ? _value.branchId : branchId as String,
+      branchId: freezed == branchId ? _value.branchId : branchId as String?,
       name: null == name ? _value.name : name as String,
-      phone: null == phone ? _value.phone : phone as String,
+      phone: freezed == phone ? _value.phone : phone as String?,
       email: freezed == email ? _value.email : email as String?,
       address: freezed == address ? _value.address : address as String?,
       occupation:
@@ -169,9 +169,9 @@ class _$GuardianImpl implements _Guardian {
   _$GuardianImpl(
       {required this.id,
       required this.organizationId,
-      required this.branchId,
+      this.branchId,
       required this.name,
-      required this.phone,
+      this.phone,
       this.email,
       this.address,
       this.occupation,
@@ -181,29 +181,29 @@ class _$GuardianImpl implements _Guardian {
       this.updatedAt});
 
   @override
-  String id;
+  final String id;
   @override
-  String organizationId;
+  final String organizationId;
   @override
-  String branchId;
+  final String? branchId;
   @override
-  String name;
+  final String name;
   @override
-  String phone;
+  final String? phone;
   @override
-  String? email;
+  final String? email;
   @override
-  String? address;
+  final String? address;
   @override
-  String? occupation;
+  final String? occupation;
   @override
-  GuardianType? type;
+  final GuardianType? type;
   @override
-  String? notes;
+  final String? notes;
   @override
-  DateTime createdAt;
+  final DateTime createdAt;
   @override
-  DateTime? updatedAt;
+  final DateTime? updatedAt;
 
   @override
   String toString() {
@@ -267,9 +267,9 @@ abstract class _Guardian implements Guardian {
   factory _Guardian(
       {required String id,
       required String organizationId,
-      required String branchId,
+      String? branchId,
       required String name,
-      required String phone,
+      String? phone,
       String? email,
       String? address,
       String? occupation,
@@ -283,11 +283,11 @@ abstract class _Guardian implements Guardian {
   @override
   String get organizationId;
   @override
-  String get branchId;
+  String? get branchId;
   @override
   String get name;
   @override
-  String get phone;
+  String? get phone;
   @override
   String? get email;
   @override

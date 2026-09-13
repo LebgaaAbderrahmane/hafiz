@@ -12,8 +12,9 @@ _$SurahImpl _$$SurahImplFromJson(Map<String, dynamic> json) => _$SurahImpl(
       nameEnglish: json['name_english'] as String,
       nameTransliteration: json['name_transliteration'] as String,
       totalAyahs: (json['total_ayahs'] as num).toInt(),
-      revelationType:
-          $enumDecode(_$RevelationTypeEnumMap, json['revelation_type']),
+      revelationType: RevelationType.values.firstWhere(
+          (e) => e.name == (json['revelation_type'] as String).toLowerCase(),
+          orElse: () => RevelationType.meccan),
       juz: (json['juz'] as num).toInt(),
       hizb: (json['hizb'] as num?)?.toInt(),
       page: (json['page'] as num?)?.toInt(),

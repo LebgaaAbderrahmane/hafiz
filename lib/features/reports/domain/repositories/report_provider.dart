@@ -3,6 +3,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:hafiz/features/reports/domain/entities/report.dart';
 import 'package:hafiz/features/reports/domain/repositories/report_repository.dart';
 import 'package:hafiz/features/reports/data/repositories/report_repository_impl.dart';
+import 'package:hafiz/features/auth/domain/repositories/user_role_provider.dart';
 
 /// Report repository provider.
 final reportRepositoryProvider = Provider<ReportRepository>((ref) {
@@ -11,9 +12,12 @@ final reportRepositoryProvider = Provider<ReportRepository>((ref) {
 
 /// Branch reports provider.
 final branchReportsProvider =
-    FutureProvider.autoDispose.family<List<Report>, String>((ref, branchId) async {
+    FutureProvider.autoDispose.family<List<Report>, String?>((ref, branchId) async {
   final repo = ref.watch(reportRepositoryProvider);
-  return repo.getBranchReports(branchId: branchId);
+  if (branchId != null) return repo.getBranchReports(branchId: branchId);
+  final orgId = ref.watch(activeOrganizationIdProvider);
+  if (orgId == null) return [];
+  return repo.getOrgReports(organizationId: orgId);
 });
 
 /// Report notifier for generating reports.

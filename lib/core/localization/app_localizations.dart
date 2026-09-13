@@ -133,6 +133,15 @@ class AppLocalizations {
   String get late => 'متأخر';
   String get excused => 'معذور';
   String get noStudents => 'لا يوجد طلاب';
+  String get attendanceHistory => 'سجل الحضور';
+  String get selectClass => 'اختر الفصل';
+  String get allClasses => 'جميع الفصول';
+  String get monthlyAttendance => 'الحضور الشهري';
+  String get attendancePercentage => 'نسبة الحضور';
+  String get noAttendanceRecords => 'لا توجد سجلات حضور';
+  String get noAttendanceRecordsMessage => 'لم يتم تسجيل أي حضور في هذا التاريخ';
+  String get today => 'اليوم';
+  String get markAttendanceForClass => 'تسجيل الحضور للفصل';
 
   // ── Quran ──
   String get quran => 'القرآن';
@@ -172,6 +181,30 @@ class AppLocalizations {
   String get assignmentStatus => 'حالة التعيين';
   String get dueDate => 'تاريخ التسليم';
   String get qualityTarget => 'الجودة المطلوبة';
+
+  // ── Revision Tracking ──
+  String get revisionTracking => 'تتبع المراجعات';
+  String get dueToday => 'مستحقة اليوم';
+  String get overdueRevision => 'متأخرة';
+  String get weakRevision => 'ضعيفة';
+  String get strongRevision => 'قوية';
+  String get completedRevision => 'مكتملة';
+  String get startRevision => 'بدء المراجعة';
+  String get revisionResult => 'نتيجة المراجعة';
+  String get strongRevisionDesc => 'تم الحفظ بشكل ممتاز';
+  String get needsRepetition => 'تحتاج تكرار';
+  String get needsRepetitionDesc => 'تم الحفظ مع بعض الأخطاء';
+  String get weakRevisionDesc => 'تحتاج مراجعة مكثفة';
+  String get noRevisions => 'لا توجد مراجعات';
+  String get noRevisionsDesc => 'لا توجد مراجعات حالياً لهذا القسم';
+  String get lastReviewed => 'آخر مراجعة';
+  String get notReviewedYet => 'لم تُراجع بعد';
+  String get revisionRegisteredStrong => 'تم تسجيل المراجعة كقوية';
+  String get revisionRegisteredNeedsRepetition => 'تم تسجيل المراجعة كتحتاج تكرار';
+  String get revisionRegisteredWeak => 'تم تسجيل المراجعة كضعيفة';
+  String get errorLoadingRevisions => 'خطأ في تحميل المراجعات';
+  String get errorLoadingStats => 'خطأ في تحميل الإحصائيات';
+  String get errorRegisteringRevision => 'خطأ في تسجيل المراجعة';
 }
 
 class _AppLocalizationsDelegate
