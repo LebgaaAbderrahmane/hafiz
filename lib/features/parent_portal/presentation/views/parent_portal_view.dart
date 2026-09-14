@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import '../../../../core/localization/app_localizations.dart';
 import '../../../../core/theme/theme.dart';
 import '../../../../core/widgets/drawer_icon_button.dart';
 import '../../../auth/domain/repositories/auth_provider.dart';
@@ -37,7 +38,7 @@ class _ParentPortalViewState extends ConsumerState<ParentPortalView>
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('بوابة ولي الأمر'),
+        title: Text(context.l.parentPortalTitle),
         leading: const DrawerIconButton(),
         actions: [
           IconButton(
@@ -52,11 +53,11 @@ class _ParentPortalViewState extends ConsumerState<ParentPortalView>
           labelColor: AppColors.primary,
           unselectedLabelColor: AppColors.textSecondary,
           indicatorColor: AppColors.primary,
-          tabs: const [
-            Tab(text: 'الرئيسية'),
-            Tab(text: 'التقدم'),
-            Tab(text: 'الحضور'),
-            Tab(text: 'الجدول'),
+          tabs: [
+            Tab(text: context.l.parentTabHome),
+            Tab(text: context.l.parentTabProgress),
+            Tab(text: context.l.parentTabAttendance),
+            Tab(text: context.l.parentTabSchedule),
           ],
         ),
       ),
@@ -89,7 +90,7 @@ class _ParentPortalViewState extends ConsumerState<ParentPortalView>
             Icon(Icons.error_outline, size: 64, color: AppColors.error),
             Gap.l,
             Text(
-              'حدث خطأ',
+              context.l.parentError,
               style: AppTextStyles.headlineMedium,
             ),
             Gap.s,
@@ -103,7 +104,7 @@ class _ParentPortalViewState extends ConsumerState<ParentPortalView>
             Gap.xl,
             ElevatedButton(
               onPressed: () => ref.invalidate(parentStudentsProvider),
-              child: const Text('إعادة المحاولة'),
+              child: Text(context.l.retry),
             ),
           ],
         ),
@@ -121,12 +122,12 @@ class _ParentPortalViewState extends ConsumerState<ParentPortalView>
             Icon(Icons.child_care, size: 64, color: AppColors.textHint),
             Gap.l,
             Text(
-              'لم يتم ربط أي أطفال بعد',
+              context.l.parentNoChildren,
               style: AppTextStyles.headlineMedium,
             ),
             Gap.s,
             Text(
-              'سيظهر أبناؤك هنا بعد ربطهم بحسابك',
+              context.l.parentNoChildrenHint,
               style: AppTextStyles.bodyMedium.copyWith(
                 color: AppColors.textSecondary,
               ),
@@ -206,7 +207,7 @@ class _HomeTab extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Greeting
-          _buildGreeting(user?.fullName),
+          _buildGreeting(context, user?.fullName),
           Gap.m,
 
           // Student selector
@@ -220,13 +221,13 @@ class _HomeTab extends ConsumerWidget {
 
           // Today's status card
           if (selectedStudent != null) ...[
-            _buildTodayStatusCard(selectedStudent),
+            _buildTodayStatusCard(context, selectedStudent),
             Gap.xl,
           ],
 
           // Recent feedback (tasmi sessions)
           if (selectedId != null) ...[
-            Text('آخر التقييمات', style: AppTextStyles.titleLarge),
+            Text(context.l.parentLastEvaluations, style: AppTextStyles.titleLarge),
             Gap.m,
             _RecentFeedbackSection(studentId: selectedId),
           ],
@@ -235,7 +236,7 @@ class _HomeTab extends ConsumerWidget {
     );
   }
 
-  Widget _buildGreeting(String? name) {
+  Widget _buildGreeting(BuildContext context, String? name) {
     return Row(
       children: [
         Expanded(
@@ -243,12 +244,12 @@ class _HomeTab extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'مرحباً، ${name ?? 'ولي الأمر'}',
+                'مرحباً، ${name ?? context.l.parentPortalTitle}',
                 style: AppTextStyles.headlineMedium,
               ),
               Gap.xs,
               Text(
-                'تتبع تقدم أطفالك في حفظ القرآن',
+                context.l.parentGreetingSubtitle,
                 style: AppTextStyles.bodyMedium.copyWith(
                   color: AppColors.textSecondary,
                 ),
@@ -260,7 +261,7 @@ class _HomeTab extends ConsumerWidget {
     );
   }
 
-  Widget _buildTodayStatusCard(ParentStudent student) {
+  Widget _buildTodayStatusCard(BuildContext context, ParentStudent student) {
     return Card(
       child: Padding(
         padding: EdgeInsets.all(AppSpacing.l),
@@ -279,7 +280,7 @@ class _HomeTab extends ConsumerWidget {
             Row(
               children: [
                 _StatusChip(
-                  label: 'الحضور',
+                  label: context.l.parentAttendance,
                   value: '${(student.attendanceRate * 100).round()}%',
                   color: student.attendanceRate >= 0.8
                       ? AppColors.success
@@ -287,13 +288,13 @@ class _HomeTab extends ConsumerWidget {
                 ),
                 Gap.m,
                 _StatusChip(
-                  label: 'التسميع',
+                  label: context.l.parentTasmi,
                   value: '${student.tasmiPassCount} نجح',
                   color: AppColors.info,
                 ),
                 Gap.m,
                 _StatusChip(
-                  label: 'المستوى',
+                  label: context.l.parentLevel,
                   value: student.currentQuranLevel ?? '—',
                   color: AppColors.primary,
                 ),
@@ -362,7 +363,7 @@ class _RecentFeedbackSection extends ConsumerWidget {
         ),
       ),
       error: (e, _) => Text(
-        'خطأ في تحميل البيانات',
+        context.l.parentErrorLoadingData,
         style: AppTextStyles.bodyMedium.copyWith(color: AppColors.error),
       ),
       data: (sessions) {
@@ -372,7 +373,7 @@ class _RecentFeedbackSection extends ConsumerWidget {
               padding: EdgeInsets.all(AppSpacing.l),
               child: Center(
                 child: Text(
-                  'لا توجد تقييمات بعد',
+                  context.l.parentNoTasmiEvaluations,
                   style: AppTextStyles.bodyMedium.copyWith(
                     color: AppColors.textSecondary,
                   ),
@@ -397,12 +398,12 @@ class _RecentFeedbackSection extends ConsumerWidget {
                   ),
                 ),
                 title: Text(
-                  _sessionTypeLabel(session.sessionType),
+                  _sessionTypeLabel(session.sessionType, context),
                   style: AppTextStyles.bodyMedium
                       .copyWith(fontWeight: FontWeight.w600),
                 ),
                 subtitle: Text(
-                  '${_outcomeLabel(session.outcome)}${session.overallRating != null ? ' • التقييم: ${session.overallRating}' : ''}',
+                  '${_outcomeLabel(session.outcome, context)}${session.overallRating != null ? ' • ${context.l.parentEvaluationLabel}: ${session.overallRating}' : ''}',
                   style: AppTextStyles.bodySmall,
                 ),
                 trailing: Text(
@@ -451,13 +452,13 @@ class _ProgressTab extends ConsumerWidget {
           Gap.l,
 
           // Memorization stats
-          Text('إحصائيات الحفظ', style: AppTextStyles.titleLarge),
+          Text(context.l.parentMemorizationStats, style: AppTextStyles.titleLarge),
           Gap.m,
           _MemorizationStatsCard(student: selectedStudent),
           Gap.xl,
 
           // Recent tasmi sessions
-          Text('جلسات التسميع الأخيرة', style: AppTextStyles.titleLarge),
+          Text(context.l.parentRecentTasmi, style: AppTextStyles.titleLarge),
           Gap.m,
           _TasmiHistorySection(studentId: selectedId),
         ],
@@ -480,21 +481,21 @@ class _MemorizationStatsCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _StatRow(
-              label: 'الصفحات المحفوظة',
+              label: context.l.parentSavedPages,
               value: '${student.totalMemorizedPages}',
               icon: Icons.menu_book,
               color: AppColors.primary,
             ),
             Gap.m,
             _StatRow(
-              label: 'مستوى الحفظ',
-              value: student.memorizationLevel ?? 'غير محدد',
+              label: context.l.parentMemorizationLevel,
+              value: student.memorizationLevel ?? context.l.parentNotDetermined,
               icon: Icons.trending_up,
               color: AppColors.info,
             ),
             Gap.m,
             _StatRow(
-              label: 'نسبة الحضور',
+              label: context.l.parentAttendanceRate,
               value: '${(student.attendanceRate * 100).round()}%',
               icon: Icons.check_circle_outline,
               color: student.attendanceRate >= 0.8
@@ -503,7 +504,7 @@ class _MemorizationStatsCard extends StatelessWidget {
             ),
             Gap.m,
             _StatRow(
-              label: 'جلسات التسميع',
+              label: context.l.parentTasmiSessions,
               value: '${student.totalSessions}',
               icon: Icons.record_voice_over,
               color: AppColors.accent,
@@ -574,7 +575,7 @@ class _TasmiHistorySection extends ConsumerWidget {
         ),
       ),
       error: (e, _) => Text(
-        'خطأ في تحميل البيانات',
+        context.l.parentErrorLoadingData,
         style: AppTextStyles.bodyMedium.copyWith(color: AppColors.error),
       ),
       data: (sessions) {
@@ -584,7 +585,7 @@ class _TasmiHistorySection extends ConsumerWidget {
               padding: EdgeInsets.all(AppSpacing.l),
               child: Center(
                 child: Text(
-                  'لا توجد جلسات تسميع بعد',
+                  context.l.parentNoTasmiSessions,
                   style: AppTextStyles.bodyMedium.copyWith(
                     color: AppColors.textSecondary,
                   ),
@@ -615,8 +616,8 @@ class _TasmiHistorySection extends ConsumerWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            _sessionTypeLabel(session.sessionType),
+                           Text(
+                            _sessionTypeLabel(session.sessionType, context),
                             style: AppTextStyles.bodyMedium
                                 .copyWith(fontWeight: FontWeight.w600),
                           ),
@@ -643,7 +644,7 @@ class _TasmiHistorySection extends ConsumerWidget {
                             borderRadius: AppSpacing.radiusSM,
                           ),
                           child: Text(
-                            _outcomeLabel(session.outcome),
+                            _outcomeLabel(session.outcome, context),
                             style: AppTextStyles.caption.copyWith(
                               color: outcomeColor,
                               fontWeight: FontWeight.w600,
@@ -783,10 +784,10 @@ class _AttendanceTabState extends ConsumerState<_AttendanceTab> {
       spacing: AppSpacing.m,
       runSpacing: AppSpacing.s,
       children: [
-        _LegendItem(color: AppColors.present, label: 'حاضر'),
-        _LegendItem(color: AppColors.late, label: 'متأخر'),
-        _LegendItem(color: AppColors.absent, label: 'غائب'),
-        _LegendItem(color: AppColors.excused, label: 'مبرر'),
+        _LegendItem(color: AppColors.present, label: context.l.parentLegendPresent),
+        _LegendItem(color: AppColors.late, label: context.l.parentLegendLate),
+        _LegendItem(color: AppColors.absent, label: context.l.parentLegendAbsent),
+        _LegendItem(color: AppColors.excused, label: context.l.parentLegendExcused),
       ],
     );
   }
@@ -822,7 +823,7 @@ class _CalendarGrid extends ConsumerWidget {
         ),
       ),
       error: (e, _) => Text(
-        'خطأ في تحميل بيانات الحضور',
+        context.l.parentErrorLoadingAttendance,
         style: AppTextStyles.bodyMedium.copyWith(color: AppColors.error),
       ),
       data: (records) {
@@ -936,7 +937,7 @@ class _ScheduleTab extends ConsumerWidget {
           ),
           Gap.l,
 
-          Text('الجلسات القادمة', style: AppTextStyles.titleLarge),
+          Text(context.l.parentUpcomingSessions, style: AppTextStyles.titleLarge),
           Gap.m,
           _UpcomingSessionsSection(studentId: selectedId),
         ],
@@ -962,7 +963,7 @@ class _UpcomingSessionsSection extends ConsumerWidget {
         ),
       ),
       error: (e, _) => Text(
-        'خطأ في تحميل البيانات',
+        context.l.parentErrorLoadingData,
         style: AppTextStyles.bodyMedium.copyWith(color: AppColors.error),
       ),
       data: (sessions) {
@@ -976,7 +977,7 @@ class _UpcomingSessionsSection extends ConsumerWidget {
                     Icon(Icons.event_busy, size: 48, color: AppColors.textHint),
                     Gap.m,
                     Text(
-                      'لا توجد جلسات قادمة',
+                      context.l.parentNoUpcoming,
                       style: AppTextStyles.bodyMedium.copyWith(
                         color: AppColors.textSecondary,
                       ),
@@ -1021,7 +1022,7 @@ class _UpcomingSessionsSection extends ConsumerWidget {
                           ),
                           Gap.xs,
                           Text(
-                            '${_sessionTypeLabel(session.type)} • ${session.startTime} - ${session.endTime}',
+                            '${_sessionTypeLabel(session.type, context)} • ${session.startTime} - ${session.endTime}',
                             style: AppTextStyles.bodySmall,
                           ),
                           if (session.location != null)
@@ -1079,23 +1080,23 @@ IconData _outcomeIcon(String outcome) {
   };
 }
 
-String _outcomeLabel(String outcome) {
+String _outcomeLabel(String outcome, BuildContext context) {
   return switch (outcome) {
-    'pass' => 'نجح',
-    'needsRevision' => 'يحتاج مراجعة',
-    'fail' => 'لم ينجح',
+    'pass' => context.l.parentOutcomePass,
+    'needsRevision' => context.l.parentOutcomeNeedsRevision,
+    'fail' => context.l.parentOutcomeFail,
     _ => outcome,
   };
 }
 
-String _sessionTypeLabel(String type) {
+String _sessionTypeLabel(String type, BuildContext context) {
   return switch (type) {
-    'newMemorization' => 'حفظ جديد',
-    'revision' => 'مراجعة',
-    'comprehensiveRevision' => 'مراجعة شاملة',
-    'exam' => 'امتحان',
-    'classSession' => 'حصة دراسية',
-    'tasmi' => 'تسميع',
+    'newMemorization' => context.l.parentSessionNewMemorization,
+    'revision' => context.l.parentSessionRevision,
+    'comprehensiveRevision' => context.l.parentSessionComprehensive,
+    'exam' => context.l.parentSessionExam,
+    'classSession' => context.l.parentSessionClass,
+    'tasmi' => context.l.parentSessionTasmi,
     _ => type,
   };
 }

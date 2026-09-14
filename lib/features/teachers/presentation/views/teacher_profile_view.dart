@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../core/localization/app_localizations.dart';
 import '../../../../core/theme/theme.dart';
 import '../../../auth/domain/repositories/user_role_provider.dart';
 import '../../../classes/domain/entities/school_class.dart';
@@ -19,7 +20,7 @@ class TeacherProfileView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('ملف المعلم'),
+        title: Text(context.l.teacherProfile),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => context.pop(),
@@ -35,7 +36,7 @@ class TeacherProfileView extends ConsumerWidget {
           final teacher = snapshot.data;
           if (teacher == null) {
             return Center(
-              child: Text('المعلم غير موجود', style: AppTextStyles.bodyLarge),
+              child: Text(context.l.teacherNotFound, style: AppTextStyles.bodyLarge),
             );
           }
 
@@ -45,10 +46,10 @@ class TeacherProfileView extends ConsumerWidget {
               children: [
                 _buildProfileHeader(context, teacher),
                 TabBar(
-                  tabs: const [
-                    Tab(text: 'المعلومات'),
-                    Tab(text: 'الفصول'),
-                    Tab(text: 'الجدول'),
+                  tabs: [
+                    Tab(text: context.l.teacherTabInfo),
+                    Tab(text: context.l.teacherTabClasses),
+                    Tab(text: context.l.teacherTabSchedule),
                   ],
                 ),
                 Expanded(
@@ -115,38 +116,38 @@ class _InfoTab extends StatelessWidget {
     return ListView(
       padding: EdgeInsets.all(AppSpacing.m),
       children: [
-        _InfoRow(label: 'الاسم الكامل', value: teacher.fullName),
+        _InfoRow(label: context.l.teacherInfoFullName, value: teacher.fullName),
         if (teacher.preferredName != null)
-          _InfoRow(label: 'الاسم المفضل', value: teacher.preferredName!),
+          _InfoRow(label: context.l.teacherInfoPreferredName, value: teacher.preferredName!),
         if (teacher.gender != null)
-          _InfoRow(label: 'الجنس', value: teacher.gender!.displayNameAr),
+          _InfoRow(label: context.l.teacherInfoGender, value: teacher.gender!.displayNameAr),
         if (teacher.dateOfBirth != null)
           _InfoRow(
-            label: 'تاريخ الميلاد',
+            label: context.l.teacherInfoDateOfBirth,
             value: '${teacher.dateOfBirth!.day}/${teacher.dateOfBirth!.month}/${teacher.dateOfBirth!.year}',
           ),
         if (teacher.nationality != null)
-          _InfoRow(label: 'الجنسية', value: teacher.nationality!),
+          _InfoRow(label: context.l.teacherInfoNationality, value: teacher.nationality!),
         if (teacher.phone != null)
-          _InfoRow(label: 'الهاتف', value: teacher.phone!),
+          _InfoRow(label: context.l.teacherInfoPhone, value: teacher.phone!),
         if (teacher.email != null)
-          _InfoRow(label: 'البريد الإلكتروني', value: teacher.email!),
+          _InfoRow(label: context.l.teacherInfoEmail, value: teacher.email!),
         if (teacher.specialization != null)
-          _InfoRow(label: 'التخصص', value: teacher.specialization!),
+          _InfoRow(label: context.l.teacherInfoSpecialization, value: teacher.specialization!),
         if (teacher.qualifications.isNotEmpty)
-          _InfoRow(label: 'المؤهلات', value: teacher.qualifications.join(', ')),
+          _InfoRow(label: context.l.teacherInfoQualifications, value: teacher.qualifications.join(', ')),
         if (teacher.certifications.isNotEmpty)
-          _InfoRow(label: 'الشهادات', value: teacher.certifications.join(', ')),
+          _InfoRow(label: context.l.teacherInfoCertifications, value: teacher.certifications.join(', ')),
         if (teacher.languagesSpoken.isNotEmpty)
-          _InfoRow(label: 'اللغات', value: teacher.languagesSpoken.join(', ')),
-        _InfoRow(label: 'الحالة', value: teacher.status.displayNameAr),
+          _InfoRow(label: context.l.teacherInfoLanguages, value: teacher.languagesSpoken.join(', ')),
+        _InfoRow(label: context.l.teacherInfoStatus, value: teacher.status.displayNameAr),
         if (teacher.hireDate != null)
           _InfoRow(
-            label: 'تاريخ التوظيف',
+            label: context.l.teacherInfoHireDate,
             value: '${teacher.hireDate!.day}/${teacher.hireDate!.month}/${teacher.hireDate!.year}',
           ),
         if (teacher.notes != null)
-          _InfoRow(label: 'ملاحظات', value: teacher.notes!),
+          _InfoRow(label: context.l.teacherInfoNotes, value: teacher.notes!),
       ],
     );
   }
@@ -171,7 +172,7 @@ class _ClassesTab extends ConsumerWidget {
     return classesAsync.when(
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (error, _) => Center(
-        child: Text('حدث خطأ في تحميل الفصول', style: AppTextStyles.bodyMedium),
+        child: Text(context.l.teacherClassesError, style: AppTextStyles.bodyMedium),
       ),
       data: (classes) {
         if (classes.isEmpty) {
@@ -181,10 +182,10 @@ class _ClassesTab extends ConsumerWidget {
               children: [
                 Icon(Icons.class_outlined, size: 64, color: AppColors.textHint),
                 Gap.l,
-                Text('لا توجد فصول', style: AppTextStyles.bodyLarge),
+                Text(context.l.teacherNoClasses, style: AppTextStyles.bodyLarge),
                 Gap.s,
                 Text(
-                  'لم يُسند أي فصل لهذا المعلم بعد',
+                  context.l.teacherNoClassesHint,
                   style: AppTextStyles.bodySmall.copyWith(
                     color: AppColors.textSecondary,
                   ),
@@ -297,7 +298,7 @@ class _ScheduleTab extends ConsumerWidget {
     return sessionsAsync.when(
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (error, _) => Center(
-        child: Text('حدث خطأ في تحميل الجدول', style: AppTextStyles.bodyMedium),
+        child: Text(context.l.teacherScheduleError, style: AppTextStyles.bodyMedium),
       ),
       data: (sessions) {
         if (sessions.isEmpty) {
@@ -307,10 +308,10 @@ class _ScheduleTab extends ConsumerWidget {
               children: [
                 Icon(Icons.schedule, size: 64, color: AppColors.textHint),
                 Gap.l,
-                Text('لا توجد حصص مجدولة', style: AppTextStyles.bodyLarge),
+                Text(context.l.teacherNoSessions, style: AppTextStyles.bodyLarge),
                 Gap.s,
                 Text(
-                  'لا توجد حصص مجدولة لهذا المعلم خلال 30 يوماً',
+                  context.l.teacherNoSessionsHint,
                   style: AppTextStyles.bodySmall.copyWith(
                     color: AppColors.textSecondary,
                   ),
@@ -448,11 +449,11 @@ class _SessionStatusChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final (color, label) = switch (status) {
-      SessionStatus.scheduled => (AppColors.primary, 'مجدول'),
-      SessionStatus.inProgress => (Colors.orange, 'قيد التنفيذ'),
-      SessionStatus.completed => (Colors.green, 'مكتمل'),
-      SessionStatus.cancelled => (Colors.red, 'ملغي'),
-      SessionStatus.rescheduled => (Colors.purple, 'تمت الإعادة جدولة'),
+      SessionStatus.scheduled => (AppColors.primary, context.l.teacherSessionScheduled),
+      SessionStatus.inProgress => (Colors.orange, context.l.teacherSessionInProgress),
+      SessionStatus.completed => (Colors.green, context.l.teacherSessionCompleted),
+      SessionStatus.cancelled => (Colors.red, context.l.teacherSessionCancelled),
+      SessionStatus.rescheduled => (Colors.purple, context.l.teacherSessionRescheduled),
     };
 
     return Container(

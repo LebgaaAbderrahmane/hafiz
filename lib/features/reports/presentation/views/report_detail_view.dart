@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import '../../../../core/localization/app_localizations.dart';
 import '../../../../core/theme/theme.dart';
 import '../../../../core/widgets/app_card.dart';
 import '../../../../core/widgets/app_empty_state.dart';
@@ -36,12 +37,12 @@ class _ReportDetailViewState extends ConsumerState<ReportDetailView> {
           IconButton(
             icon: const Icon(Icons.date_range),
             onPressed: _pickDateRange,
-            tooltip: 'اختيار الفترة',
+            tooltip: context.l.reportsSelectPeriod,
           ),
           IconButton(
             icon: const Icon(Icons.download),
             onPressed: _exportReport,
-            tooltip: 'تصدير',
+            tooltip: context.l.reportsExport,
           ),
         ],
       ),
@@ -94,8 +95,8 @@ class _ReportDetailViewState extends ConsumerState<ReportDetailView> {
     final provider = _getProviderForCategory();
     if (provider == null) {
       return AppEmptyState(
-        title: 'لا توجد بيانات',
-        description: 'لم يتم العثور على بيانات لهذا التقرير',
+        title: context.l.reportsNoData,
+        description: context.l.reportsNoReportData,
         icon: Icons.assessment_outlined,
       );
     }
@@ -103,17 +104,17 @@ class _ReportDetailViewState extends ConsumerState<ReportDetailView> {
     final asyncData = ref.watch(provider);
 
     return asyncData.when(
-      loading: () => const AppLoading(message: 'جاري تحميل التقرير...'),
+      loading: () => AppLoading(message: context.l.reportsLoadingReport),
       error: (e, st) => AppErrorWidget(
-        message: 'حدث خطأ أثناء تحميل التقرير',
-        title: 'خطأ',
+        message: context.l.reportsErrorReport,
+        title: context.l.error,
         onRetry: () => ref.invalidate(provider),
       ),
       data: (data) {
         if (data == null || data.isEmpty) {
           return AppEmptyState(
-            title: 'لا توجد بيانات',
-            description: 'لم يتم العثور على بيانات للفترة المحددة',
+            title: context.l.reportsNoData,
+            description: context.l.reportsNoReportDataForPeriod,
             icon: Icons.assessment_outlined,
           );
         }
@@ -143,7 +144,7 @@ class _ReportDetailViewState extends ConsumerState<ReportDetailView> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('ملخص', style: AppTextStyles.titleLarge),
+        Text(context.l.reportsSummary, style: AppTextStyles.titleLarge),
         Gap.m,
         GridView.builder(
           shrinkWrap: true,
@@ -173,25 +174,25 @@ class _ReportDetailViewState extends ConsumerState<ReportDetailView> {
     return switch (_category) {
       ReportCategory.attendance => [
         {
-          'label': 'الإجمالي',
+          'label': context.l.reportsTotal,
           'value': data['total'] ?? 0,
           'icon': Icons.people,
           'color': AppColors.primary,
         },
         {
-          'label': 'حاضرون',
+          'label': context.l.reportsPresent,
           'value': data['present'] ?? 0,
           'icon': Icons.check_circle,
           'color': AppColors.success,
         },
         {
-          'label': 'غائبون',
+          'label': context.l.reportsAbsent,
           'value': data['absent'] ?? 0,
           'icon': Icons.cancel,
           'color': AppColors.error,
         },
         {
-          'label': 'متأخرون',
+          'label': context.l.reportsLate,
           'value': data['late'] ?? 0,
           'icon': Icons.watch_later,
           'color': AppColors.warning,
@@ -199,25 +200,25 @@ class _ReportDetailViewState extends ConsumerState<ReportDetailView> {
       ],
       ReportCategory.quran || ReportCategory.students => [
         {
-          'label': 'الإجمالي',
+          'label': context.l.reportsTotal,
           'value': data['total'] ?? 0,
           'icon': Icons.book,
           'color': AppColors.primary,
         },
         {
-          'label': 'مكتمل',
+          'label': context.l.reportsCompleted,
           'value': data['completed'] ?? 0,
           'icon': Icons.check_circle,
           'color': AppColors.success,
         },
         {
-          'label': 'قيد التنفيذ',
+          'label': context.l.reportsInProgress,
           'value': data['inProgress'] ?? 0,
           'icon': Icons.pending,
           'color': AppColors.info,
         },
         {
-          'label': 'النسبة',
+          'label': context.l.reportsPercentage,
           'value': _calcPercentage(
             data['completed'] ?? 0,
             data['total'] ?? 1,
@@ -228,13 +229,13 @@ class _ReportDetailViewState extends ConsumerState<ReportDetailView> {
       ],
       ReportCategory.teachers => [
         {
-          'label': 'الإجمالي',
+          'label': context.l.reportsTotal,
           'value': data['total'] ?? 0,
           'icon': Icons.person,
           'color': AppColors.primary,
         },
         {
-          'label': 'نشطون',
+          'label': context.l.reportsActive,
           'value': data['active'] ?? 0,
           'icon': Icons.check_circle,
           'color': AppColors.success,
@@ -242,13 +243,13 @@ class _ReportDetailViewState extends ConsumerState<ReportDetailView> {
       ],
       ReportCategory.classes => [
         {
-          'label': 'الإجمالي',
+          'label': context.l.reportsTotal,
           'value': data['total'] ?? 0,
           'icon': Icons.class_,
           'color': AppColors.primary,
         },
         {
-          'label': 'نشطون',
+          'label': context.l.reportsActive,
           'value': data['active'] ?? 0,
           'icon': Icons.check_circle,
           'color': AppColors.success,
@@ -261,7 +262,7 @@ class _ReportDetailViewState extends ConsumerState<ReportDetailView> {
     final rows = _getDataRows(data);
     if (rows.isEmpty) {
       return AppEmptyState(
-        title: 'لا توجد سجلات',
+        title: context.l.reportsNoRecords,
         icon: Icons.table_chart_outlined,
       );
     }
@@ -271,7 +272,7 @@ class _ReportDetailViewState extends ConsumerState<ReportDetailView> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('البيانات', style: AppTextStyles.titleLarge),
+        Text(context.l.reportsData, style: AppTextStyles.titleLarge),
         Gap.m,
         Card(
           child: SingleChildScrollView(
@@ -311,25 +312,25 @@ class _ReportDetailViewState extends ConsumerState<ReportDetailView> {
     return switch (_category) {
       ReportCategory.attendance => records.map((r) {
           return {
-            'التاريخ': r['date']?.toString().substring(0, 10) ?? '—',
-            'الحالة': _translateStatus(r['status']?.toString()),
-            'الملاحظات': r['notes'] ?? '—',
+            context.l.reportsTableDate: r['date']?.toString().substring(0, 10) ?? '—',
+            context.l.reportsTableStatus: _translateStatus(context, r['status']?.toString()),
+            context.l.reportsTableNotes: r['notes'] ?? '—',
           };
         }).toList(),
       ReportCategory.quran || ReportCategory.students => records.map((r) {
           return {
-            'السورة': r['surah_name'] ?? '—',
-            'الآيات': '${r['start_ayah'] ?? ''}-${r['end_ayah'] ?? ''}',
-            'الحالة': _translateStatus(r['status']?.toString()),
-            'التقييم': r['evaluation'] ?? '—',
+            context.l.reportsTableSurah: r['surah_name'] ?? '—',
+            context.l.reportsTableAyahs: '${r['start_ayah'] ?? ''}-${r['end_ayah'] ?? ''}',
+            context.l.reportsTableStatus: _translateStatus(context, r['status']?.toString()),
+            context.l.reportsTableEvaluation: r['evaluation'] ?? '—',
           };
         }).toList(),
       ReportCategory.teachers => records.map((r) {
           return {
-            'المعلم': r['teacher_name'] ?? '—',
-            'الفصل': r['class_name'] ?? '—',
-            'الحصص': '${r['sessions_count'] ?? 0}',
-            'النسبة': _calcPercentage(
+            context.l.reportsTableTeacher: r['teacher_name'] ?? '—',
+            context.l.reportsTableClass: r['class_name'] ?? '—',
+            context.l.reportsTableSessions: '${r['sessions_count'] ?? 0}',
+            context.l.reportsPercentage: _calcPercentage(
               r['completed'] ?? 0,
               r['total'] ?? 1,
             ),
@@ -337,25 +338,25 @@ class _ReportDetailViewState extends ConsumerState<ReportDetailView> {
         }).toList(),
       ReportCategory.classes => records.map((r) {
           return {
-            'الفصل': r['class_name'] ?? '—',
-            'المعلم': r['teacher_name'] ?? '—',
-            'الطلاب': '${r['students_count'] ?? 0}',
-            'معدل الحضور': r['attendance_rate'] ?? '—',
+            context.l.reportsTableClass: r['class_name'] ?? '—',
+            context.l.reportsTableTeacher: r['teacher_name'] ?? '—',
+            context.l.reportsTableStudents: '${r['students_count'] ?? 0}',
+            context.l.reportsTableAttendanceRate: r['attendance_rate'] ?? '—',
           };
         }).toList(),
     };
   }
 
-  String _translateStatus(String? status) {
+  String _translateStatus(BuildContext context, String? status) {
     return switch (status) {
-      'present' => 'حاضر',
-      'absent' => 'غائب',
-      'late' => 'متأخر',
-      'completed' => 'مكتمل',
-      'in_progress' => 'قيد التنفيذ',
-      'passed' => 'ناجح',
-      'needs_review' => 'يحتاج مراجعة',
-      'active' => 'نشط',
+      'present' => context.l.present,
+      'absent' => context.l.absent,
+      'late' => context.l.late,
+      'completed' => context.l.reportsCompleted,
+      'in_progress' => context.l.reportsInProgress,
+      'passed' => context.l.reportsStatusPassed,
+      'needs_review' => context.l.reportsStatusNeedsReview,
+      'active' => context.l.reportsActive,
       _ => status ?? '—',
     };
   }
@@ -387,8 +388,8 @@ class _ReportDetailViewState extends ConsumerState<ReportDetailView> {
 
   void _exportReport() {
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('سيتم إضافة التصدير قريباً'),
+      SnackBar(
+        content: Text(context.l.reportsExportComingSoon),
       ),
     );
   }
@@ -397,7 +398,7 @@ class _ReportDetailViewState extends ConsumerState<ReportDetailView> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('تصدير', style: AppTextStyles.titleLarge),
+        Text(context.l.reportsExport, style: AppTextStyles.titleLarge),
         Gap.m,
         Row(
           children: [

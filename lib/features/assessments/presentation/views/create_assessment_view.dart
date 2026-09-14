@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../core/localization/app_localizations.dart';
 import '../../../../core/theme/theme.dart';
 import '../../../auth/domain/repositories/user_role_provider.dart';
 import '../../domain/entities/assessment.dart';
@@ -41,7 +42,7 @@ class _CreateAssessmentViewState extends ConsumerState<CreateAssessmentView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('تقييم جديد'),
+        title: Text(context.l.assessmentTitle),
         leading: IconButton(
           icon: const Icon(Icons.close),
           onPressed: () => context.pop(),
@@ -58,31 +59,31 @@ class _CreateAssessmentViewState extends ConsumerState<CreateAssessmentView> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('المعلومات الأساسية', style: AppTextStyles.titleMedium),
+                    Text(context.l.assessmentBasicInfo, style: AppTextStyles.titleMedium),
                     Gap.m,
                     TextFormField(
                       controller: _titleController,
-                      decoration: const InputDecoration(
-                        labelText: 'عنوان التقييم *',
-                        border: OutlineInputBorder(),
+                      decoration: InputDecoration(
+                        labelText: '${context.l.assessmentLabel} *',
+                        border: const OutlineInputBorder(),
                       ),
-                      validator: (v) => v?.isEmpty == true ? 'مطلوب' : null,
+                      validator: (v) => v?.isEmpty == true ? context.l.authRequired : null,
                     ),
                     Gap.m,
                     TextFormField(
                       controller: _descriptionController,
                       maxLines: 2,
-                      decoration: const InputDecoration(
-                        labelText: 'الوصف',
-                        border: OutlineInputBorder(),
+                      decoration: InputDecoration(
+                        labelText: context.l.description,
+                        border: const OutlineInputBorder(),
                       ),
                     ),
                     Gap.m,
                     DropdownButtonFormField<AssessmentType>(
                       initialValue: _type,
-                      decoration: const InputDecoration(
-                        labelText: 'نوع التقييم',
-                        border: OutlineInputBorder(),
+                      decoration: InputDecoration(
+                        labelText: context.l.assessmentType,
+                        border: const OutlineInputBorder(),
                       ),
                       items: AssessmentType.values.map((t) {
                         return DropdownMenuItem(
@@ -105,7 +106,7 @@ class _CreateAssessmentViewState extends ConsumerState<CreateAssessmentView> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('الدرجات', style: AppTextStyles.titleMedium),
+                    Text(context.l.assessmentScores, style: AppTextStyles.titleMedium),
                     Gap.m,
                     Row(
                       children: [
@@ -113,9 +114,9 @@ class _CreateAssessmentViewState extends ConsumerState<CreateAssessmentView> {
                           child: TextFormField(
                             controller: _maxScoreController,
                             keyboardType: TextInputType.number,
-                            decoration: const InputDecoration(
-                              labelText: 'الدرجة النهائية',
-                              border: OutlineInputBorder(),
+                            decoration: InputDecoration(
+                              labelText: context.l.assessmentMaxScore,
+                              border: const OutlineInputBorder(),
                             ),
                           ),
                         ),
@@ -124,9 +125,9 @@ class _CreateAssessmentViewState extends ConsumerState<CreateAssessmentView> {
                           child: TextFormField(
                             controller: _passingScoreController,
                             keyboardType: TextInputType.number,
-                            decoration: const InputDecoration(
-                              labelText: 'درجة النجاح',
-                              border: OutlineInputBorder(),
+                            decoration: InputDecoration(
+                              labelText: context.l.assessmentPassingScore,
+                              border: const OutlineInputBorder(),
                             ),
                           ),
                         ),
@@ -143,7 +144,7 @@ class _CreateAssessmentViewState extends ConsumerState<CreateAssessmentView> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('التاريخ والملاحظات', style: AppTextStyles.titleMedium),
+                    Text(context.l.assessmentDateAndNotes, style: AppTextStyles.titleMedium),
                     Gap.m,
                     InkWell(
                       onTap: () async {
@@ -158,10 +159,10 @@ class _CreateAssessmentViewState extends ConsumerState<CreateAssessmentView> {
                         }
                       },
                       child: InputDecorator(
-                        decoration: const InputDecoration(
-                          labelText: 'تاريخ التقييم',
-                          border: OutlineInputBorder(),
-                          suffixIcon: Icon(Icons.calendar_today),
+                        decoration: InputDecoration(
+                          labelText: context.l.assessmentDate,
+                          border: const OutlineInputBorder(),
+                          suffixIcon: const Icon(Icons.calendar_today),
                         ),
                         child: Text(
                           '${_assessmentDate.day}/${_assessmentDate.month}/${_assessmentDate.year}',
@@ -172,9 +173,9 @@ class _CreateAssessmentViewState extends ConsumerState<CreateAssessmentView> {
                     TextFormField(
                       controller: _notesController,
                       maxLines: 2,
-                      decoration: const InputDecoration(
-                        labelText: 'ملاحظات',
-                        border: OutlineInputBorder(),
+                      decoration: InputDecoration(
+                        labelText: context.l.notes,
+                        border: const OutlineInputBorder(),
                       ),
                     ),
                   ],
@@ -193,7 +194,7 @@ class _CreateAssessmentViewState extends ConsumerState<CreateAssessmentView> {
                         height: 20,
                         child: CircularProgressIndicator(strokeWidth: 2),
                       )
-                    : const Text('إنشاء التقييم'),
+                    : Text(context.l.assessmentSubmit),
               ),
             ),
           ],
@@ -234,13 +235,16 @@ class _CreateAssessmentViewState extends ConsumerState<CreateAssessmentView> {
         ref.invalidate(branchAssessmentsProvider(branchId));
         context.pop();
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('تم إنشاء التقييم بنجاح')),
+          SnackBar(content: Text(context.l.assessmentSuccess)),
         );
       }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('خطأ: $e'), backgroundColor: AppColors.error),
+          SnackBar(
+            content: Text('${context.l.error}: ${e.toString().contains('Exception') ? context.l.errorGeneric : e}'),
+            backgroundColor: AppColors.error,
+          ),
         );
       }
     } finally {

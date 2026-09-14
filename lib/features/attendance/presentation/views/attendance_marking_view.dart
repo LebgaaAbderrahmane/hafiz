@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import "package:hafiz/core/localization/app_localizations.dart";
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hafiz/core/theme/theme.dart';
 import 'package:hafiz/core/widgets/button.dart';
 import 'package:hafiz/core/widgets/drawer_icon_button.dart';
 import 'package:hafiz/core/widgets/loading.dart';
@@ -187,7 +188,10 @@ class _AttendanceMarkingViewState
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(e.toString())),
+          SnackBar(
+            content: Text('${context.l.error}: ${e.toString().contains('Exception') ? context.l.errorGeneric : e}'),
+            backgroundColor: AppColors.error,
+          ),
         );
       }
     } finally {

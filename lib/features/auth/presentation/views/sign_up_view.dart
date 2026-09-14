@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../core/localization/app_localizations.dart';
 import '../../../../core/theme/theme.dart';
 import '../../domain/repositories/auth_provider.dart';
 
@@ -36,7 +37,7 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('إنشاء حساب'),
+        title: Text(context.l.authSignUpTitle),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => context.go('/login'),
@@ -60,13 +61,13 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
                   ),
                   Gap.m,
                   Text(
-                    'إنشاء حساب جديد',
+                    context.l.authSignUpSubtitle,
                     style: AppTextStyles.headlineSmall,
                     textAlign: TextAlign.center,
                   ),
                   Gap.s,
                   Text(
-                    'أدخل بياناتك لإنشاء حساب',
+                    context.l.authSignUpDescription,
                     style: AppTextStyles.bodyMedium.copyWith(
                       color: AppColors.textSecondary,
                     ),
@@ -76,25 +77,25 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
                   TextFormField(
                     controller: _fullNameController,
                     textDirection: TextDirection.rtl,
-                    decoration: const InputDecoration(
-                      labelText: 'الاسم الكامل *',
-                      prefixIcon: Icon(Icons.person_outline),
-                      border: OutlineInputBorder(),
+                    decoration: InputDecoration(
+                      labelText: '${context.l.fullName} *',
+                      prefixIcon: const Icon(Icons.person_outline),
+                      border: const OutlineInputBorder(),
                     ),
-                    validator: (v) => v?.isEmpty == true ? 'مطلوب' : null,
+                    validator: (v) => v?.isEmpty == true ? context.l.authRequired : null,
                   ),
                   Gap.m,
                   TextFormField(
                     controller: _emailController,
                     keyboardType: TextInputType.emailAddress,
-                    decoration: const InputDecoration(
-                      labelText: 'البريد الإلكتروني *',
-                      prefixIcon: Icon(Icons.email_outlined),
-                      border: OutlineInputBorder(),
+                    decoration: InputDecoration(
+                      labelText: '${context.l.email} *',
+                      prefixIcon: const Icon(Icons.email_outlined),
+                      border: const OutlineInputBorder(),
                     ),
                     validator: (v) {
-                      if (v?.isEmpty == true) return 'مطلوب';
-                      if (!v!.contains('@')) return 'بريد غير صالح';
+                      if (v?.isEmpty == true) return context.l.authRequired;
+                      if (!v!.contains('@')) return context.l.authInvalidEmail;
                       return null;
                     },
                   ),
@@ -102,10 +103,10 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
                   TextFormField(
                     controller: _phoneController,
                     keyboardType: TextInputType.phone,
-                    decoration: const InputDecoration(
-                      labelText: 'الهاتف',
-                      prefixIcon: Icon(Icons.phone_outlined),
-                      border: OutlineInputBorder(),
+                    decoration: InputDecoration(
+                      labelText: context.l.phone,
+                      prefixIcon: const Icon(Icons.phone_outlined),
+                      border: const OutlineInputBorder(),
                     ),
                   ),
                   Gap.m,
@@ -113,7 +114,7 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
                     controller: _passwordController,
                     obscureText: _obscurePassword,
                     decoration: InputDecoration(
-                      labelText: 'كلمة المرور *',
+                      labelText: '${context.l.password} *',
                       prefixIcon: const Icon(Icons.lock_outline),
                       border: const OutlineInputBorder(),
                       suffixIcon: IconButton(
@@ -128,8 +129,8 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
                       ),
                     ),
                     validator: (v) {
-                      if (v?.isEmpty == true) return 'مطلوب';
-                      if (v!.length < 6) return '6 أحرف على الأقل';
+                      if (v?.isEmpty == true) return context.l.authRequired;
+                      if (v!.length < 6) return context.l.authPasswordMinLength;
                       return null;
                     },
                   ),
@@ -137,14 +138,14 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
                   TextFormField(
                     controller: _confirmPasswordController,
                     obscureText: true,
-                    decoration: const InputDecoration(
-                      labelText: 'تأكيد كلمة المرور *',
-                      prefixIcon: Icon(Icons.lock_outline),
-                      border: OutlineInputBorder(),
+                    decoration: InputDecoration(
+                      labelText: '${context.l.authConfirmPassword} *',
+                      prefixIcon: const Icon(Icons.lock_outline),
+                      border: const OutlineInputBorder(),
                     ),
                     validator: (v) {
                       if (v != _passwordController.text) {
-                        return 'كلمتا المرور غير متطابقتين';
+                        return context.l.authPasswordsMismatch;
                       }
                       return null;
                     },
@@ -160,13 +161,13 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
                               height: 20,
                               child: CircularProgressIndicator(strokeWidth: 2),
                             )
-                          : const Text('إنشاء الحساب'),
+                          : Text(context.l.authCreateAccountButton),
                     ),
                   ),
                   Gap.m,
                   TextButton(
                     onPressed: () => context.go('/login'),
-                    child: const Text('لديك حساب بالفعل؟ تسجيل الدخول'),
+                    child: Text(context.l.authAlreadyHaveAccount),
                   ),
                 ],
               ),
@@ -194,8 +195,8 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('تم إنشاء الحساب بنجاح. يمكنك تسجيل الدخول الآن.'),
+          SnackBar(
+            content: Text(context.l.authSignUpSuccess),
           ),
         );
         context.go('/login');
@@ -203,7 +204,10 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('خطأ: $e'), backgroundColor: AppColors.error),
+          SnackBar(
+            content: Text('${context.l.error}: ${e.toString().contains('Exception') ? context.l.errorGeneric : e}'),
+            backgroundColor: AppColors.error,
+          ),
         );
       }
     } finally {

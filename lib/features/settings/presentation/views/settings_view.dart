@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../core/localization/app_localizations.dart';
 import '../../../../core/theme/theme.dart';
 import '../../../../core/widgets/drawer_icon_button.dart';
 import '../../../auth/domain/entities/user.dart' show Role;
@@ -21,7 +22,7 @@ class SettingsView extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         leading: const DrawerIconButton(),
-        title: const Text('الإعدادات'),
+        title: Text(context.l.settings),
       ),
       body: ListView(
         padding: EdgeInsets.all(AppSpacing.m),
@@ -29,101 +30,101 @@ class SettingsView extends ConsumerWidget {
           _buildProfileSection(context, ref, currentUser),
           Gap.xl,
 
-          _buildSection(context, 'عام', [
+          _buildSection(context, context.l.settingsGeneral, [
             _buildSettingsTile(
               context,
               icon: Icons.language,
-              title: 'اللغة',
-              subtitle: 'العربية',
+              title: context.l.settingsLanguage,
+              subtitle: context.l.settingsLanguageArabic,
               onTap: () => _showLanguageDialog(context),
             ),
             _buildSettingsTile(
               context,
               icon: Icons.dark_mode,
-              title: 'المظهر',
-              subtitle: 'فاتح',
+              title: context.l.settingsTheme,
+              subtitle: context.l.settingsThemeLight,
               onTap: () => _showThemeDialog(context),
             ),
             _buildSettingsTile(
               context,
               icon: Icons.notifications,
-              title: 'الإشعارات',
+              title: context.l.notifications,
               onTap: () => context.push('/notifications'),
             ),
           ]),
           Gap.xl,
 
           if (activeRole == Role.owner || activeRole == Role.superAdmin) ...[
-            _buildSection(context, 'المؤسسة', [
+            _buildSection(context, context.l.settingsOrganization, [
               _buildOrgInfoTile(context, ref, orgAsync),
               _buildSettingsTile(
                 context,
                 icon: Icons.location_on,
-                title: 'الفروع',
+                title: context.l.settingsBranches,
                 onTap: () => context.push('/settings/branches'),
               ),
               _buildSettingsTile(
                 context,
                 icon: Icons.people,
-                title: 'المستخدمون',
+                title: context.l.settingsUsers,
                 onTap: () => context.push('/settings/users'),
               ),
             ]),
             Gap.xl,
           ],
 
-          _buildSection(context, 'البيانات', [
+          _buildSection(context, context.l.settingsData, [
             _buildSettingsTile(
               context,
               icon: Icons.backup,
-              title: 'النسخ الاحتياطي',
+              title: context.l.settingsBackup,
               onTap: () {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('النسخ الاحتياطي قيد التطوير')),
+                  SnackBar(content: Text(context.l.settingsBackupComingSoon)),
                 );
               },
             ),
             _buildSettingsTile(
               context,
               icon: Icons.download,
-              title: 'تصدير البيانات',
+              title: context.l.settingsExportData,
               onTap: () {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('تصدير البيانات قيد التطوير')),
+                  SnackBar(content: Text(context.l.settingsExportDataComingSoon)),
                 );
               },
             ),
             _buildSettingsTile(
               context,
               icon: Icons.upload,
-              title: 'استيراد البيانات',
+              title: context.l.settingsImportData,
               onTap: () {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('استيراد البيانات قيد التطوير')),
+                  SnackBar(content: Text(context.l.settingsImportDataComingSoon)),
                 );
               },
             ),
           ]),
           Gap.xl,
 
-          _buildSection(context, 'حول', [
+          _buildSection(context, context.l.settingsAbout, [
             _buildSettingsTile(
               context,
               icon: Icons.info,
-              title: 'عن التطبيق',
-              subtitle: 'الإصدار 1.0.0',
+              title: context.l.settingsAboutApp,
+              subtitle: context.l.settingsVersion,
               onTap: () => _showAboutDialog(context),
             ),
             _buildSettingsTile(
               context,
               icon: Icons.description,
-              title: 'الشروط والأحكام',
+              title: context.l.settingsTerms,
               onTap: () => _showTermsDialog(context),
             ),
             _buildSettingsTile(
               context,
               icon: Icons.privacy_tip,
-              title: 'سياسة الخصوصية',
+              title: context.l.settingsPrivacy,
               onTap: () => _showPrivacyDialog(context),
             ),
           ]),
@@ -140,7 +141,7 @@ class SettingsView extends ConsumerWidget {
               },
               icon: const Icon(Icons.logout, color: AppColors.error),
               label: Text(
-                'تسجيل الخروج',
+                context.l.logout,
                 style: TextStyle(color: AppColors.error),
               ),
               style: OutlinedButton.styleFrom(
@@ -165,7 +166,7 @@ class SettingsView extends ConsumerWidget {
               radius: 32,
               backgroundColor: AppColors.primary.withValues(alpha: 0.1),
               child: Text(
-                (user?.fullName ?? 'م')[0],
+                (user?.fullName ?? context.l.settingsUser)[0],
                 style: AppTextStyles.headlineMedium.copyWith(
                   color: AppColors.primary,
                 ),
@@ -177,7 +178,7 @@ class SettingsView extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    user?.fullName ?? 'مستخدم',
+                    user?.fullName ?? context.l.settingsUser,
                     style: AppTextStyles.titleMedium,
                   ),
                   Gap.xs,
@@ -203,22 +204,22 @@ class SettingsView extends ConsumerWidget {
   Widget _buildOrgInfoTile(
       BuildContext context, WidgetRef ref, AsyncValue<dynamic> orgAsync) {
     return orgAsync.when(
-      loading: () => const ListTile(
-        leading: Icon(Icons.business, color: AppColors.primary),
-        title: Text('معلومات المؤسسة'),
-        subtitle: Text('جاري التحميل...'),
-        trailing: CircularProgressIndicator(strokeWidth: 2),
+      loading: () => ListTile(
+        leading: const Icon(Icons.business, color: AppColors.primary),
+        title: Text(context.l.settingsOrgInfo),
+        subtitle: Text(context.l.settingsOrgLoading),
+        trailing: const CircularProgressIndicator(strokeWidth: 2),
       ),
       error: (e, _) => ListTile(
         leading: const Icon(Icons.business, color: AppColors.primary),
-        title: const Text('معلومات المؤسسة'),
-        subtitle: const Text('خطأ في تحميل البيانات'),
+        title: Text(context.l.settingsOrgInfo),
+        subtitle: Text(context.l.settingsOrgError),
         trailing: const Icon(Icons.chevron_left),
         onTap: () => _showOrgInfoDialog(context, null),
       ),
       data: (org) => ListTile(
         leading: const Icon(Icons.business, color: AppColors.primary),
-        title: Text(org?.name ?? 'معلومات المؤسسة'),
+        title: Text(org?.name ?? context.l.settingsOrgInfo),
         subtitle: org != null
             ? Text(org.address ?? org.email ?? '', maxLines: 1)
             : null,
@@ -279,20 +280,20 @@ class SettingsView extends ConsumerWidget {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('اختيار اللغة'),
+        title: Text(context.l.settingsChangeLanguage),
         content: RadioGroup<String>(
           groupValue: 'ar',
           onChanged: (_) {
             Navigator.pop(context);
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('تم تغيير اللغة')),
+              SnackBar(content: Text(context.l.settingsLanguageChanged)),
             );
           },
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               RadioListTile<String>(
-                title: const Text('العربية'),
+                title: Text(context.l.settingsLanguageArabic),
                 value: 'ar',
               ),
               RadioListTile<String>(
@@ -314,28 +315,28 @@ class SettingsView extends ConsumerWidget {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('اختيار المظهر'),
+        title: Text(context.l.settingsChangeTheme),
         content: RadioGroup<String>(
           groupValue: 'light',
           onChanged: (_) {
             Navigator.pop(context);
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('تم تغيير المظهر')),
+              SnackBar(content: Text(context.l.settingsThemeChanged)),
             );
           },
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               RadioListTile<String>(
-                title: const Text('فاتح'),
+                title: Text(context.l.settingsThemeLight),
                 value: 'light',
               ),
               RadioListTile<String>(
-                title: const Text('داكن'),
+                title: Text(context.l.settingsThemeDark),
                 value: 'dark',
               ),
               RadioListTile<String>(
-                title: const Text('تلقائي'),
+                title: Text(context.l.settingsThemeAutomatic),
                 value: 'system',
               ),
             ],
@@ -349,24 +350,24 @@ class SettingsView extends ConsumerWidget {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('معلومات المؤسسة'),
+        title: Text(context.l.settingsOrgInfo),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('اسم المؤسسة: ${org?.name ?? 'غير محدد'}'),
+            Text('${context.l.settingsOrgName}: ${org?.name ?? context.l.settingsNotDetermined}'),
             Gap.s,
-            Text('العنوان: ${org?.address ?? 'غير محدد'}'),
+            Text('${context.l.settingsOrgAddress}: ${org?.address ?? context.l.settingsNotDetermined}'),
             Gap.s,
-            Text('الهاتف: ${org?.phone ?? 'غير محدد'}'),
+            Text('${context.l.settingsOrgPhone}: ${org?.phone ?? context.l.settingsNotDetermined}'),
             Gap.s,
-            Text('البريد: ${org?.email ?? 'غير محدد'}'),
+            Text('${context.l.settingsOrgEmail}: ${org?.email ?? context.l.settingsNotDetermined}'),
           ],
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('إغلاق'),
+            child: Text(context.l.settingsClose),
           ),
         ],
       ),
@@ -380,10 +381,10 @@ class SettingsView extends ConsumerWidget {
       applicationVersion: '1.0.0',
       applicationIcon:
           const Icon(Icons.book, size: 48, color: AppColors.primary),
-      children: const [
-        Text('تطبيق إدارة مدارس القرآن الكريم'),
+      children: [
+        Text(context.l.settingsAppDescription),
         Gap.s,
-        Text('إدارة الطلاب والمعلمين والحضور والحفظ والمراجعات'),
+        Text(context.l.settingsAppFeatures),
       ],
     );
   }
@@ -392,7 +393,7 @@ class SettingsView extends ConsumerWidget {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('الشروط والأحكام'),
+        title: Text(context.l.settingsTerms),
         content: const SingleChildScrollView(
           child: Text(
             'شروط الاستخدام\n\n'
@@ -407,7 +408,7 @@ class SettingsView extends ConsumerWidget {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('إغلاق'),
+            child: Text(context.l.settingsClose),
           ),
         ],
       ),
@@ -418,7 +419,7 @@ class SettingsView extends ConsumerWidget {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('سياسة الخصوصية'),
+        title: Text(context.l.settingsPrivacy),
         content: const SingleChildScrollView(
           child: Text(
             'سياسة الخصوصية\n\n'
@@ -441,7 +442,7 @@ class SettingsView extends ConsumerWidget {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('إغلاق'),
+            child: Text(context.l.settingsClose),
           ),
         ],
       ),
@@ -456,14 +457,14 @@ class SettingsView extends ConsumerWidget {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('تعديل الملف الشخصي'),
+        title: Text(context.l.settingsEditProfile),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             TextFormField(
               controller: nameController,
-              decoration: const InputDecoration(
-                labelText: 'الاسم الكامل',
+              decoration: InputDecoration(
+                labelText: context.l.fullName,
                 border: OutlineInputBorder(),
               ),
             ),
@@ -471,8 +472,8 @@ class SettingsView extends ConsumerWidget {
             TextFormField(
               controller: phoneController,
               keyboardType: TextInputType.phone,
-              decoration: const InputDecoration(
-                labelText: 'الهاتف',
+              decoration: InputDecoration(
+                labelText: context.l.phone,
                 border: OutlineInputBorder(),
               ),
             ),
@@ -481,7 +482,7 @@ class SettingsView extends ConsumerWidget {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('إلغاء'),
+            child: Text(context.l.cancel),
           ),
           ElevatedButton(
             onPressed: () async {
@@ -496,21 +497,21 @@ class SettingsView extends ConsumerWidget {
                   Navigator.pop(context);
                   ref.invalidate(currentUserProvider);
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('تم تعديل الملف الشخصي')),
+                    SnackBar(content: Text(context.l.settingsProfileUpdated)),
                   );
                 }
               } catch (e) {
                 if (context.mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text('خطأ: $e'),
+                      content: Text('${context.l.error}: ${e.toString().contains('Exception') ? context.l.errorGeneric : e}'),
                       backgroundColor: AppColors.error,
                     ),
                   );
                 }
               }
             },
-            child: const Text('حفظ'),
+              child: Text(context.l.save),
           ),
         ],
       ),

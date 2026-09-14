@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../core/localization/app_localizations.dart';
 import '../../../../core/theme/theme.dart';
 import '../../../../core/widgets/app_text_field.dart';
 import '../../../../core/widgets/app_button.dart';
@@ -51,7 +52,7 @@ class _CreateNotificationViewState
           icon: const Icon(Icons.arrow_back),
           onPressed: () => context.pop(),
         ),
-        title: const Text('إنشاء إشعار'),
+        title: Text(context.l.createNotificationTitle),
       ),
       body: Form(
         key: _formKey,
@@ -60,19 +61,19 @@ class _CreateNotificationViewState
           children: [
             AppTextField(
               controller: _titleController,
-              label: 'العنوان',
-              hint: 'أدخل عنوان الإشعار',
+              label: context.l.createNotificationLabel,
+              hint: context.l.createNotificationHint,
               validator: (v) =>
-                  v == null || v.trim().isEmpty ? 'العنوان مطلوب' : null,
+                  v == null || v.trim().isEmpty ? context.l.createNotificationTitleRequired : null,
             ),
             AppSpacing.gapLG,
             AppTextField(
               controller: _bodyController,
-              label: 'النص',
-              hint: 'أدخل نص الإشعار',
+              label: context.l.createNotificationBody,
+              hint: context.l.createNotificationBodyHint,
               maxLines: 3,
               validator: (v) =>
-                  v == null || v.trim().isEmpty ? 'النص مطلوب' : null,
+                  v == null || v.trim().isEmpty ? context.l.createNotificationBodyRequired : null,
             ),
             AppSpacing.gapXL,
             _buildTypeSelector(),
@@ -89,7 +90,7 @@ class _CreateNotificationViewState
             const SizedBox(height: 40),
             AppButton(
               onPressed: _isSending ? null : _sendNotification,
-              label: 'إرسال الآن',
+              label: context.l.createNotificationSendNow,
               icon: Icons.send,
               isExpanded: true,
               isLoading: _isSending,
@@ -104,7 +105,7 @@ class _CreateNotificationViewState
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('نوع الإشعار', style: AppTextStyles.label),
+        Text(context.l.createNotificationType, style: AppTextStyles.label),
         AppSpacing.gapXS,
         Wrap(
           spacing: AppSpacing.s,
@@ -131,11 +132,11 @@ class _CreateNotificationViewState
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('الجمهور', style: AppTextStyles.label),
+        Text(context.l.createNotificationAudience, style: AppTextStyles.label),
         AppSpacing.gapXS,
         RadioListTile<AudienceType>(
           title: Text(
-            'جميع أولياء الأمور',
+            context.l.createNotificationAllParents,
             style: AppTextStyles.body,
           ),
           value: AudienceType.allParents,
@@ -146,7 +147,7 @@ class _CreateNotificationViewState
         ),
         RadioListTile<AudienceType>(
           title: Text(
-            'فصل محدد',
+            context.l.createNotificationSpecificClass,
             style: AppTextStyles.body,
           ),
           value: AudienceType.specificClass,
@@ -157,7 +158,7 @@ class _CreateNotificationViewState
         ),
         RadioListTile<AudienceType>(
           title: Text(
-            'طالب محدد',
+            context.l.createNotificationSpecificStudent,
             style: AppTextStyles.body,
           ),
           value: AudienceType.specificStudent,
@@ -174,13 +175,13 @@ class _CreateNotificationViewState
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('اختر الفصل', style: AppTextStyles.label),
+        Text(context.l.createNotificationSelectClass, style: AppTextStyles.label),
         AppSpacing.gapXS,
         classesAsync.when(
           data: (classes) {
             if (classes.isEmpty) {
               return Text(
-                'لا توجد فصول متاحة',
+                context.l.createNotificationNoClasses,
                 style: AppTextStyles.body.copyWith(
                   color: AppColors.textSecondary,
                 ),
@@ -188,8 +189,8 @@ class _CreateNotificationViewState
             }
             return DropdownButtonFormField<String>(
               value: _selectedClassId,
-              decoration: const InputDecoration(
-                hintText: 'اختر فصلاً',
+              decoration: InputDecoration(
+                hintText: context.l.createNotificationClassHint,
               ),
               items: classes
                   .map((c) => DropdownMenuItem(
@@ -202,7 +203,7 @@ class _CreateNotificationViewState
           },
           loading: () => const Center(child: CircularProgressIndicator()),
           error: (e, _) => Text(
-            'خطأ في تحميل الفصول',
+            context.l.createNotificationErrorClasses,
             style: AppTextStyles.body.copyWith(color: AppColors.error),
           ),
         ),
@@ -214,13 +215,13 @@ class _CreateNotificationViewState
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('اختر الطالب', style: AppTextStyles.label),
+        Text(context.l.createNotificationSelectStudent, style: AppTextStyles.label),
         AppSpacing.gapXS,
         studentsAsync.when(
           data: (students) {
             if (students.isEmpty) {
               return Text(
-                'لا يوجد طلاب متاحون',
+                context.l.createNotificationNoStudents,
                 style: AppTextStyles.body.copyWith(
                   color: AppColors.textSecondary,
                 ),
@@ -228,8 +229,8 @@ class _CreateNotificationViewState
             }
             return DropdownButtonFormField<String>(
               value: _selectedStudentId,
-              decoration: const InputDecoration(
-                hintText: 'اختر طالباً',
+              decoration: InputDecoration(
+                hintText: context.l.createNotificationStudentHint,
               ),
               items: students
                   .map((s) => DropdownMenuItem(
@@ -242,7 +243,7 @@ class _CreateNotificationViewState
           },
           loading: () => const Center(child: CircularProgressIndicator()),
           error: (e, _) => Text(
-            'خطأ في تحميل الطلاب',
+            context.l.createNotificationErrorStudents,
             style: AppTextStyles.body.copyWith(color: AppColors.error),
           ),
         ),
@@ -255,12 +256,12 @@ class _CreateNotificationViewState
 
     if (_audienceType == AudienceType.specificClass &&
         _selectedClassId == null) {
-      _showSnackBar('يرجى اختيار فصل');
+      _showSnackBar(context.l.createNotificationSelectClassFirst);
       return;
     }
     if (_audienceType == AudienceType.specificStudent &&
         _selectedStudentId == null) {
-      _showSnackBar('يرجى اختيار طالب');
+      _showSnackBar(context.l.createNotificationSelectStudentFirst);
       return;
     }
 
@@ -309,12 +310,12 @@ class _CreateNotificationViewState
       }
 
       if (mounted) {
-        _showSnackBar('تم إرسال الإشعار بنجاح');
+        _showSnackBar(context.l.createNotificationSent);
         context.pop();
       }
     } catch (e) {
       if (mounted) {
-        _showSnackBar('خطأ في إرسال الإشعار: $e');
+        _showSnackBar('${context.l.createNotificationSendError}: ${e.toString().contains('Exception') ? context.l.errorGeneric : e}');
       }
     } finally {
       if (mounted) {

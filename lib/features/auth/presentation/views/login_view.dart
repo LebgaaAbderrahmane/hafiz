@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hafiz/core/errors/exceptions.dart';
+import 'package:hafiz/core/localization/app_localizations.dart';
 import 'package:hafiz/features/auth/domain/entities/user.dart';
 import 'package:hafiz/features/auth/domain/repositories/auth_provider.dart';
 import 'package:hafiz/core/theme/theme.dart';
@@ -78,7 +79,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
                     ),
                     AppSpacing.gapLG,
                     Text(
-                      'حافظ',
+                      context.l.authAppName,
                       style: AppTextStyles.arabicH1.copyWith(
                         color: AppColors.primary,
                       ),
@@ -102,7 +103,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
 
                     // ── Email ──
                     AppTextField(
-                      label: 'البريد الإلكتروني',
+                      label: context.l.email,
                       hint: 'email@example.com',
                       controller: _emailController,
                       keyboardType: TextInputType.emailAddress,
@@ -113,7 +114,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
 
                     // ── Password ──
                     AppTextField(
-                      label: 'كلمة المرور',
+                      label: context.l.password,
                       controller: _passwordController,
                       obscureText: _obscurePassword,
                       textInputAction: TextInputAction.done,
@@ -137,7 +138,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
                       alignment: AlignmentDirectional.centerEnd,
                       child: TextButton(
                         onPressed: () => context.push('/forgot-password'),
-                        child: const Text('نسيت كلمة المرور؟'),
+                        child: Text(context.l.forgotPassword),
                       ),
                     ),
                     AppSpacing.gapXL,
@@ -145,7 +146,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
                     // ── Login Button ──
                     AppButton(
                       onPressed: authState.isLoading ? null : _handleLogin,
-                      label: 'تسجيل الدخول',
+                      label: context.l.login,
                       isLoading: authState.isLoading,
                       isExpanded: true,
                       size: AppButtonSize.large,
@@ -161,7 +162,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
                             horizontal: AppSpacing.lg,
                           ),
                           child: Text(
-                            'أو',
+                            context.l.authOrDivider,
                             style: AppTextStyles.bodySmall,
                           ),
                         ),
@@ -175,7 +176,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'ليس لديك حساب؟',
+                          context.l.authNoAccount,
                           style: AppTextStyles.body.copyWith(
                             color: AppColors.textSecondary,
                           ),
@@ -184,7 +185,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
                           onPressed: () {
                             context.go('/sign-up');
                           },
-                          child: const Text('إنشاء حساب'),
+                          child: Text(context.l.authCreateAccount),
                         ),
                       ],
                     ),

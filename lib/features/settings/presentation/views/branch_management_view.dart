@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hafiz/core/localization/app_localizations.dart';
 import 'package:hafiz/core/theme/theme.dart';
 import 'package:hafiz/features/auth/domain/repositories/user_role_provider.dart';
 import 'package:hafiz/features/classes/domain/repositories/branch_provider.dart';
@@ -20,7 +21,7 @@ class _BranchManagementViewState extends ConsumerState<BranchManagementView> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('إدارة الفروع'),
+        title: Text(context.l.branchManagementTitle),
         actions: [
           IconButton(
             icon: const Icon(Icons.add),
@@ -30,7 +31,7 @@ class _BranchManagementViewState extends ConsumerState<BranchManagementView> {
       ),
       body: branchesAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => Center(child: Text('خطأ: $e')),
+        error: (e, _) => Center(child: Text('${context.l.error}: $e')),
         data: (branches) {
           if (branches.isEmpty) {
             return Center(
@@ -40,11 +41,11 @@ class _BranchManagementViewState extends ConsumerState<BranchManagementView> {
                   Icon(Icons.location_on_outlined,
                       size: 64, color: AppColors.textTertiary),
                   Gap.l,
-                  Text('لا توجد فروع',
+                  Text(context.l.branchEmpty,
                       style: AppTextStyles.headlineSmall
                           .copyWith(color: AppColors.textSecondary)),
                   Gap.s,
-                  Text('اضغط على + لإضافة فرع جديد',
+                  Text(context.l.branchAddHint,
                       style: AppTextStyles.bodySmall),
                 ],
               ),
@@ -96,32 +97,32 @@ class _BranchManagementViewState extends ConsumerState<BranchManagementView> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('إضافة فرع جديد'),
+        title: Text(context.l.branchAddNew),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             TextField(
               controller: nameController,
-              decoration: const InputDecoration(
-                labelText: 'اسم الفرع',
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                labelText: context.l.branchName,
+                border: const OutlineInputBorder(),
               ),
             ),
             Gap.m,
             TextField(
               controller: addressController,
-              decoration: const InputDecoration(
-                labelText: 'العنوان',
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                labelText: context.l.settingsOrgAddress,
+                border: const OutlineInputBorder(),
               ),
             ),
             Gap.m,
             TextField(
               controller: phoneController,
               keyboardType: TextInputType.phone,
-              decoration: const InputDecoration(
-                labelText: 'الهاتف',
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                labelText: context.l.settingsOrgPhone,
+                border: const OutlineInputBorder(),
               ),
             ),
           ],
@@ -129,7 +130,7 @@ class _BranchManagementViewState extends ConsumerState<BranchManagementView> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('إلغاء'),
+            child: Text(context.l.cancel),
           ),
           ElevatedButton(
             onPressed: () async {
@@ -148,7 +149,7 @@ class _BranchManagementViewState extends ConsumerState<BranchManagementView> {
                   );
               if (context.mounted) Navigator.pop(context);
             },
-            child: const Text('إضافة'),
+            child: Text(context.l.add),
           ),
         ],
       ),
@@ -164,32 +165,32 @@ class _BranchManagementViewState extends ConsumerState<BranchManagementView> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('تعديل الفرع'),
+        title: Text(context.l.branchEdit),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             TextField(
               controller: nameController,
-              decoration: const InputDecoration(
-                labelText: 'اسم الفرع',
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                labelText: context.l.branchName,
+                border: const OutlineInputBorder(),
               ),
             ),
             Gap.m,
             TextField(
               controller: addressController,
-              decoration: const InputDecoration(
-                labelText: 'العنوان',
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                labelText: context.l.settingsOrgAddress,
+                border: const OutlineInputBorder(),
               ),
             ),
             Gap.m,
             TextField(
               controller: phoneController,
               keyboardType: TextInputType.phone,
-              decoration: const InputDecoration(
-                labelText: 'الهاتف',
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                labelText: context.l.settingsOrgPhone,
+                border: const OutlineInputBorder(),
               ),
             ),
           ],
@@ -197,7 +198,7 @@ class _BranchManagementViewState extends ConsumerState<BranchManagementView> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('إلغاء'),
+            child: Text(context.l.cancel),
           ),
           ElevatedButton(
             onPressed: () async {
@@ -213,7 +214,7 @@ class _BranchManagementViewState extends ConsumerState<BranchManagementView> {
                   );
               if (context.mounted) Navigator.pop(context);
             },
-            child: const Text('حفظ'),
+            child: Text(context.l.save),
           ),
         ],
       ),
@@ -224,12 +225,12 @@ class _BranchManagementViewState extends ConsumerState<BranchManagementView> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('حذف الفرع'),
+        title: Text(context.l.branchDelete),
         content: Text('هل أنت متأكد من حذف "${branch.name}"؟'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('إلغاء'),
+            child: Text(context.l.cancel),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
@@ -241,7 +242,7 @@ class _BranchManagementViewState extends ConsumerState<BranchManagementView> {
                   );
               if (context.mounted) Navigator.pop(context);
             },
-            child: const Text('حذف'),
+            child: Text(context.l.delete),
           ),
         ],
       ),

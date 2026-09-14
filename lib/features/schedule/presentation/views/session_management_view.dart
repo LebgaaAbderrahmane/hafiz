@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import "package:hafiz/core/localization/app_localizations.dart";
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hafiz/core/theme/theme.dart';
 import 'package:hafiz/core/widgets/badge.dart';
 import 'package:hafiz/core/widgets/drawer_icon_button.dart';
 import 'package:hafiz/core/widgets/card.dart';
@@ -112,7 +113,7 @@ class _SessionManagementViewState extends ConsumerState<SessionManagementView> {
 
     return sessionsAsync.when(
       loading: () => const AppLoading(),
-      error: (e, _) => Center(child: Text(e.toString())),
+      error: (e, _) => _buildErrorState(context, ref, startOfDay, endOfDay),
       data: (sessions) {
         if (sessions.isEmpty) {
           return AppEmptyState(
@@ -125,6 +126,40 @@ class _SessionManagementViewState extends ConsumerState<SessionManagementView> {
         }
         return _buildSessionList(sessions);
       },
+    );
+  }
+
+  Widget _buildErrorState(BuildContext context, WidgetRef ref, DateTime start, DateTime end) {
+    return Center(
+      child: Padding(
+        padding: EdgeInsets.all(AppSpacing.xxl),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.error_outline, size: 64, color: AppColors.error),
+            Gap.l,
+            Text(
+              context.l.errorLoadingData,
+              style: AppTextStyles.headlineSmall,
+              textAlign: TextAlign.center,
+            ),
+            Gap.s,
+            Text(
+              context.l.errorTryAgain,
+              style: AppTextStyles.bodySmall.copyWith(
+                color: AppColors.textSecondary,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            Gap.xl,
+            ElevatedButton.icon(
+              onPressed: () => ref.invalidate(sessionsProvider((start: start, end: end))),
+              icon: const Icon(Icons.refresh),
+              label: Text(context.l.retry),
+            ),
+          ],
+        ),
+      ),
     );
   }
 

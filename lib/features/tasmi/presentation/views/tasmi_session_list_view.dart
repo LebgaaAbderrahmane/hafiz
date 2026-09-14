@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import '../../../../core/localization/app_localizations.dart';
 import '../../../../core/theme/theme.dart';
 import '../../../../core/widgets/app_badge.dart';
 import '../../../../core/widgets/app_card.dart';
@@ -24,6 +25,36 @@ class TasmiSessionListView extends ConsumerStatefulWidget {
 
 class _TasmiSessionListViewState extends ConsumerState<TasmiSessionListView> {
   _FilterOption _filter = _FilterOption.all;
+  final _scrollController = ScrollController();
+  bool _isLoadingMore = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 200) {
+      _loadMore();
+    }
+  }
+
+  Future<void> _loadMore() async {
+    if (_isLoadingMore) return;
+    final sessions = ref.read(branchTasmiSessionsProvider).valueOrNull;
+    if (sessions == null || sessions.length < 50) return;
+    setState(() => _isLoadingMore = true);
+    await ref.read(branchTasmiSessionsProvider.notifier).loadMore();
+    if (mounted) setState(() => _isLoadingMore = false);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +63,7 @@ class _TasmiSessionListViewState extends ConsumerState<TasmiSessionListView> {
     return Scaffold(
       appBar: AppBar(
         leading: const DrawerIconButton(),
-        title: const Text('جلسات التسميع'),
+        title: Text(context.l.tasmiSessionListTitle),
         actions: [
           IconButton(
             icon: const Icon(Icons.add),
@@ -46,15 +77,15 @@ class _TasmiSessionListViewState extends ConsumerState<TasmiSessionListView> {
           Expanded(
             child: sessionsAsync.when(
               loading: () => const AppLoading(),
-              error: (e, _) => Center(child: Text(e.toString())),
+              error: (e, _) => _buildErrorState(context, ref),
               data: (sessions) {
                 final filtered = _applyFilter(sessions);
                 if (filtered.isEmpty) {
                   return AppEmptyState(
                     icon: Icons.mic_none_outlined,
-                    title: 'لا توجد جلسات',
-                    description: 'لا توجد جلسات تسميع لهذا الفرع',
-                    primaryActionLabel: 'إضافة جلسة',
+                    title: context.l.tasmiSessionEmptyTitle,
+                    description: context.l.tasmiSessionEmptyDescription,
+                    primaryActionLabel: context.l.tasmiSessionAddButton,
                     onPrimaryAction: () => context.push('/tasmi/add'),
                   );
                 }
@@ -80,7 +111,7 @@ class _TasmiSessionListViewState extends ConsumerState<TasmiSessionListView> {
           return Padding(
             padding: const EdgeInsetsDirectional.only(end: AppSpacing.s),
             child: FilterChip(
-              label: Text(option.label),
+              label: Text(option.label(context)),
               selected: _filter == option,
               onSelected: (_) => setState(() => _filter = option),
             ),
@@ -96,9 +127,16 @@ class _TasmiSessionListViewState extends ConsumerState<TasmiSessionListView> {
         ref.invalidate(branchTasmiSessionsProvider);
       },
       child: ListView.builder(
+        controller: _scrollController,
         padding: const EdgeInsets.all(AppSpacing.l),
-        itemCount: sessions.length,
+        itemCount: sessions.length + (_isLoadingMore ? 1 : 0),
         itemBuilder: (context, index) {
+          if (index == sessions.length) {
+            return const Padding(
+              padding: EdgeInsets.all(AppSpacing.l),
+              child: Center(child: CircularProgressIndicator()),
+            );
+          }
           final session = sessions[index];
           return _TasmiSessionCard(
             session: session,
@@ -127,6 +165,40 @@ class _TasmiSessionListViewState extends ConsumerState<TasmiSessionListView> {
               session.recordedAt.isAtSameMomentAs(startOfWeek),
       };
     }).toList();
+  }
+
+  Widget _buildErrorState(BuildContext context, WidgetRef ref) {
+    return Center(
+      child: Padding(
+        padding: EdgeInsets.all(AppSpacing.xxl),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.error_outline, size: 64, color: AppColors.error),
+            Gap.l,
+            Text(
+              context.l.errorLoadingData,
+              style: AppTextStyles.headlineSmall,
+              textAlign: TextAlign.center,
+            ),
+            Gap.s,
+            Text(
+              context.l.errorTryAgain,
+              style: AppTextStyles.bodyMedium.copyWith(
+                color: AppColors.textSecondary,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            Gap.xl,
+            ElevatedButton.icon(
+              onPressed: () => ref.invalidate(branchTasmiSessionsProvider),
+              icon: const Icon(Icons.refresh),
+              label: Text(context.l.retry),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 
@@ -177,14 +249,14 @@ class _TasmiSessionCard extends StatelessWidget {
     };
   }
 
-  String _formatDate(DateTime date) {
+  String _formatDate(BuildContext context, DateTime date) {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
     final sessionDate = DateTime(date.year, date.month, date.day);
     final diff = today.difference(sessionDate).inDays;
 
-    if (diff == 0) return 'اليوم';
-    if (diff == 1) return 'أمس';
+    if (diff == 0) return context.l.today;
+    if (diff == 1) return context.l.yesterday;
     if (diff < 7) return '$diff أيام';
     return DateFormat('dd/MM/yyyy', 'ar').format(date);
   }
@@ -236,7 +308,7 @@ class _TasmiSessionCard extends StatelessWidget {
               ),
               const SizedBox(width: AppSpacing.xs),
               Text(
-                '${_formatDate(session.recordedAt)} - ${_formatTime(session.recordedAt)}',
+                '${_formatDate(context, session.recordedAt)} - ${_formatTime(session.recordedAt)}',
                 style: AppTextStyles.bodySmall.copyWith(
                   color: AppColors.textTertiary,
                 ),
@@ -245,7 +317,7 @@ class _TasmiSessionCard extends StatelessWidget {
           ),
           if (_hasScores(session)) ...[
             Gap.xs,
-            _buildScoresRow(),
+            _buildScoresRow(context),
           ],
         ],
       ),
@@ -258,19 +330,19 @@ class _TasmiSessionCard extends StatelessWidget {
         session.fluencyScore != null;
   }
 
-  Widget _buildScoresRow() {
+  Widget _buildScoresRow(BuildContext context) {
     final scores = <String>[];
     if (session.accuracyScore != null) {
-      scores.add('الدقة: ${session.accuracyScore}/10');
+      scores.add('${context.l.tasmiAccuracy}: ${session.accuracyScore}/10');
     }
     if (session.tajwidScore != null) {
-      scores.add('التجويد: ${session.tajwidScore}/10');
+      scores.add('${context.l.tasmiTajwid}: ${session.tajwidScore}/10');
     }
     if (session.fluencyScore != null) {
-      scores.add('الطلاقة: ${session.fluencyScore}/10');
+      scores.add('${context.l.tasmiFluency}: ${session.fluencyScore}/10');
     }
     if (session.overallRating != null) {
-      scores.add('التقييم: ${session.overallRating}/10');
+      scores.add('${context.l.tasmiRating}: ${session.overallRating}/10');
     }
 
     return Row(
@@ -292,10 +364,13 @@ class _TasmiSessionCard extends StatelessWidget {
 }
 
 enum _FilterOption {
-  all('الكل'),
-  today('اليوم'),
-  thisWeek('هذا الأسبوع');
+  all,
+  today,
+  thisWeek;
 
-  const _FilterOption(this.label);
-  final String label;
+  String label(BuildContext context) => switch (this) {
+        all => context.l.all,
+        today => context.l.today,
+        thisWeek => context.l.tasmiFilterThisWeek,
+      };
 }

@@ -1,7 +1,7 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../core/localization/app_localizations.dart';
 import '../../../../core/theme/theme.dart';
 import '../../../../core/widgets/branch_dropdown.dart';
 import '../../../auth/domain/repositories/user_role_provider.dart';
@@ -43,7 +43,7 @@ class _AddClassViewState extends ConsumerState<AddClassView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('إضافة فصل'),
+        title: Text(context.l.addClass),
         leading: IconButton(
           icon: const Icon(Icons.close),
           onPressed: () => context.pop(),
@@ -60,31 +60,31 @@ class _AddClassViewState extends ConsumerState<AddClassView> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('معلومات الفصل', style: AppTextStyles.titleMedium),
+                    Text(context.l.addClassInfo, style: AppTextStyles.titleMedium),
                     Gap.m,
                     TextFormField(
                       controller: _nameController,
-                      decoration: const InputDecoration(
-                        labelText: 'اسم الفصل *',
-                        border: OutlineInputBorder(),
+                      decoration: InputDecoration(
+                        labelText: '${context.l.addClassName} *',
+                        border: const OutlineInputBorder(),
                       ),
-                      validator: (v) => v?.isEmpty == true ? 'مطلوب' : null,
+                      validator: (v) => v?.isEmpty == true ? context.l.authRequired : null,
                     ),
                     Gap.m,
                     TextFormField(
                       controller: _descriptionController,
                       maxLines: 2,
-                      decoration: const InputDecoration(
-                        labelText: 'الوصف',
-                        border: OutlineInputBorder(),
+                      decoration: InputDecoration(
+                        labelText: context.l.description,
+                        border: const OutlineInputBorder(),
                       ),
                     ),
                     Gap.m,
                     DropdownButtonFormField<ClassLevel>(
                       initialValue: _level,
-                      decoration: const InputDecoration(
-                        labelText: 'المستوى',
-                        border: OutlineInputBorder(),
+                      decoration: InputDecoration(
+                        labelText: context.l.level,
+                        border: const OutlineInputBorder(),
                       ),
                       items: ClassLevel.values.map((l) {
                         return DropdownMenuItem(
@@ -104,9 +104,9 @@ class _AddClassViewState extends ConsumerState<AddClassView> {
                     Gap.m,
                     TextFormField(
                       keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
-                        labelText: 'الحد الأقصى للطلاب',
-                        border: OutlineInputBorder(),
+                      decoration: InputDecoration(
+                        labelText: context.l.addClassMaxStudents,
+                        border: const OutlineInputBorder(),
                       ),
                     ),
                   ],
@@ -120,7 +120,7 @@ class _AddClassViewState extends ConsumerState<AddClassView> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('أيام الأسبوع', style: AppTextStyles.titleMedium),
+                    Text(context.l.addClassDays, style: AppTextStyles.titleMedium),
                     Gap.m,
                     Wrap(
                       spacing: 8,
@@ -153,7 +153,7 @@ class _AddClassViewState extends ConsumerState<AddClassView> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('التوقيت', style: AppTextStyles.titleMedium),
+                    Text(context.l.addClassTiming, style: AppTextStyles.titleMedium),
                     Gap.m,
                     Row(
                       children: [
@@ -170,11 +170,11 @@ class _AddClassViewState extends ConsumerState<AddClassView> {
                               }
                             },
                             child: InputDecorator(
-                              decoration: const InputDecoration(
-                                labelText: 'وقت البداية',
-                                border: OutlineInputBorder(),
+                              decoration: InputDecoration(
+                                labelText: context.l.startTime,
+                                border: const OutlineInputBorder(),
                               ),
-                              child: Text(_startTime ?? 'اختر'),
+                              child: Text(_startTime ?? context.l.next),
                             ),
                           ),
                         ),
@@ -192,11 +192,11 @@ class _AddClassViewState extends ConsumerState<AddClassView> {
                               }
                             },
                             child: InputDecorator(
-                              decoration: const InputDecoration(
-                                labelText: 'وقت النهاية',
-                                border: OutlineInputBorder(),
+                              decoration: InputDecoration(
+                                labelText: context.l.endTime,
+                                border: const OutlineInputBorder(),
                               ),
-                              child: Text(_endTime ?? 'اختر'),
+                              child: Text(_endTime ?? context.l.next),
                             ),
                           ),
                         ),
@@ -218,7 +218,7 @@ class _AddClassViewState extends ConsumerState<AddClassView> {
                         height: 20,
                         child: CircularProgressIndicator(strokeWidth: 2),
                       )
-                    : const Text('إنشاء الفصل'),
+                    : Text(context.l.addClassSubmit),
               ),
             ),
           ],
@@ -238,7 +238,7 @@ class _AddClassViewState extends ConsumerState<AddClassView> {
 
       if (orgId.isEmpty || branchId.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('يرجى اختيار الفرع'), backgroundColor: AppColors.error),
+          SnackBar(content: Text(context.l.addClassSelectBranch), backgroundColor: AppColors.error),
         );
         return;
       }
@@ -261,21 +261,24 @@ class _AddClassViewState extends ConsumerState<AddClassView> {
         (failure) {
           debugPrint('CLASS CREATE ERROR: $failure');
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('خطأ: $failure'), backgroundColor: AppColors.error),
+            SnackBar(content: Text('${context.l.error}: $failure'), backgroundColor: AppColors.error),
           );
         },
         (_) {
           ref.read(classesProvider.notifier).refresh();
           context.pop();
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('تم إنشاء الفصل بنجاح')),
+            SnackBar(content: Text(context.l.addClassSuccess)),
           );
         },
       );
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('خطأ: $e'), backgroundColor: AppColors.error),
+          SnackBar(
+            content: Text('${context.l.error}: ${e.toString().contains('Exception') ? context.l.errorGeneric : e}'),
+            backgroundColor: AppColors.error,
+          ),
         );
       }
     } finally {

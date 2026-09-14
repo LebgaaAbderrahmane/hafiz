@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import '../../../../core/localization/app_localizations.dart';
 import '../../../../core/theme/theme.dart';
 import '../../../../core/widgets/app_badge.dart';
 import '../../../../core/widgets/app_card.dart';
@@ -42,7 +43,7 @@ class _RevisionTrackingViewState extends ConsumerState<RevisionTrackingView> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('تتبع المراجعات'),
+        title: Text(context.l.revisionTracking),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => context.pop(),
@@ -59,7 +60,7 @@ class _RevisionTrackingViewState extends ConsumerState<RevisionTrackingView> {
             error: (e, _) => SizedBox(
               height: 100,
               child: Center(
-                child: Text('خطأ في تحميل الإحصائيات: $e'),
+                child: Text('${context.l.errorLoadingStats}: $e'),
               ),
             ),
             data: (revisions) => _buildSummaryCards(revisions),
@@ -78,13 +79,13 @@ class _RevisionTrackingViewState extends ConsumerState<RevisionTrackingView> {
                   children: [
                     const Icon(Icons.error_outline, size: 48, color: AppColors.error),
                     Gap.m,
-                    Text('خطأ في تحميل المراجعات: $e'),
+                    Text('${context.l.errorLoadingRevisions}: $e'),
                     Gap.m,
                     TextButton(
                       onPressed: () {
                         _refreshProviders();
                       },
-                      child: const Text('إعادة المحاولة'),
+                      child: Text(context.l.retry),
                     ),
                   ],
                 ),
@@ -94,8 +95,8 @@ class _RevisionTrackingViewState extends ConsumerState<RevisionTrackingView> {
                 if (filtered.isEmpty) {
                   return AppEmptyState(
                     icon: Icons.menu_book_outlined,
-                    title: 'لا توجد مراجعات',
-                    description: 'لا توجد مراجعات حالياً لهذا القسم',
+                    title: context.l.noRevisions,
+                    description: context.l.noRevisionsDesc,
                   );
                 }
                 return _buildRevisionList(filtered);
@@ -143,7 +144,7 @@ class _RevisionTrackingViewState extends ConsumerState<RevisionTrackingView> {
         children: [
           Expanded(
             child: _SummaryCard(
-              label: 'مستحقة اليوم',
+              label: context.l.dueToday,
               value: dueToday,
               color: AppColors.warning,
               icon: Icons.today,
@@ -152,7 +153,7 @@ class _RevisionTrackingViewState extends ConsumerState<RevisionTrackingView> {
           const SizedBox(width: AppSpacing.s),
           Expanded(
             child: _SummaryCard(
-              label: 'متأخرة',
+              label: context.l.overdueRevision,
               value: overdue,
               color: AppColors.error,
               icon: Icons.warning_amber_outlined,
@@ -161,7 +162,7 @@ class _RevisionTrackingViewState extends ConsumerState<RevisionTrackingView> {
           const SizedBox(width: AppSpacing.s),
           Expanded(
             child: _SummaryCard(
-              label: 'ضعيفة',
+              label: context.l.weakRevision,
               value: weak,
               color: AppColors.needsRevision,
               icon: Icons.trending_down,
@@ -170,7 +171,7 @@ class _RevisionTrackingViewState extends ConsumerState<RevisionTrackingView> {
           const SizedBox(width: AppSpacing.s),
           Expanded(
             child: _SummaryCard(
-              label: 'قوية',
+              label: context.l.strongRevision,
               value: strong,
               color: AppColors.success,
               icon: Icons.check_circle_outline,
@@ -196,7 +197,7 @@ class _RevisionTrackingViewState extends ConsumerState<RevisionTrackingView> {
           return Padding(
             padding: const EdgeInsetsDirectional.only(end: AppSpacing.s),
             child: FilterChip(
-              label: Text(option.label),
+              label: Text(option.label(context)),
               selected: _filter == option,
               onSelected: (_) => setState(() => _filter = option),
             ),
@@ -302,25 +303,25 @@ class _RevisionTrackingViewState extends ConsumerState<RevisionTrackingView> {
                   ),
                 ),
                 Gap.l,
-                Text('تفاصيل المراجعة', style: AppTextStyles.headlineSmall),
+                Text(context.l.revisionDetailTitle, style: AppTextStyles.headlineSmall),
                 Gap.m,
-                _buildDetailRow('السورة', 'سورة ${revision.surahNumber}'),
-                _buildDetailRow('الآيات', '${revision.startAyah} - ${revision.endAyah}'),
-                _buildDetailRow('الحالة', revision.status.displayNameAr),
-                _buildDetailRow('الأولوية', revision.priority.displayNameAr),
+                _buildDetailRow(context.l.surah, '${context.l.tasmiSurah} ${revision.surahNumber}'),
+                _buildDetailRow(context.l.revisionAyahs, '${revision.startAyah} - ${revision.endAyah}'),
+                _buildDetailRow(context.l.status, revision.status.displayNameAr),
+                _buildDetailRow(context.l.revisionPriority, revision.priority.displayNameAr),
                 if (revision.dueDate != null)
                   _buildDetailRow(
-                    'موعد المراجعة',
+                    context.l.revisionDueDate,
                     DateFormat('yyyy-MM-dd', 'ar').format(revision.dueDate!),
                   ),
                 if (revision.qualityScore != null)
-                  _buildDetailRow('الجودة', '${revision.qualityScore}/10'),
+                  _buildDetailRow(context.l.revisionQuality, '${revision.qualityScore}/10'),
                 if (revision.reviewCount != null)
-                  _buildDetailRow('عدد المراجعات', revision.reviewCount.toString()),
+                  _buildDetailRow(context.l.revisionReviewCount, revision.reviewCount.toString()),
                 if (revision.lastReviewedAt != null) ...[
                   Gap.xs,
                   Text(
-                    'آخر مراجعة: ${_formatDaysSince(revision.lastReviewedAt!)}',
+                    '${context.l.revisionLastReviewedLabel}: ${_formatDaysSince(context, revision.lastReviewedAt!)}',
                     style: AppTextStyles.bodySmall.copyWith(
                       color: AppColors.textSecondary,
                     ),
@@ -328,7 +329,7 @@ class _RevisionTrackingViewState extends ConsumerState<RevisionTrackingView> {
                 ],
                 if (revision.notes != null && revision.notes!.isNotEmpty) ...[
                   Gap.m,
-                  Text('ملاحظات', style: AppTextStyles.titleSmall),
+                  Text(context.l.notes, style: AppTextStyles.titleSmall),
                   Gap.s,
                   Text(revision.notes!, style: AppTextStyles.bodyMedium),
                 ],
@@ -342,7 +343,7 @@ class _RevisionTrackingViewState extends ConsumerState<RevisionTrackingView> {
                         _showRevisionResultSheet(revision);
                       },
                       icon: const Icon(Icons.play_arrow),
-                      label: const Text('بدء المراجعة'),
+                      label: Text(context.l.startRevision),
                     ),
                   ),
               ],
@@ -394,9 +395,9 @@ class _RevisionTrackingViewState extends ConsumerState<RevisionTrackingView> {
 
             if (mounted) {
               final message = switch (result) {
-                _RevisionResult.strong => 'تم تسجيل المراجعة كقوية',
-                _RevisionResult.needsRepetition => 'تم تسجيل المراجعة كتحتاج تكرار',
-                _RevisionResult.weak => 'تم تسجيل المراجعة كضعيفة',
+                _RevisionResult.strong => context.l.revisionRegisteredStrong,
+                _RevisionResult.needsRepetition => context.l.revisionRegisteredNeedsRepetition,
+                _RevisionResult.weak => context.l.revisionRegisteredWeak,
               };
               final color = switch (result) {
                 _RevisionResult.strong => AppColors.success,
@@ -412,7 +413,7 @@ class _RevisionTrackingViewState extends ConsumerState<RevisionTrackingView> {
             if (mounted) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text('خطأ في تسجيل المراجعة: $e'),
+                  content: Text('${context.l.errorRegisteringRevision}: ${e.toString().contains('Exception') ? context.l.errorGeneric : e}'),
                   backgroundColor: AppColors.error,
                 ),
               );
@@ -425,15 +426,15 @@ class _RevisionTrackingViewState extends ConsumerState<RevisionTrackingView> {
 
   // ── Helpers ──
 
-  String _formatDaysSince(DateTime date) {
+  String _formatDaysSince(BuildContext context, DateTime date) {
     final now = DateTime.now();
     final diff = now.difference(date).inDays;
 
-    if (diff == 0) return 'اليوم';
-    if (diff == 1) return 'أمس';
-    if (diff < 7) return 'منذ $diff أيام';
-    if (diff < 30) return 'منذ ${diff ~/ 7} أسابيع';
-    return 'منذ ${diff ~/ 30} أشهر';
+    if (diff == 0) return context.l.today;
+    if (diff == 1) return context.l.yesterday;
+    if (diff < 7) return '${context.l.revisionSince} $diff أيام';
+    if (diff < 30) return '${context.l.revisionSince} ${diff ~/ 7} ${context.l.revisionWeeks}';
+    return '${context.l.revisionSince} ${diff ~/ 30} ${context.l.revisionMonths}';
   }
 }
 
@@ -533,16 +534,16 @@ class _RevisionCard extends StatelessWidget {
     };
   }
 
-  String _formatDaysSince(DateTime? date) {
-    if (date == null) return 'لم تُراجع بعد';
+  String _formatDaysSince(BuildContext context, DateTime? date) {
+    if (date == null) return context.l.notReviewedYet;
     final now = DateTime.now();
     final diff = now.difference(date).inDays;
 
-    if (diff == 0) return 'اليوم';
-    if (diff == 1) return 'أمس';
-    if (diff < 7) return 'منذ $diff أيام';
-    if (diff < 30) return 'منذ ${diff ~/ 7} أسابيع';
-    return 'منذ ${diff ~/ 30} أشهر';
+    if (diff == 0) return context.l.today;
+    if (diff == 1) return context.l.yesterday;
+    if (diff < 7) return '${context.l.revisionSince} $diff أيام';
+    if (diff < 30) return '${context.l.revisionSince} ${diff ~/ 7} ${context.l.revisionWeeks}';
+    return '${context.l.revisionSince} ${diff ~/ 30} ${context.l.revisionMonths}';
   }
 
   Color _scoreColor(int? score) {
@@ -585,7 +586,7 @@ class _RevisionCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      _formatDaysSince(revision.lastReviewedAt),
+                      _formatDaysSince(context, revision.lastReviewedAt),
                       style: AppTextStyles.caption.copyWith(
                         color: AppColors.textSecondary,
                       ),
@@ -636,7 +637,7 @@ class _RevisionCard extends StatelessWidget {
                 if (isOverdue) ...[
                   const SizedBox(width: AppSpacing.xs),
                   AppBadge(
-                    label: 'متأخر',
+                    label: context.l.revisionOverdueBadge,
                     variant: AppBadgeVariant.error,
                     size: AppBadgeSize.small,
                   ),
@@ -650,7 +651,7 @@ class _RevisionCard extends StatelessWidget {
                 TextButton.icon(
                   onPressed: onStartRevision,
                   icon: const Icon(Icons.play_arrow, size: 18),
-                  label: const Text('بدء المراجعة'),
+                  label: Text(context.l.startRevision),
                   style: TextButton.styleFrom(
                     foregroundColor: AppColors.primary,
                     padding: const EdgeInsetsDirectional.symmetric(
@@ -733,8 +734,8 @@ class _RevisionResultSheet extends StatelessWidget {
           Gap.l,
 
           // Title
-          Text(
-            'نتيجة المراجعة',
+            Text(
+            context.l.revisionResultTitle,
             style: AppTextStyles.headlineSmall,
             textAlign: TextAlign.center,
           ),
@@ -750,8 +751,8 @@ class _RevisionResultSheet extends StatelessWidget {
 
           // Result options
           _ResultOption(
-            label: 'قوية',
-            description: 'تم الحفظ بشكل ممتاز',
+            label: context.l.revisionStrongLabel,
+            description: context.l.revisionStrongDescription,
             icon: Icons.check_circle_outline,
             color: AppColors.success,
             onTap: () {
@@ -761,8 +762,8 @@ class _RevisionResultSheet extends StatelessWidget {
           ),
           const SizedBox(height: AppSpacing.m),
           _ResultOption(
-            label: 'تحتاج تكرار',
-            description: 'تم الحفظ مع بعض الأخطاء',
+            label: context.l.revisionNeedsRepetitionLabel,
+            description: context.l.revisionNeedsRepetitionDescription,
             icon: Icons.warning_amber_outlined,
             color: AppColors.warning,
             onTap: () {
@@ -772,8 +773,8 @@ class _RevisionResultSheet extends StatelessWidget {
           ),
           const SizedBox(height: AppSpacing.m),
           _ResultOption(
-            label: 'ضعيفة',
-            description: 'تحتاج مراجعة مكثفة',
+            label: context.l.revisionWeakLabel,
+            description: context.l.revisionWeakDescription,
             icon: Icons.error_outline,
             color: AppColors.error,
             onTap: () {
@@ -856,15 +857,21 @@ class _ResultOption extends StatelessWidget {
 // ── Enums ──
 
 enum _FilterOption {
-  all('الكل'),
-  dueToday('مستحقة اليوم'),
-  overdue('متأخرة'),
-  weak('ضعيفة'),
-  strong('قوية'),
-  completed('مكتملة');
+  all,
+  dueToday,
+  overdue,
+  weak,
+  strong,
+  completed;
 
-  const _FilterOption(this.label);
-  final String label;
+  String label(BuildContext context) => switch (this) {
+        all => context.l.all,
+        dueToday => context.l.dueToday,
+        overdue => context.l.overdueRevision,
+        weak => context.l.weakRevision,
+        strong => context.l.strongRevision,
+        completed => context.l.completedRevision,
+      };
 }
 
 enum _RevisionResult {

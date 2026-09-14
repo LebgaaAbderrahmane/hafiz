@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import "package:hafiz/core/localization/app_localizations.dart";
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hafiz/core/theme/theme.dart';
 import 'package:hafiz/core/widgets/badge.dart';
 import 'package:hafiz/core/widgets/card.dart';
 import 'package:hafiz/core/widgets/empty_state.dart';
@@ -51,7 +52,7 @@ class _ClassListViewState extends ConsumerState<ClassListView> {
             padding: const EdgeInsets.all(16),
             child: app.AppSearchBar(
               controller: _searchController,
-              hintText: context.l.searchHint,
+              hint: context.l.searchHint,
               onChanged: (value) {
                 setState(() => _searchQuery = value);
               },
@@ -61,7 +62,7 @@ class _ClassListViewState extends ConsumerState<ClassListView> {
           Expanded(
             child: classesAsync.when(
               loading: () => const AppLoading(),
-              error: (e, _) => Center(child: Text(e.toString())),
+              error: (e, _) => _buildErrorState(context, ref),
               data: (classes) {
                 final filtered = _filterClasses(classes);
                 if (filtered.isEmpty) {
@@ -146,6 +147,40 @@ class _ClassListViewState extends ConsumerState<ClassListView> {
           _levelFilter == null || schoolClass.level == _levelFilter;
       return matchesSearch && matchesStatus && matchesLevel;
     }).toList();
+  }
+
+  Widget _buildErrorState(BuildContext context, WidgetRef ref) {
+    return Center(
+      child: Padding(
+        padding: EdgeInsets.all(AppSpacing.xxl),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.error_outline, size: 64, color: AppColors.error),
+            Gap.l,
+            Text(
+              context.l.errorLoadingData,
+              style: AppTextStyles.headlineSmall,
+              textAlign: TextAlign.center,
+            ),
+            Gap.s,
+            Text(
+              context.l.errorTryAgain,
+              style: AppTextStyles.bodyMedium.copyWith(
+                color: AppColors.textSecondary,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            Gap.xl,
+            ElevatedButton.icon(
+              onPressed: () => ref.invalidate(classesProvider),
+              icon: const Icon(Icons.refresh),
+              label: Text(context.l.retry),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 

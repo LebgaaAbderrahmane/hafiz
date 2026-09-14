@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'core/database/app_database.dart';
 import 'core/network/supabase_client.dart';
 import 'core/utils/app_logger.dart';
 
@@ -31,6 +32,11 @@ Future<void> bootstrap(Widget Function() appBuilder) async {
   await AppLogger.init();
   final logPath = await AppLogger.getLogPath();
   await AppLogger.log('BOOT', 'Log file: $logPath');
+
+  // ── Initialize Database ──
+  final db = AppDatabase();
+  await db.customSelect('SELECT 1').get(); // Verify DB opens
+  await AppLogger.log('BOOT', 'Database initialized');
 
   // ── Global error handler — all errors go to log file ──
   FlutterError.onError = (details) async {

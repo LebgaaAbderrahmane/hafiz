@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import '../../../../core/localization/app_localizations.dart';
 import '../../../../core/theme/theme.dart';
 import '../../../../core/widgets/drawer_icon_button.dart';
 import '../../../auth/domain/repositories/auth_provider.dart';
@@ -19,11 +20,11 @@ class NotificationView extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         leading: const DrawerIconButton(),
-        title: const Text('الإشعارات'),
+        title: Text(context.l.notificationsTitle),
         actions: [
           IconButton(
             icon: const Icon(Icons.done_all),
-            tooltip: 'تحديد الكل كمقروء',
+            tooltip: context.l.notificationsMarkAllRead,
             onPressed: () {
               ref
                   .read(notificationNotifierProvider.notifier)
@@ -34,9 +35,9 @@ class NotificationView extends ConsumerWidget {
           ),
           PopupMenuButton<String>(
             itemBuilder: (context) => [
-              const PopupMenuItem(
+              PopupMenuItem(
                 value: 'deleteAll',
-                child: Text('حذف الكل'),
+                child: Text(context.l.notificationsDeleteAll),
               ),
             ],
             onSelected: (value) {
@@ -67,19 +68,19 @@ class NotificationView extends ConsumerWidget {
             ),
             children: [
               if (grouped.$1.isNotEmpty) ...[
-                _buildSectionHeader('اليوم'),
+                _buildSectionHeader(context.l.notificationsSectionToday),
                 ...grouped.$1.map(
                   (n) => _buildNotificationCard(context, ref, n, userId),
                 ),
               ],
               if (grouped.$2.isNotEmpty) ...[
-                _buildSectionHeader('أمس'),
+                _buildSectionHeader(context.l.notificationsSectionYesterday),
                 ...grouped.$2.map(
                   (n) => _buildNotificationCard(context, ref, n, userId),
                 ),
               ],
               if (grouped.$3.isNotEmpty) ...[
-                _buildSectionHeader('أقدم'),
+                _buildSectionHeader(context.l.notificationsSectionOlder),
                 ...grouped.$3.map(
                   (n) => _buildNotificationCard(context, ref, n, userId),
                 ),
@@ -89,7 +90,7 @@ class NotificationView extends ConsumerWidget {
           );
         },
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => _buildErrorState(e),
+        error: (e, _) => _buildErrorState(context, e),
       ),
     );
   }
@@ -136,12 +137,12 @@ class NotificationView extends ConsumerWidget {
         return await showDialog<bool>(
           context: context,
           builder: (context) => AlertDialog(
-            title: const Text('حذف الإشعار'),
-            content: const Text('هل أنت متأكد من حذف هذا الإشعار؟'),
+            title: Text(context.l.notificationsDeleteTitle),
+            content: Text(context.l.notificationsDeleteConfirm),
             actions: [
               TextButton(
                 onPressed: () => Navigator.of(context).pop(false),
-                child: const Text('إلغاء'),
+                child: Text(context.l.cancel),
               ),
               ElevatedButton(
                 onPressed: () => Navigator.of(context).pop(true),
@@ -149,7 +150,7 @@ class NotificationView extends ConsumerWidget {
                   backgroundColor: AppColors.error,
                   foregroundColor: AppColors.white,
                 ),
-                child: const Text('حذف'),
+                child: Text(context.l.delete),
               ),
             ],
           ),
@@ -386,13 +387,13 @@ class NotificationView extends ConsumerWidget {
             ),
             AppSpacing.gapLG,
             Text(
-              'لا توجد إشعارات',
+              context.l.notificationsEmpty,
               style: AppTextStyles.h3,
               textAlign: TextAlign.center,
             ),
             AppSpacing.gapSM,
             Text(
-              'ستظهر هنا الإشعارات الجديدة عند وصولها',
+              context.l.notificationsEmptyHint,
               style: AppTextStyles.body.copyWith(
                 color: AppColors.textSecondary,
               ),
@@ -404,7 +405,7 @@ class NotificationView extends ConsumerWidget {
     );
   }
 
-  Widget _buildErrorState(Object error) {
+  Widget _buildErrorState(BuildContext context, Object error) {
     final isConnectionError = error.toString().contains('Connection refused') ||
         error.toString().contains('SocketException');
     return Center(
@@ -421,15 +422,15 @@ class NotificationView extends ConsumerWidget {
             AppSpacing.gapLG,
             Text(
               isConnectionError
-                  ? 'تعذر الاتصال بالخادم'
-                  : 'خطأ في تحميل الإشعارات',
+                  ? context.l.notificationsConnectionError
+                  : context.l.notificationsLoadingError,
               style: AppTextStyles.h3,
               textAlign: TextAlign.center,
             ),
             if (isConnectionError) ...[
               AppSpacing.gapSM,
               Text(
-                'تأكد من اتصالك بالإنترنت',
+                context.l.notificationsCheckConnection,
                 style: AppTextStyles.body.copyWith(
                   color: AppColors.textSecondary,
                 ),
@@ -446,12 +447,12 @@ class NotificationView extends ConsumerWidget {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('حذف جميع الإشعارات'),
-        content: const Text('هل أنت متأكد من حذف جميع الإشعارات؟'),
+        title: Text(context.l.notificationsDeleteAllTitle),
+        content: Text(context.l.notificationsDeleteAllConfirm),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('إلغاء'),
+            child: Text(context.l.cancel),
           ),
           ElevatedButton(
             onPressed: () {
@@ -466,7 +467,7 @@ class NotificationView extends ConsumerWidget {
               backgroundColor: AppColors.error,
               foregroundColor: AppColors.white,
             ),
-            child: const Text('حذف'),
+            child: Text(context.l.delete),
           ),
         ],
       ),
