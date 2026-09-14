@@ -43,6 +43,7 @@ import 'package:hafiz/features/reports/presentation/views/reports_view.dart';
 import 'package:hafiz/features/reports/presentation/views/report_detail_view.dart';
 import 'package:hafiz/features/parent_portal/presentation/views/parent_portal_view.dart';
 import 'package:hafiz/features/dashboard/presentation/views/owner_dashboard_view.dart';
+import 'package:hafiz/features/offline/presentation/views/sync_status_view.dart';
 import 'package:hafiz/core/theme/theme.dart';
 import 'package:hafiz/core/widgets/drawer_icon_button.dart';
 
@@ -296,6 +297,10 @@ GoRoute(
           GoRoute(
             path: '/settings/users',
             builder: (context, state) => const UserManagementView(),
+          ),
+          GoRoute(
+            path: '/sync-status',
+            builder: (context, state) => const SyncStatusView(),
           ),
         ],
       ),
