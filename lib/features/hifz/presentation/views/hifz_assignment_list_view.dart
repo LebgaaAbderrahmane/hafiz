@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import '../../../../core/localization/app_localizations.dart';
 import '../../../../core/theme/theme.dart';
 import '../../../auth/domain/repositories/user_role_provider.dart';
 import '../../domain/entities/hifz_assignment.dart';
@@ -42,7 +43,7 @@ class _HifzAssignmentListViewState extends ConsumerState<HifzAssignmentListView>
     return Scaffold(
       appBar: AppBar(
         leading: const DrawerIconButton(),
-        title: const Text('تعيينات الحفظ'),
+        title: Text(context.l.hifzListTitle),
         actions: [
           IconButton(
             icon: const Icon(Icons.filter_list),
@@ -62,11 +63,11 @@ class _HifzAssignmentListViewState extends ConsumerState<HifzAssignmentListView>
               };
             });
           },
-          tabs: const [
-            Tab(text: 'الكل'),
-            Tab(text: 'قيد الانتظار'),
-            Tab(text: 'جارية'),
-            Tab(text: 'مكتملة'),
+          tabs: [
+            Tab(text: context.l.hifzListTabAll),
+            Tab(text: context.l.hifzListTabPending),
+            Tab(text: context.l.hifzListTabInProgress),
+            Tab(text: context.l.hifzListTabCompleted),
           ],
         ),
       ),
@@ -87,10 +88,10 @@ class _HifzAssignmentListViewState extends ConsumerState<HifzAssignmentListView>
                 children: [
                   Icon(Icons.book_outlined, size: 64, color: AppColors.textHint),
                   Gap.l,
-                  Text('لا توجد تعيينات', style: AppTextStyles.bodyLarge),
+                  Text(context.l.hifzListEmpty, style: AppTextStyles.bodyLarge),
                   Gap.s,
                   Text(
-                    'اضغط + لإنشاء تعيين حفظ جديد',
+                    context.l.hifzListEmptyHint,
                     style: AppTextStyles.bodySmall.copyWith(
                       color: AppColors.textSecondary,
                     ),
@@ -108,7 +109,7 @@ class _HifzAssignmentListViewState extends ConsumerState<HifzAssignmentListView>
           );
         },
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, st) => Center(child: Text('خطأ: $e')),
+        error: (e, st) => Center(child: Text('${context.l.error}: $e')),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => context.push('/hifz/assignments/create'),
@@ -267,24 +268,24 @@ class _HifzAssignmentListViewState extends ConsumerState<HifzAssignmentListView>
           children: [
             ListTile(
               leading: const Icon(Icons.filter_list),
-              title: const Text('تصفية حسب النوع'),
+              title: Text(context.l.hifzListFilterByType),
             ),
             ListTile(
-              title: const Text('الكل'),
+              title: Text(context.l.hifzListTabAll),
               onTap: () {
                 setState(() => _selectedTypeFilter = null);
                 Navigator.pop(context);
               },
             ),
             ListTile(
-              title: const Text('حفظ جديد'),
+              title: Text(context.l.hifzFormTypeNew),
               onTap: () {
                 setState(() => _selectedTypeFilter = AssignmentType.newMemorization);
                 Navigator.pop(context);
               },
             ),
             ListTile(
-              title: const Text('مراجعة'),
+              title: Text(context.l.hifzFormTypeRevision),
               onTap: () {
                 setState(() => _selectedTypeFilter = AssignmentType.revision);
                 Navigator.pop(context);

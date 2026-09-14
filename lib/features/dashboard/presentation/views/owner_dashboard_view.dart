@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../core/localization/app_localizations.dart';
 import '../../../../core/theme/theme.dart';
 import '../../../../core/widgets/drawer_icon_button.dart';
 import '../../../../core/utils/app_logger.dart';
@@ -19,7 +20,7 @@ class OwnerDashboardView extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('لوحة التحكم'),
+        title: Text(context.l.dashboard),
         leading: const DrawerIconButton(),
         actions: [
           _buildNotificationBadge(context, ref),
@@ -50,12 +51,12 @@ class OwnerDashboardView extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'مرحباً، $name',
+          '${context.l.dashboardGreeting}، $name',
           style: AppTextStyles.headlineMedium,
         ),
         Gap.xs,
         Text(
-          'نظرة عامة على أداء مؤسستك',
+          context.l.dashboardGreetingSubtitle,
           style: AppTextStyles.bodyMedium.copyWith(
             color: AppColors.textSecondary,
           ),
@@ -70,7 +71,7 @@ class OwnerDashboardView extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('نظرة عامة', style: AppTextStyles.titleLarge),
+        Text(context.l.dashboardOverview, style: AppTextStyles.titleLarge),
         Gap.m,
         statsAsync.when(
           data: (stats) => Column(
@@ -80,7 +81,7 @@ class OwnerDashboardView extends ConsumerWidget {
                   Expanded(
                     child: _buildStatCard(
                       context,
-                      'الطلاب',
+                      context.l.students,
                       stats.totalStudents.toString(),
                       Icons.people,
                       AppColors.primary,
@@ -90,7 +91,7 @@ class OwnerDashboardView extends ConsumerWidget {
                   Expanded(
                     child: _buildStatCard(
                       context,
-                      'المعلمون',
+                      context.l.teachers,
                       stats.totalTeachers.toString(),
                       Icons.person,
                       AppColors.accent,
@@ -104,7 +105,7 @@ class OwnerDashboardView extends ConsumerWidget {
                   Expanded(
                     child: _buildStatCard(
                       context,
-                      'الفصول',
+                      context.l.classes,
                       stats.totalClasses.toString(),
                       Icons.class_,
                       AppColors.success,
@@ -114,7 +115,7 @@ class OwnerDashboardView extends ConsumerWidget {
                   Expanded(
                     child: _buildStatCard(
                       context,
-                      'التعيينات المعلقة',
+                      context.l.hifzAssignments,
                       stats.pendingAssignments.toString(),
                       Icons.assignment,
                       AppColors.warning,
@@ -130,7 +131,7 @@ class OwnerDashboardView extends ConsumerWidget {
                 e.toString().contains('SocketException');
             return Center(
               child: Text(
-                isConnectionError ? 'تعذر الاتصال بالخادم' : 'خطأ في تحميل الإحصائيات',
+                isConnectionError ? context.l.dashboardConnectionError : context.l.dashboardStatsError,
                 style: TextStyle(color: AppColors.error),
               ),
             );
@@ -177,14 +178,14 @@ class OwnerDashboardView extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('إجراءات سريعة', style: AppTextStyles.titleLarge),
+        Text(context.l.dashboardQuickActions, style: AppTextStyles.titleLarge),
         Gap.m,
         Row(
           children: [
             Expanded(
               child: _buildActionButton(
                 context,
-                'إضافة طالب',
+                context.l.addStudent,
                 Icons.person_add,
                 AppColors.primary,
                 () => context.push('/students/add'),
@@ -194,7 +195,7 @@ class OwnerDashboardView extends ConsumerWidget {
             Expanded(
               child: _buildActionButton(
                 context,
-                'إضافة معلم',
+                context.l.addTeacher,
                 Icons.person_add,
                 AppColors.accent,
                 () => context.push('/teachers/add'),
@@ -208,7 +209,7 @@ class OwnerDashboardView extends ConsumerWidget {
             Expanded(
               child: _buildActionButton(
                 context,
-                'إنشاء فصل',
+                context.l.dashboardCreateClass,
                 Icons.add_box,
                 AppColors.success,
                 () => context.push('/classes/add'),
@@ -218,7 +219,7 @@ class OwnerDashboardView extends ConsumerWidget {
             Expanded(
               child: _buildActionButton(
                 context,
-                'جدولة حصة',
+                context.l.dashboardScheduleSession,
                 Icons.event,
                 AppColors.warning,
                 () => context.push('/schedule'),
@@ -264,11 +265,11 @@ class OwnerDashboardView extends ConsumerWidget {
       children: [
         Row(
           children: [
-            Text('النشاط الأخير', style: AppTextStyles.titleLarge),
+            Text(context.l.dashboardRecentActivity, style: AppTextStyles.titleLarge),
             const Spacer(),
             TextButton(
               onPressed: () => context.push('/notifications'),
-              child: const Text('عرض الكل'),
+              child: Text(context.l.dashboardViewAll),
             ),
           ],
         ),
@@ -300,15 +301,15 @@ class OwnerDashboardView extends ConsumerWidget {
                         children: [
                           Text(
                             isConnectionError
-                                ? 'تعذر الاتصال بالخادم'
-                                : 'خطأ في تحميل النشاط',
+                                ? context.l.dashboardConnectionError
+                                : context.l.dashboardActivityError,
                             style: AppTextStyles.bodyMedium.copyWith(
                               fontWeight: FontWeight.w600,
                             ),
                           ),
                           if (isConnectionError)
                             Text(
-                              'تأكد من اتصالك بالإنترنت وأن الخادم يعمل',
+                              context.l.dashboardCheckConnection,
                               style: AppTextStyles.bodySmall.copyWith(
                                 color: AppColors.textSecondary,
                               ),
@@ -332,7 +333,7 @@ class OwnerDashboardView extends ConsumerWidget {
                         Icon(Icons.history, size: 48, color: AppColors.textHint),
                         Gap.m,
                         Text(
-                          'لا يوجد نشاط حديث',
+                          context.l.dashboardNoActivity,
                           style: AppTextStyles.bodyMedium.copyWith(
                             color: AppColors.textSecondary,
                           ),

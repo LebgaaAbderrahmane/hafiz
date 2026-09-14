@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hafiz/core/localization/app_localizations.dart';
 import 'package:hafiz/core/theme/theme.dart';
 import 'package:hafiz/features/auth/domain/entities/user.dart'
     show Role, RoleExtension;
@@ -15,7 +16,7 @@ class UserManagementView extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('إدارة المستخدمين'),
+        title: Text(context.l.userManagementTitle),
         actions: [
           IconButton(
             icon: const Icon(Icons.person_add),
@@ -25,7 +26,7 @@ class UserManagementView extends ConsumerWidget {
       ),
       body: usersAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => Center(child: Text('خطأ: $e')),
+        error: (e, _) => Center(child: Text('${context.l.error}: $e')),
         data: (users) {
           if (users.isEmpty) {
             return Center(
@@ -35,11 +36,11 @@ class UserManagementView extends ConsumerWidget {
                   Icon(Icons.people_outline,
                       size: 64, color: AppColors.textTertiary),
                   Gap.l,
-                  Text('لا يوجد مستخدمون',
+                  Text(context.l.userManagementEmpty,
                       style: AppTextStyles.headlineSmall
                           .copyWith(color: AppColors.textSecondary)),
                   Gap.s,
-                  Text('اضغط على + لدعوة مستخدم جديد',
+                  Text(context.l.userManagementAddHint,
                       style: AppTextStyles.bodySmall),
                 ],
               ),
@@ -124,24 +125,24 @@ class UserManagementView extends ConsumerWidget {
       context: context,
       builder: (context) => StatefulBuilder(
         builder: (context, setDialogState) => AlertDialog(
-          title: const Text('دعوة مستخدم'),
+          title: Text(context.l.userManagementInvite),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
                 controller: emailController,
                 keyboardType: TextInputType.emailAddress,
-                decoration: const InputDecoration(
-                  labelText: 'البريد الإلكتروني',
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  labelText: context.l.email,
+                  border: const OutlineInputBorder(),
                 ),
               ),
               Gap.m,
               DropdownButtonFormField<Role>(
                 initialValue: selectedRole,
-                decoration: const InputDecoration(
-                  labelText: 'الدور',
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  labelText: context.l.userManagementRole,
+                  border: const OutlineInputBorder(),
                 ),
                 items: Role.values
                     .where((r) => r != Role.student && r != Role.parent)
@@ -161,16 +162,16 @@ class UserManagementView extends ConsumerWidget {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('إلغاء'),
+              child: Text(context.l.cancel),
             ),
             ElevatedButton(
               onPressed: () {
                 Navigator.pop(context);
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('تم إرسال الدعوة')),
+                  SnackBar(content: Text(context.l.userManagementInviteSent)),
                 );
               },
-              child: const Text('إرسال'),
+              child: Text(context.l.userManagementSend),
             ),
           ],
         ),
@@ -186,7 +187,7 @@ class UserManagementView extends ConsumerWidget {
       context: context,
       builder: (context) => StatefulBuilder(
         builder: (context, setDialogState) => AlertDialog(
-          title: const Text('تعديل الدور'),
+          title: Text(context.l.userManagementEditRole),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -194,9 +195,9 @@ class UserManagementView extends ConsumerWidget {
               Gap.m,
               DropdownButtonFormField<Role>(
                 initialValue: selectedRole,
-                decoration: const InputDecoration(
-                  labelText: 'الدور',
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  labelText: context.l.userManagementRole,
+                  border: const OutlineInputBorder(),
                 ),
                 items: Role.values
                     .where((r) => r != Role.student && r != Role.parent)
@@ -216,7 +217,7 @@ class UserManagementView extends ConsumerWidget {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('إلغاء'),
+              child: Text(context.l.cancel),
             ),
             ElevatedButton(
               onPressed: () async {
@@ -225,7 +226,7 @@ class UserManagementView extends ConsumerWidget {
                     .updateUserRole(user.id, selectedRole.name);
                 if (context.mounted) Navigator.pop(context);
               },
-              child: const Text('حفظ'),
+              child: Text(context.l.save),
             ),
           ],
         ),

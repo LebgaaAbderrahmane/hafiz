@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../core/localization/app_localizations.dart';
 import '../../../../core/theme/theme.dart';
 import '../../../auth/domain/repositories/user_role_provider.dart';
 import '../../domain/entities/memorization_plan.dart';
@@ -80,7 +81,7 @@ class _CreateMemorizationPlanViewState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('خطة حفظ جديدة'),
+        title: Text(context.l.quranPlanTitle),
         leading: IconButton(
           icon: const Icon(Icons.close),
           onPressed: () => context.pop(),
@@ -97,34 +98,34 @@ class _CreateMemorizationPlanViewState
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('المعلومات الأساسية', style: AppTextStyles.titleMedium),
+                    Text(context.l.quranPlanBasicInfo, style: AppTextStyles.titleMedium),
                     Gap.m,
                     if (widget.studentId == null)
                       TextFormField(
                         controller: _studentIdController,
-                        decoration: const InputDecoration(
-                          labelText: 'معرف الطالب *',
-                          border: OutlineInputBorder(),
+                        decoration: InputDecoration(
+                          labelText: '${context.l.quranPlanStudentId} *',
+                          border: const OutlineInputBorder(),
                         ),
-                        validator: (v) => v?.isEmpty == true ? 'مطلوب' : null,
+                        validator: (v) => v?.isEmpty == true ? context.l.authRequired : null,
                       ),
                     if (widget.teacherId == null) ...[
                       Gap.m,
                       TextFormField(
                         controller: _teacherIdController,
-                        decoration: const InputDecoration(
-                          labelText: 'معرف المعلم *',
-                          border: OutlineInputBorder(),
+                        decoration: InputDecoration(
+                          labelText: '${context.l.quranPlanTeacherId} *',
+                          border: const OutlineInputBorder(),
                         ),
-                        validator: (v) => v?.isEmpty == true ? 'مطلوب' : null,
+                        validator: (v) => v?.isEmpty == true ? context.l.authRequired : null,
                       ),
                     ],
                     Gap.m,
                     DropdownButtonFormField<MemorizationPriority>(
                       initialValue: _priority,
-                      decoration: const InputDecoration(
-                        labelText: 'الأولوية',
-                        border: OutlineInputBorder(),
+                      decoration: InputDecoration(
+                        labelText: context.l.quranPlanPriority,
+                        border: const OutlineInputBorder(),
                       ),
                       items: MemorizationPriority.values.map((p) {
                         return DropdownMenuItem(
@@ -147,16 +148,16 @@ class _CreateMemorizationPlanViewState
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('نطاق الحفظ', style: AppTextStyles.titleMedium),
+                    Text(context.l.quranPlanScope, style: AppTextStyles.titleMedium),
                     Gap.m,
                     Row(
                       children: [
                         Expanded(
                           child: DropdownButtonFormField<int>(
                             initialValue: _startSurah,
-                            decoration: const InputDecoration(
-                              labelText: 'من السورة',
-                              border: OutlineInputBorder(),
+                            decoration: InputDecoration(
+                              labelText: context.l.quranPlanFromSurah,
+                              border: const OutlineInputBorder(),
                             ),
                             items: List.generate(
                               _surahNames.length,
@@ -175,9 +176,9 @@ class _CreateMemorizationPlanViewState
                         Expanded(
                           child: DropdownButtonFormField<int>(
                             initialValue: _startAyah,
-                            decoration: const InputDecoration(
-                              labelText: 'من الآية',
-                              border: OutlineInputBorder(),
+                            decoration: InputDecoration(
+                              labelText: context.l.quranPlanFromAyah,
+                              border: const OutlineInputBorder(),
                             ),
                             items: List.generate(
                               300,
@@ -200,9 +201,9 @@ class _CreateMemorizationPlanViewState
                         Expanded(
                           child: DropdownButtonFormField<int>(
                             initialValue: _targetSurah,
-                            decoration: const InputDecoration(
-                              labelText: 'إلى السورة',
-                              border: OutlineInputBorder(),
+                            decoration: InputDecoration(
+                              labelText: context.l.quranPlanToSurah,
+                              border: const OutlineInputBorder(),
                             ),
                             items: List.generate(
                               _surahNames.length,
@@ -221,9 +222,9 @@ class _CreateMemorizationPlanViewState
                         Expanded(
                           child: DropdownButtonFormField<int>(
                             initialValue: _targetAyah,
-                            decoration: const InputDecoration(
-                              labelText: 'إلى الآية',
-                              border: OutlineInputBorder(),
+                            decoration: InputDecoration(
+                              labelText: context.l.quranPlanToAyah,
+                              border: const OutlineInputBorder(),
                             ),
                             items: List.generate(
                               300,
@@ -256,7 +257,7 @@ class _CreateMemorizationPlanViewState
                         height: 20,
                         child: CircularProgressIndicator(strokeWidth: 2),
                       )
-                    : const Text('إنشاء الخطة'),
+                    : Text(context.l.quranPlanSubmit),
               ),
             ),
           ],
@@ -294,14 +295,14 @@ class _CreateMemorizationPlanViewState
           ref.invalidate(studentPlansProvider(_studentIdController.text));
           context.pop();
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('تم إنشاء الخطة بنجاح')),
+            SnackBar(content: Text(context.l.quranPlanSuccess)),
           );
         },
       );
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('خطأ: $e'), backgroundColor: AppColors.error),
+          SnackBar(content: Text('${context.l.error}: $e'), backgroundColor: AppColors.error),
         );
       }
     } finally {

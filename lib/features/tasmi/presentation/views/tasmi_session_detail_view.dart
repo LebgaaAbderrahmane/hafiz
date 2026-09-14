@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
+import '../../../../core/localization/app_localizations.dart';
 import '../../../../core/theme/theme.dart';
 import '../../../../core/widgets/widgets.dart';
 import '../../../../core/widgets/drawer_icon_button.dart';
@@ -28,10 +29,10 @@ class TasmiSessionDetailView extends ConsumerWidget {
         leading: const DrawerIconButton(),
         title: sessionAsync.when(
           data: (session) => Text(
-            session?.sessionType.displayNameAr ?? 'تفاصيل التسميع',
+            session?.sessionType.displayNameAr ?? context.l.tasmiSessionDetailTitle,
           ),
-          loading: () => const Text('تفاصيل التسميع'),
-          error: (_, __) => const Text('تفاصيل التسميع'),
+          loading: () => Text(context.l.tasmiSessionDetailTitle),
+          error: (_, __) => Text(context.l.tasmiSessionDetailTitle),
         ),
         actions: [
           IconButton(
@@ -43,20 +44,20 @@ class TasmiSessionDetailView extends ConsumerWidget {
       body: sessionAsync.when(
         data: (session) {
           if (session == null) {
-            return const AppErrorWidget(
-              message: 'جلسة التسميع غير موجودة',
-              title: 'خطأ',
+            return AppErrorWidget(
+              message: context.l.tasmiSessionNotFound,
+              title: context.l.error,
             );
           }
           return _SessionContent(session: session);
         },
-        loading: () => const AppLoading(
+        loading: () => AppLoading(
           size: AppLoadingSize.large,
-          message: 'جاري التحميل...',
+          message: context.l.tasmiLoadingSession,
         ),
         error: (e, _) => AppErrorWidget(
-          message: 'حدث خطأ أثناء تحميل بيانات الجلسة',
-          title: 'خطأ',
+          message: context.l.tasmiErrorLoadingSession,
+          title: context.l.error,
           onRetry: () => ref.invalidate(tasmiSessionProvider(sessionId)),
         ),
       ),
@@ -67,20 +68,20 @@ class TasmiSessionDetailView extends ConsumerWidget {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('حذف الجلسة'),
-        content: const Text('هل أنت متأكد من حذف هذه الجلسة؟'),
+        title: Text(context.l.tasmiDeleteSession),
+        content: Text(context.l.tasmiDeleteSessionConfirm),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(),
-            child: const Text('إلغاء'),
+            child: Text(context.l.cancel),
           ),
           TextButton(
             onPressed: () {
               Navigator.of(ctx).pop();
               Navigator.of(context).pop();
             },
-            child: const Text(
-              'حذف',
+            child: Text(
+              context.l.delete,
               style: TextStyle(color: AppColors.error),
             ),
           ),
@@ -102,21 +103,21 @@ class _SessionContent extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          _buildStudentInfoCard(),
+          _buildStudentInfoCard(context),
           Gap.l,
-          _buildPassageCard(),
+          _buildPassageCard(context),
           Gap.l,
-          _buildOutcomeBadge(),
+          _buildOutcomeBadge(context),
           Gap.l,
-          _buildScoresSection(),
+          _buildScoresSection(context),
           if (session.errors.isNotEmpty) ...[
             Gap.l,
-            _buildErrorsSection(),
+            _buildErrorsSection(context),
           ],
           if (session.teacherNotes != null &&
               session.teacherNotes!.isNotEmpty) ...[
             Gap.l,
-            _buildNotesSection(),
+            _buildNotesSection(context),
           ],
           Gap.l,
           _buildRecordedDate(),
@@ -126,21 +127,21 @@ class _SessionContent extends StatelessWidget {
     );
   }
 
-  Widget _buildStudentInfoCard() {
+  Widget _buildStudentInfoCard(BuildContext context) {
     return AppCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('معلومات الجلسة', style: AppTextStyles.titleMedium),
+          Text(context.l.tasmiSessionInfo, style: AppTextStyles.titleMedium),
           Gap.m,
-          _infoRow('رقم الطالب', session.studentId),
+          _infoRow(context.l.tasmiStudentId, session.studentId),
           Gap.s,
-          _infoRow('رقم المعلم', session.teacherId),
+          _infoRow(context.l.tasmiTeacherId, session.teacherId),
           Gap.s,
-          _infoRow('رقم الحصة', session.sessionId),
+          _infoRow(context.l.tasmiSessionId, session.sessionId),
           if (session.classId != null) ...[
             Gap.s,
-            _infoRow('رقم الفصل', session.classId!),
+            _infoRow(context.l.tasmiClassId, session.classId!),
           ],
         ],
       ),
@@ -165,18 +166,19 @@ class _SessionContent extends StatelessWidget {
     );
   }
 
-  Widget _buildPassageCard() {
+  Widget _buildPassageCard(BuildContext context) {
     return AppCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('القرآن', style: AppTextStyles.titleMedium),
+          Text(context.l.quran, style: AppTextStyles.titleMedium),
           Gap.m,
           Row(
             children: [
               Expanded(
                 child: _passageTile(
-                  label: 'من',
+                  context: context,
+                  label: context.l.tasmiFrom,
                   surah: session.startSurah,
                   ayah: session.startAyah,
                 ),
@@ -191,7 +193,8 @@ class _SessionContent extends StatelessWidget {
               ),
               Expanded(
                 child: _passageTile(
-                  label: 'إلى',
+                  context: context,
+                  label: context.l.tasmiTo,
                   surah: session.endSurah,
                   ayah: session.endAyah,
                 ),
@@ -204,6 +207,7 @@ class _SessionContent extends StatelessWidget {
   }
 
   Widget _passageTile({
+    required BuildContext context,
     required String label,
     required int surah,
     required int ayah,
@@ -219,7 +223,7 @@ class _SessionContent extends StatelessWidget {
           Text(label, style: AppTextStyles.caption),
           Gap.xs,
           Text(
-            'سورة $surah:$ayah',
+            '${context.l.tasmiSurah} $surah:$ayah',
             style: AppTextStyles.bodyMedium.copyWith(
               fontWeight: FontWeight.w600,
             ),
@@ -230,7 +234,7 @@ class _SessionContent extends StatelessWidget {
     );
   }
 
-  Widget _buildOutcomeBadge() {
+  Widget _buildOutcomeBadge(BuildContext context) {
     final color = Color(session.outcome.colorValue);
     final icon = switch (session.outcome) {
       TasmiOutcome.pass => Icons.check_circle,
@@ -248,7 +252,7 @@ class _SessionContent extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('النتيجة', style: AppTextStyles.bodySmall),
+                Text(context.l.tasmiResult, style: AppTextStyles.bodySmall),
                 Gap.xs,
                 Text(
                   session.outcome.displayNameAr,
@@ -267,21 +271,21 @@ class _SessionContent extends StatelessWidget {
     );
   }
 
-  Widget _buildScoresSection() {
+  Widget _buildScoresSection(BuildContext context) {
     return AppCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('الدرجات', style: AppTextStyles.titleMedium),
+          Text(context.l.tasmiScores, style: AppTextStyles.titleMedium),
           Gap.m,
-          _scoreBar('الدقة', session.accuracyScore),
+          _scoreBar(context.l.tasmiAccuracy, session.accuracyScore),
           Gap.m,
-          _scoreBar('التجويد', session.tajwidScore),
+          _scoreBar(context.l.tasmiTajwid, session.tajwidScore),
           Gap.m,
-          _scoreBar('الطلاقة', session.fluencyScore),
+          _scoreBar(context.l.tasmiFluency, session.fluencyScore),
           if (session.overallRating != null) ...[
             Gap.m,
-            _scoreBar('التقييم العام', session.overallRating),
+            _scoreBar(context.l.tasmiOverallRating, session.overallRating),
           ],
         ],
       ),
@@ -328,7 +332,7 @@ class _SessionContent extends StatelessWidget {
     );
   }
 
-  Widget _buildErrorsSection() {
+  Widget _buildErrorsSection(BuildContext context) {
     return AppCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -337,7 +341,7 @@ class _SessionContent extends StatelessWidget {
             children: [
               const Icon(Icons.error_outline, color: AppColors.error, size: 20),
               Gap.s,
-              Text('الأخطاء', style: AppTextStyles.titleMedium),
+              Text(context.l.tasmiErrors, style: AppTextStyles.titleMedium),
               Gap.s,
               AppBadge(
                 label: '${session.errors.length}',
@@ -346,13 +350,13 @@ class _SessionContent extends StatelessWidget {
             ],
           ),
           Gap.m,
-          ...session.errors.map((error) => _errorTile(error)),
+          ...session.errors.map((error) => _errorTile(context, error)),
         ],
       ),
     );
   }
 
-  Widget _errorTile(TasmiError error) {
+  Widget _errorTile(BuildContext context, TasmiError error) {
     final severityColor = switch (error.severity) {
       ErrorSeverity.minor => AppColors.warning,
       ErrorSeverity.moderate => AppColors.warning,
@@ -360,9 +364,9 @@ class _SessionContent extends StatelessWidget {
       null => AppColors.textTertiary,
     };
     final severityLabel = switch (error.severity) {
-      ErrorSeverity.minor => 'طفيف',
-      ErrorSeverity.moderate => 'متوسط',
-      ErrorSeverity.major => 'جسيم',
+      ErrorSeverity.minor => context.l.tasmiErrorMinor,
+      ErrorSeverity.moderate => context.l.tasmiErrorModerate,
+      ErrorSeverity.major => context.l.tasmiErrorMajor,
       null => '-',
     };
 
@@ -386,13 +390,13 @@ class _SessionContent extends StatelessWidget {
                   ),
                 ),
                 Gap.xs,
-                Text(
-                  'سورة ${error.surahNumber}:${error.ayahNumber}',
+          Text(
+            '${context.l.tasmiSurah} ${error.surahNumber}:${error.ayahNumber}',
                   style: AppTextStyles.bodySmall,
                 ),
                 if (error.wordLocation != null)
                   Text(
-                    'الموضع: ${error.wordLocation}',
+                    '${context.l.tasmiErrorLocation}: ${error.wordLocation}',
                     style: AppTextStyles.caption,
                   ),
               ],
@@ -408,12 +412,12 @@ class _SessionContent extends StatelessWidget {
     );
   }
 
-  Widget _buildNotesSection() {
+  Widget _buildNotesSection(BuildContext context) {
     return AppCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('ملاحظات المعلم', style: AppTextStyles.titleMedium),
+          Text(context.l.tasmiTeacherNotes, style: AppTextStyles.titleMedium),
           Gap.m,
           Text(
             session.teacherNotes!,

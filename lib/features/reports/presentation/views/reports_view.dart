@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../core/localization/app_localizations.dart';
 import '../../../../core/theme/theme.dart';
 import '../../../../core/widgets/drawer_icon_button.dart';
 import '../../../../core/widgets/app_card.dart';
@@ -20,13 +21,13 @@ class ReportsView extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         leading: const DrawerIconButton(),
-        title: const Text('التقارير'),
+        title: Text(context.l.reportsTitle),
       ),
       body: reportsAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, st) => Center(
           child: Text(
-            'خطأ في تحميل التقارير',
+            context.l.reportsErrorLoading,
             style: AppTextStyles.bodyMedium.copyWith(color: AppColors.error),
           ),
         ),
@@ -41,7 +42,7 @@ class ReportsView extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildHeader(),
+          _buildHeader(context),
           Gap.l,
           _buildCategoriesGrid(context),
           if (reports.isNotEmpty) ...[
@@ -53,14 +54,14 @@ class ReportsView extends ConsumerWidget {
     );
   }
 
-  Widget _buildHeader() {
+  Widget _buildHeader(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('التقارير والإحصائيات', style: AppTextStyles.headlineMedium),
+        Text(context.l.reportsStatistics, style: AppTextStyles.headlineMedium),
         Gap.xs,
         Text(
-          'اختر تصنيفاً لعرض التقارير المتاحة',
+          context.l.reportsSubtitle,
           style: AppTextStyles.bodyMedium.copyWith(
             color: AppColors.textSecondary,
           ),
@@ -73,7 +74,7 @@ class ReportsView extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('التصنيفات', style: AppTextStyles.titleLarge),
+        Text(context.l.reportsCategories, style: AppTextStyles.titleLarge),
         Gap.m,
         GridView.builder(
           shrinkWrap: true,
@@ -125,7 +126,7 @@ class ReportsView extends ConsumerWidget {
           ),
           Gap.xs,
           Text(
-            '${category.reportTypes.length} تقارير',
+            '${category.reportTypes.length} ${context.l.reportsReportCount}',
             style: AppTextStyles.caption,
           ),
         ],
@@ -140,17 +141,17 @@ class ReportsView extends ConsumerWidget {
       children: [
         Row(
           children: [
-            Text('التقارير الأخيرة', style: AppTextStyles.titleLarge),
+            Text(context.l.reportsRecent, style: AppTextStyles.titleLarge),
             const Spacer(),
           ],
         ),
         Gap.m,
-        ...recent.map((report) => _buildRecentReportItem(report)),
+        ...recent.map((report) => _buildRecentReportItem(context, report)),
       ],
     );
   }
 
-  Widget _buildRecentReportItem(Report report) {
+  Widget _buildRecentReportItem(BuildContext context, Report report) {
     return Card(
       margin: EdgeInsetsDirectional.only(bottom: AppSpacing.s),
       child: ListTile(
@@ -181,19 +182,19 @@ class ReportsView extends ConsumerWidget {
           ),
         ),
         trailing: Text(
-          _formatDate(report.createdAt),
+          _formatDate(context, report.createdAt),
           style: AppTextStyles.caption,
         ),
       ),
     );
   }
 
-  String _formatDate(DateTime date) {
+  String _formatDate(BuildContext context, DateTime date) {
     final now = DateTime.now();
     final diff = now.difference(date);
     if (diff.inDays > 7) return '${date.day}/${date.month}';
-    if (diff.inDays > 0) return '${diff.inDays} يوم';
-    if (diff.inHours > 0) return '${diff.inHours} ساعة';
-    return 'الآن';
+    if (diff.inDays > 0) return '${diff.inDays} ${context.l.reportsDaysAgo}';
+    if (diff.inHours > 0) return '${diff.inHours} ${context.l.reportsHoursAgo}';
+    return context.l.reportsNow;
   }
 }

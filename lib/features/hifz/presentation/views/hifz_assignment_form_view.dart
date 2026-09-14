@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../core/localization/app_localizations.dart';
 import '../../../../core/theme/theme.dart';
 import '../../../auth/domain/repositories/user_role_provider.dart';
 import '../../domain/entities/hifz_assignment.dart';
@@ -85,7 +86,7 @@ class _HifzAssignmentFormViewState extends ConsumerState<HifzAssignmentFormView>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.isEditing ? 'تعديل التعيين' : 'تعيين حفظ جديد'),
+        title: Text(widget.isEditing ? context.l.hifzFormEditTitle : context.l.hifzFormTitle),
         actions: [
           if (widget.isEditing)
             IconButton(
@@ -120,24 +121,24 @@ class _HifzAssignmentFormViewState extends ConsumerState<HifzAssignmentFormView>
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('نوع التعيين', style: AppTextStyles.titleMedium),
+        Text(context.l.hifzFormType, style: AppTextStyles.titleMedium),
         Gap.s,
         SegmentedButton<AssignmentType>(
-          segments: const [
+          segments: [
             ButtonSegment(
               value: AssignmentType.newMemorization,
-              label: Text('حفظ جديد'),
-              icon: Icon(Icons.bookmark_add_outlined),
+              label: Text(context.l.hifzFormTypeNew),
+              icon: const Icon(Icons.bookmark_add_outlined),
             ),
             ButtonSegment(
               value: AssignmentType.revision,
-              label: Text('مراجعة'),
-              icon: Icon(Icons.refresh),
+              label: Text(context.l.hifzFormTypeRevision),
+              icon: const Icon(Icons.refresh),
             ),
             ButtonSegment(
               value: AssignmentType.comprehensiveRevision,
-              label: Text('مراجعة شاملة'),
-              icon: Icon(Icons.rate_review_outlined),
+              label: Text(context.l.hifzFormTypeComprehensive),
+              icon: const Icon(Icons.rate_review_outlined),
             ),
           ],
           selected: {_type},
@@ -153,16 +154,16 @@ class _HifzAssignmentFormViewState extends ConsumerState<HifzAssignmentFormView>
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('الآيات', style: AppTextStyles.titleMedium),
+        Text(context.l.hifzFormAyahs, style: AppTextStyles.titleMedium),
         Gap.s,
         Row(
           children: [
             Expanded(
               child: DropdownButtonFormField<int>(
                 initialValue: _startSurah,
-                decoration: const InputDecoration(
-                  labelText: 'من السورة',
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  labelText: context.l.hifzFormFromSurah,
+                  border: const OutlineInputBorder(),
                 ),
                 items: List.generate(
                   _surahNames.length,
@@ -180,9 +181,9 @@ class _HifzAssignmentFormViewState extends ConsumerState<HifzAssignmentFormView>
             Expanded(
               child: DropdownButtonFormField<int>(
                 initialValue: _startAyah,
-                decoration: const InputDecoration(
-                  labelText: 'من الآية',
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  labelText: context.l.hifzFormFromAyah,
+                  border: const OutlineInputBorder(),
                 ),
                 items: List.generate(
                   300,
@@ -204,9 +205,9 @@ class _HifzAssignmentFormViewState extends ConsumerState<HifzAssignmentFormView>
             Expanded(
               child: DropdownButtonFormField<int>(
                 initialValue: _endSurah,
-                decoration: const InputDecoration(
-                  labelText: 'إلى السورة',
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  labelText: context.l.hifzFormToSurah,
+                  border: const OutlineInputBorder(),
                 ),
                 items: List.generate(
                   _surahNames.length,
@@ -224,9 +225,9 @@ class _HifzAssignmentFormViewState extends ConsumerState<HifzAssignmentFormView>
             Expanded(
               child: DropdownButtonFormField<int>(
                 initialValue: _endAyah,
-                decoration: const InputDecoration(
-                  labelText: 'إلى الآية',
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  labelText: context.l.hifzFormToAyah,
+                  border: const OutlineInputBorder(),
                 ),
                 items: List.generate(
                   300,
@@ -250,7 +251,7 @@ class _HifzAssignmentFormViewState extends ConsumerState<HifzAssignmentFormView>
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('تاريخ التسليم', style: AppTextStyles.titleMedium),
+        Text(context.l.hifzFormDueDate, style: AppTextStyles.titleMedium),
         Gap.s,
         InkWell(
           onTap: () async {
@@ -272,7 +273,7 @@ class _HifzAssignmentFormViewState extends ConsumerState<HifzAssignmentFormView>
             child: Text(
               _dueDate != null
                   ? '${_dueDate!.day}/${_dueDate!.month}/${_dueDate!.year}'
-                  : 'اختر التاريخ',
+                  : context.l.hifzFormSelectDate,
               style: AppTextStyles.bodyMedium,
             ),
           ),
@@ -285,7 +286,7 @@ class _HifzAssignmentFormViewState extends ConsumerState<HifzAssignmentFormView>
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('الجودة المطلوبة', style: AppTextStyles.titleMedium),
+        Text(context.l.hifzFormQuality, style: AppTextStyles.titleMedium),
         Gap.s,
         Row(
           children: [
@@ -330,14 +331,14 @@ class _HifzAssignmentFormViewState extends ConsumerState<HifzAssignmentFormView>
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('ملاحظات', style: AppTextStyles.titleMedium),
+        Text(context.l.notes, style: AppTextStyles.titleMedium),
         Gap.s,
         TextFormField(
           controller: _notesController,
           maxLines: 3,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            hintText: 'ملاحظات إضافية...',
+          decoration: InputDecoration(
+            border: const OutlineInputBorder(),
+            hintText: context.l.hifzFormNotesHint,
           ),
           onChanged: (value) => _notes = value,
         ),
@@ -358,7 +359,7 @@ class _HifzAssignmentFormViewState extends ConsumerState<HifzAssignmentFormView>
                 child: CircularProgressIndicator(strokeWidth: 2),
               )
             : Text(
-                widget.isEditing ? 'حفظ التعديلات' : 'إنشاء التعيين',
+                widget.isEditing ? context.l.hifzFormSaveEdit : context.l.hifzFormCreate,
                 style: AppTextStyles.titleMedium.copyWith(color: AppColors.white),
               ),
       ),
@@ -403,7 +404,7 @@ class _HifzAssignmentFormViewState extends ConsumerState<HifzAssignmentFormView>
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              widget.isEditing ? 'تم تعديل التعيين بنجاح' : 'تم إنشاء التعيين بنجاح',
+              widget.isEditing ? context.l.hifzFormEditSuccess : context.l.hifzFormCreateSuccess,
             ),
           ),
         );
@@ -411,7 +412,7 @@ class _HifzAssignmentFormViewState extends ConsumerState<HifzAssignmentFormView>
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('خطأ: $e'), backgroundColor: AppColors.error),
+          SnackBar(content: Text('${context.l.error}: $e'), backgroundColor: AppColors.error),
         );
       }
     } finally {
@@ -423,12 +424,12 @@ class _HifzAssignmentFormViewState extends ConsumerState<HifzAssignmentFormView>
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('حذف التعيين'),
-        content: const Text('هل أنت متأكد من حذف هذا التعيين؟'),
+        title: Text(context.l.hifzFormDeleteTitle),
+        content: Text(context.l.hifzFormDeleteConfirm),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('إلغاء'),
+            child: Text(context.l.cancel),
           ),
           ElevatedButton(
             onPressed: () async {
@@ -439,11 +440,11 @@ class _HifzAssignmentFormViewState extends ConsumerState<HifzAssignmentFormView>
               if (!context.mounted) return;
               context.pop();
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('تم حذف التعيين')),
+                SnackBar(content: Text(context.l.hifzFormDeleteSuccess)),
               );
             },
             style: ElevatedButton.styleFrom(backgroundColor: AppColors.error),
-            child: const Text('حذف'),
+            child: Text(context.l.delete),
           ),
         ],
       ),

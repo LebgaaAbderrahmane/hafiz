@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../core/localization/app_localizations.dart';
 import '../../../../core/theme/theme.dart';
 import '../../../auth/domain/repositories/user_role_provider.dart';
 import '../../domain/entities/teacher.dart';
@@ -44,7 +45,7 @@ class _AddTeacherViewState extends ConsumerState<AddTeacherView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('إضافة معلم'),
+        title: Text(context.l.addTeacher),
         leading: IconButton(
           icon: const Icon(Icons.close),
           onPressed: () => context.pop(),
@@ -56,34 +57,34 @@ class _AddTeacherViewState extends ConsumerState<AddTeacherView> {
           padding: EdgeInsets.all(AppSpacing.m),
           children: [
             _buildSection(
-              'المعلومات الأساسية',
+              context.l.addTeacherBasicInfo,
               [
                 TextFormField(
                   controller: _fullNameController,
-                  decoration: const InputDecoration(
-                    labelText: 'الاسم الكامل *',
-                    border: OutlineInputBorder(),
+                  decoration: InputDecoration(
+                    labelText: '${context.l.fullName} *',
+                    border: const OutlineInputBorder(),
                   ),
-                  validator: (v) => v?.isEmpty == true ? 'مطلوب' : null,
+                  validator: (v) => v?.isEmpty == true ? context.l.authRequired : null,
                 ),
                 Gap.m,
                 TextFormField(
                   controller: _preferredNameController,
-                  decoration: const InputDecoration(
-                    labelText: 'الاسم المفضل',
-                    border: OutlineInputBorder(),
+                  decoration: InputDecoration(
+                    labelText: context.l.preferredName,
+                    border: const OutlineInputBorder(),
                   ),
                 ),
                 Gap.m,
                 DropdownButtonFormField<Gender>(
                   initialValue: _gender,
-                  decoration: const InputDecoration(
-                    labelText: 'الجنس',
-                    border: OutlineInputBorder(),
+                  decoration: InputDecoration(
+                    labelText: context.l.gender,
+                    border: const OutlineInputBorder(),
                   ),
-                  items: const [
-                    DropdownMenuItem(value: Gender.male, child: Text('ذكر')),
-                    DropdownMenuItem(value: Gender.female, child: Text('أنثى')),
+                  items: [
+                    DropdownMenuItem(value: Gender.male, child: Text(context.l.editStudentMale)),
+                    DropdownMenuItem(value: Gender.female, child: Text(context.l.editStudentFemale)),
                   ],
                   onChanged: (v) => setState(() => _gender = v),
                 ),
@@ -96,36 +97,36 @@ class _AddTeacherViewState extends ConsumerState<AddTeacherView> {
             ),
             Gap.m,
             _buildSection(
-              'معلومات الاتصال',
+              context.l.addTeacherContactInfo,
               [
                 TextFormField(
                   controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
-                  decoration: const InputDecoration(
-                    labelText: 'البريد الإلكتروني',
-                    border: OutlineInputBorder(),
+                  decoration: InputDecoration(
+                    labelText: context.l.email,
+                    border: const OutlineInputBorder(),
                   ),
                 ),
                 Gap.m,
                 TextFormField(
                   controller: _phoneController,
                   keyboardType: TextInputType.phone,
-                  decoration: const InputDecoration(
-                    labelText: 'الهاتف',
-                    border: OutlineInputBorder(),
+                  decoration: InputDecoration(
+                    labelText: context.l.phone,
+                    border: const OutlineInputBorder(),
                   ),
                 ),
               ],
             ),
             Gap.m,
             _buildSection(
-              'المعلومات المهنية',
+              context.l.addTeacherProfessionalInfo,
               [
                 TextFormField(
                   controller: _specializationController,
-                  decoration: const InputDecoration(
-                    labelText: 'التخصص',
-                    border: OutlineInputBorder(),
+                  decoration: InputDecoration(
+                    labelText: context.l.addTeacherSpecialization,
+                    border: const OutlineInputBorder(),
                   ),
                 ),
                 Gap.m,
@@ -140,15 +141,15 @@ class _AddTeacherViewState extends ConsumerState<AddTeacherView> {
                     if (date != null) setState(() => _hireDate = date);
                   },
                   child: InputDecorator(
-                    decoration: const InputDecoration(
-                      labelText: 'تاريخ التعيين',
-                      border: OutlineInputBorder(),
-                      suffixIcon: Icon(Icons.calendar_today),
+                    decoration: InputDecoration(
+                      labelText: context.l.addTeacherHireDate,
+                      border: const OutlineInputBorder(),
+                      suffixIcon: const Icon(Icons.calendar_today),
                     ),
                     child: Text(
                       _hireDate != null
                           ? '${_hireDate!.day}/${_hireDate!.month}/${_hireDate!.year}'
-                          : 'اختر التاريخ',
+                          : context.l.addTeacherSelectDate,
                     ),
                   ),
                 ),
@@ -156,14 +157,14 @@ class _AddTeacherViewState extends ConsumerState<AddTeacherView> {
             ),
             Gap.m,
             _buildSection(
-              'ملاحظات',
+              context.l.notes,
               [
                 TextFormField(
                   controller: _notesController,
                   maxLines: 3,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    hintText: 'ملاحظات إضافية...',
+                  decoration: InputDecoration(
+                    border: const OutlineInputBorder(),
+                    hintText: context.l.addTeacherNotesHint,
                   ),
                 ),
               ],
@@ -180,7 +181,7 @@ class _AddTeacherViewState extends ConsumerState<AddTeacherView> {
                         height: 20,
                         child: CircularProgressIndicator(strokeWidth: 2),
                       )
-                    : const Text('إضافة المعلم'),
+                    : Text(context.l.addTeacherSubmit),
               ),
             ),
           ],
@@ -218,8 +219,8 @@ class _AddTeacherViewState extends ConsumerState<AddTeacherView> {
       if (orgId.isEmpty || branchId.isEmpty) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('يجب اختيار الفرع قبل الإضافة'),
+            SnackBar(
+              content: Text(context.l.addTeacherBranchRequired),
               backgroundColor: AppColors.error,
             ),
           );
@@ -252,13 +253,13 @@ class _AddTeacherViewState extends ConsumerState<AddTeacherView> {
       if (mounted) {
         context.pop();
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('تمت إضافة المعلم بنجاح')),
+          SnackBar(content: Text(context.l.addTeacherSuccess)),
         );
       }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('خطأ: $e'), backgroundColor: AppColors.error),
+          SnackBar(content: Text('${context.l.error}: $e'), backgroundColor: AppColors.error),
         );
       }
     } finally {

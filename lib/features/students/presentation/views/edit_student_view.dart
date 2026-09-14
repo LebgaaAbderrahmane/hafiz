@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../core/localization/app_localizations.dart';
 import '../../../../core/theme/theme.dart';
 import '../../domain/entities/student.dart';
 import '../../domain/repositories/student_provider.dart';
@@ -50,7 +51,7 @@ class _EditStudentViewState extends ConsumerState<EditStudentView> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('تعديل الطالب'),
+        title: Text(context.l.editStudentTitle),
         leading: IconButton(
           icon: const Icon(Icons.close),
           onPressed: () => context.pop(),
@@ -58,7 +59,7 @@ class _EditStudentViewState extends ConsumerState<EditStudentView> {
       ),
       body: studentAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => Center(child: Text('خطأ: $e')),
+        error: (e, _) => Center(child: Text('${context.l.error}: $e')),
         data: (student) {
           if (!_isInitialized) {
             _fullNameController.text = student.fullName;
@@ -81,34 +82,34 @@ class _EditStudentViewState extends ConsumerState<EditStudentView> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('المعلومات الأساسية', style: AppTextStyles.titleMedium),
+                        Text(context.l.editStudentBasicInfo, style: AppTextStyles.titleMedium),
                         Gap.m,
                         TextFormField(
                           controller: _fullNameController,
-                          decoration: const InputDecoration(
-                            labelText: 'الاسم الكامل *',
-                            border: OutlineInputBorder(),
+                          decoration: InputDecoration(
+                            labelText: '${context.l.fullName} *',
+                            border: const OutlineInputBorder(),
                           ),
-                          validator: (v) => v?.isEmpty == true ? 'مطلوب' : null,
+                          validator: (v) => v?.isEmpty == true ? context.l.authRequired : null,
                         ),
                         Gap.m,
                         TextFormField(
                           controller: _preferredNameController,
-                          decoration: const InputDecoration(
-                            labelText: 'الاسم المفضل',
-                            border: OutlineInputBorder(),
+                          decoration: InputDecoration(
+                            labelText: context.l.preferredName,
+                            border: const OutlineInputBorder(),
                           ),
                         ),
                         Gap.m,
                         DropdownButtonFormField<Gender>(
                           initialValue: _gender,
-                          decoration: const InputDecoration(
-                            labelText: 'الجنس',
-                            border: OutlineInputBorder(),
+                          decoration: InputDecoration(
+                            labelText: context.l.gender,
+                            border: const OutlineInputBorder(),
                           ),
-                          items: const [
-                            DropdownMenuItem(value: Gender.male, child: Text('ذكر')),
-                            DropdownMenuItem(value: Gender.female, child: Text('أنثى')),
+                          items: [
+                            DropdownMenuItem(value: Gender.male, child: Text(context.l.editStudentMale)),
+                            DropdownMenuItem(value: Gender.female, child: Text(context.l.editStudentFemale)),
                           ],
                           onChanged: (v) => setState(() => _gender = v),
                         ),
@@ -123,23 +124,23 @@ class _EditStudentViewState extends ConsumerState<EditStudentView> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('معلومات الاتصال', style: AppTextStyles.titleMedium),
+                        Text(context.l.editStudentContactInfo, style: AppTextStyles.titleMedium),
                         Gap.m,
                         TextFormField(
                           controller: _phoneController,
                           keyboardType: TextInputType.phone,
-                          decoration: const InputDecoration(
-                            labelText: 'الهاتف',
-                            border: OutlineInputBorder(),
+                          decoration: InputDecoration(
+                            labelText: context.l.phone,
+                            border: const OutlineInputBorder(),
                           ),
                         ),
                         Gap.m,
                         TextFormField(
                           controller: _emailController,
                           keyboardType: TextInputType.emailAddress,
-                          decoration: const InputDecoration(
-                            labelText: 'البريد الإلكتروني',
-                            border: OutlineInputBorder(),
+                          decoration: InputDecoration(
+                            labelText: context.l.email,
+                            border: const OutlineInputBorder(),
                           ),
                         ),
                       ],
@@ -158,7 +159,7 @@ class _EditStudentViewState extends ConsumerState<EditStudentView> {
                             height: 20,
                             child: CircularProgressIndicator(strokeWidth: 2),
                           )
-                        : const Text('حفظ التعديلات'),
+                        : Text(context.l.editStudentSave),
                   ),
                 ),
               ],
@@ -198,14 +199,14 @@ class _EditStudentViewState extends ConsumerState<EditStudentView> {
           ref.read(studentsProvider.notifier).refresh();
           context.pop();
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('تم تعديل الطالب بنجاح')),
+            SnackBar(content: Text(context.l.editStudentSuccess)),
           );
         },
       );
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('خطأ: $e'), backgroundColor: AppColors.error),
+          SnackBar(content: Text('${context.l.error}: $e'), backgroundColor: AppColors.error),
         );
       }
     } finally {

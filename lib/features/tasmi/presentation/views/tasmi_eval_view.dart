@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../core/localization/app_localizations.dart';
 import '../../../../core/theme/theme.dart';
 import '../../../../core/widgets/drawer_icon_button.dart';
 import '../../../../core/widgets/widgets.dart';
@@ -50,11 +51,11 @@ class _TasmiEvalViewState extends ConsumerState<TasmiEvalView> {
     return Scaffold(
       appBar: AppBar(
         leading: const DrawerIconButton(),
-        title: const Text('تسجيل التسميع'),
+        title: Text(context.l.tasmiRecordTitle),
       ),
       body: LoadingOverlay(
         isLoading: _saving,
-        message: 'جاري الحفظ...',
+        message: context.l.tasmiSaving,
         child: SingleChildScrollView(
           padding: EdgeInsets.all(AppSpacing.l),
           child: Column(
@@ -93,16 +94,16 @@ class _TasmiEvalViewState extends ConsumerState<TasmiEvalView> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('القرآن', style: AppTextStyles.titleMedium),
+            Text(context.l.quran, style: AppTextStyles.titleMedium),
             Gap.m,
             Row(
               children: [
                 Expanded(
                   child: DropdownButtonFormField<int>(
                     initialValue: _startSurah,
-                    decoration: const InputDecoration(
-                      labelText: 'من سورة',
-                      border: OutlineInputBorder(),
+                    decoration: InputDecoration(
+                      labelText: context.l.tasmiFromSurah,
+                      border: const OutlineInputBorder(),
                     ),
                     items: List.generate(
                       114,
@@ -118,9 +119,9 @@ class _TasmiEvalViewState extends ConsumerState<TasmiEvalView> {
                 Expanded(
                   child: DropdownButtonFormField<int>(
                     initialValue: _startAyah,
-                    decoration: const InputDecoration(
-                      labelText: 'من آية',
-                      border: OutlineInputBorder(),
+                    decoration: InputDecoration(
+                      labelText: context.l.tasmiFromAyah,
+                      border: const OutlineInputBorder(),
                     ),
                     items: List.generate(
                       10,
@@ -140,9 +141,9 @@ class _TasmiEvalViewState extends ConsumerState<TasmiEvalView> {
                 Expanded(
                   child: DropdownButtonFormField<int>(
                     initialValue: _endSurah,
-                    decoration: const InputDecoration(
-                      labelText: 'إلى سورة',
-                      border: OutlineInputBorder(),
+                    decoration: InputDecoration(
+                      labelText: context.l.tasmiToSurah,
+                      border: const OutlineInputBorder(),
                     ),
                     items: List.generate(
                       114,
@@ -158,9 +159,9 @@ class _TasmiEvalViewState extends ConsumerState<TasmiEvalView> {
                 Expanded(
                   child: DropdownButtonFormField<int>(
                     initialValue: _endAyah,
-                    decoration: const InputDecoration(
-                      labelText: 'إلى آية',
-                      border: OutlineInputBorder(),
+                    decoration: InputDecoration(
+                      labelText: context.l.tasmiToAyah,
+                      border: const OutlineInputBorder(),
                     ),
                     items: List.generate(
                       10,
@@ -187,7 +188,7 @@ class _TasmiEvalViewState extends ConsumerState<TasmiEvalView> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('نوع الحصة', style: AppTextStyles.titleMedium),
+            Text(context.l.tasmiSessionType, style: AppTextStyles.titleMedium),
             Gap.m,
             Wrap(
               spacing: AppSpacing.s,
@@ -214,7 +215,7 @@ class _TasmiEvalViewState extends ConsumerState<TasmiEvalView> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('النتيجة', style: AppTextStyles.titleMedium),
+            Text(context.l.tasmiOutcome, style: AppTextStyles.titleMedium),
             Gap.m,
             Row(
               children: TasmiOutcome.values.map((outcome) {
@@ -285,20 +286,20 @@ class _TasmiEvalViewState extends ConsumerState<TasmiEvalView> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('الدرجات', style: AppTextStyles.titleMedium),
+            Text(context.l.tasmiScores, style: AppTextStyles.titleMedium),
             Gap.m,
             _buildScoreSlider(
-              label: 'الدقة',
+              label: context.l.tasmiAccuracy,
               value: _accuracyScore,
               onChanged: (v) => setState(() => _accuracyScore = v),
             ),
             _buildScoreSlider(
-              label: 'التجويد',
+              label: context.l.tasmiTajwid,
               value: _tajwidScore,
               onChanged: (v) => setState(() => _tajwidScore = v),
             ),
             _buildScoreSlider(
-              label: 'الطلاقة',
+              label: context.l.tasmiFluency,
               value: _fluencyScore,
               onChanged: (v) => setState(() => _fluencyScore = v),
             ),
@@ -345,8 +346,8 @@ class _TasmiEvalViewState extends ConsumerState<TasmiEvalView> {
       icon: Icon(_showErrors ? Icons.expand_less : Icons.expand_more),
       label: Text(
         _showErrors
-            ? 'إخفاء الأخطاء'
-            : 'إضافة أخطاء (${_errors.length})',
+            ? context.l.tasmiHideErrors
+            : '${context.l.tasmiAddErrors} (${_errors.length})',
       ),
     );
   }
@@ -358,7 +359,7 @@ class _TasmiEvalViewState extends ConsumerState<TasmiEvalView> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('الأخطاء', style: AppTextStyles.titleMedium),
+            Text(context.l.tasmiErrors, style: AppTextStyles.titleMedium),
             Gap.m,
             Wrap(
               spacing: AppSpacing.s,
@@ -378,7 +379,7 @@ class _TasmiEvalViewState extends ConsumerState<TasmiEvalView> {
                 return ListTile(
                   dense: true,
                   title: Text(error.errorType.displayNameAr),
-                  subtitle: Text('سورة ${error.surahNumber}:${error.ayahNumber}'),
+                  subtitle: Text('${context.l.tasmiSurah} ${error.surahNumber}:${error.ayahNumber}'),
                   trailing: IconButton(
                     icon: const Icon(Icons.delete_outline, size: 20),
                     onPressed: () {
@@ -411,9 +412,9 @@ class _TasmiEvalViewState extends ConsumerState<TasmiEvalView> {
       child: Padding(
         padding: EdgeInsets.all(AppSpacing.m),
         child: TextField(
-          decoration: const InputDecoration(
-            labelText: 'ملاحظات المعلم',
-            border: OutlineInputBorder(),
+          decoration: InputDecoration(
+            labelText: context.l.tasmiTeacherNotes,
+            border: const OutlineInputBorder(),
           ),
           maxLines: 3,
           onChanged: (v) => _teacherNotes = v,
@@ -425,7 +426,7 @@ class _TasmiEvalViewState extends ConsumerState<TasmiEvalView> {
   Widget _buildSaveButton() {
     return ElevatedButton(
       onPressed: _saving || _outcome == null ? null : _save,
-      child: Text(_saving ? 'جاري الحفظ...' : 'حفظ وتسجيل'),
+      child: Text(_saving ? context.l.tasmiSaving : context.l.save),
     );
   }
 
@@ -469,14 +470,14 @@ class _TasmiEvalViewState extends ConsumerState<TasmiEvalView> {
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('تم الحفظ بنجاح')),
+          SnackBar(content: Text(context.l.tasmiSavedSuccessfully)),
         );
         Navigator.of(context).pop();
       }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('خطأ: $e')),
+          SnackBar(content: Text('${context.l.error}: $e')),
         );
       }
     } finally {
