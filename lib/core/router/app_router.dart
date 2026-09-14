@@ -12,6 +12,8 @@ import 'package:hafiz/features/hifz/presentation/views/hifz_assignment_form_view
 import 'package:hafiz/features/notifications/presentation/views/notification_view.dart';
 import 'package:hafiz/features/notifications/presentation/views/create_notification_view.dart';
 import 'package:hafiz/features/settings/presentation/views/settings_view.dart';
+import 'package:hafiz/features/settings/presentation/views/branch_management_view.dart';
+import 'package:hafiz/features/settings/presentation/views/user_management_view.dart';
 import 'package:hafiz/features/students/presentation/views/student_list_view.dart';
 import 'package:hafiz/features/students/presentation/views/student_profile_view.dart';
 import 'package:hafiz/features/students/presentation/views/add_student_view.dart';
@@ -286,6 +288,14 @@ GoRoute(
           GoRoute(
             path: '/settings',
             builder: (context, state) => const SettingsView(),
+          ),
+          GoRoute(
+            path: '/settings/branches',
+            builder: (context, state) => const BranchManagementView(),
+          ),
+          GoRoute(
+            path: '/settings/users',
+            builder: (context, state) => const UserManagementView(),
           ),
         ],
       ),
