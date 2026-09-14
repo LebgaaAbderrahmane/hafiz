@@ -10,7 +10,10 @@ import 'package:hafiz/features/auth/domain/entities/user.dart' show Role;
 import 'package:hafiz/features/hifz/presentation/views/hifz_assignment_list_view.dart';
 import 'package:hafiz/features/hifz/presentation/views/hifz_assignment_form_view.dart';
 import 'package:hafiz/features/notifications/presentation/views/notification_view.dart';
+import 'package:hafiz/features/notifications/presentation/views/create_notification_view.dart';
 import 'package:hafiz/features/settings/presentation/views/settings_view.dart';
+import 'package:hafiz/features/settings/presentation/views/branch_management_view.dart';
+import 'package:hafiz/features/settings/presentation/views/user_management_view.dart';
 import 'package:hafiz/features/students/presentation/views/student_list_view.dart';
 import 'package:hafiz/features/students/presentation/views/student_profile_view.dart';
 import 'package:hafiz/features/students/presentation/views/add_student_view.dart';
@@ -37,6 +40,7 @@ import 'package:hafiz/features/assessments/presentation/views/create_assessment_
 import 'package:hafiz/features/guardians/presentation/views/guardian_list_view.dart';
 import 'package:hafiz/features/guardians/presentation/views/guardian_profile_view.dart';
 import 'package:hafiz/features/reports/presentation/views/reports_view.dart';
+import 'package:hafiz/features/reports/presentation/views/report_detail_view.dart';
 import 'package:hafiz/features/parent_portal/presentation/views/parent_portal_view.dart';
 import 'package:hafiz/features/dashboard/presentation/views/owner_dashboard_view.dart';
 import 'package:hafiz/core/theme/theme.dart';
@@ -255,13 +259,27 @@ final appRouterProvider = Provider<GoRouter>((ref) {
               ),
             ],
           ),
-          GoRoute(
-            path: '/reports',
-            builder: (context, state) => const ReportsView(),
-          ),
+GoRoute(
+  path: '/reports',
+  builder: (context, state) => const ReportsView(),
+  routes: [
+    GoRoute(
+      path: ':category',
+      builder: (context, state) => ReportDetailView(
+        category: state.pathParameters['category']!,
+      ),
+    ),
+  ],
+),
           GoRoute(
             path: '/notifications',
             builder: (context, state) => const NotificationView(),
+            routes: [
+              GoRoute(
+                path: 'create',
+                builder: (context, state) => const CreateNotificationView(),
+              ),
+            ],
           ),
           GoRoute(
             path: '/parent-portal',
@@ -270,6 +288,14 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: '/settings',
             builder: (context, state) => const SettingsView(),
+          ),
+          GoRoute(
+            path: '/settings/branches',
+            builder: (context, state) => const BranchManagementView(),
+          ),
+          GoRoute(
+            path: '/settings/users',
+            builder: (context, state) => const UserManagementView(),
           ),
         ],
       ),

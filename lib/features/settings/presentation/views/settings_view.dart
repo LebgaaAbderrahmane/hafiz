@@ -6,6 +6,7 @@ import '../../../../core/widgets/drawer_icon_button.dart';
 import '../../../auth/domain/entities/user.dart' show Role;
 import '../../../auth/domain/repositories/auth_provider.dart';
 import '../../../auth/domain/repositories/user_role_provider.dart';
+import '../../domain/repositories/settings_provider.dart';
 
 /// Settings view.
 class SettingsView extends ConsumerWidget {
@@ -15,6 +16,7 @@ class SettingsView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final currentUser = ref.watch(currentUserProvider);
     final activeRole = ref.watch(activeRoleProvider);
+    final orgAsync = ref.watch(organizationProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -53,31 +55,18 @@ class SettingsView extends ConsumerWidget {
 
           if (activeRole == Role.owner || activeRole == Role.superAdmin) ...[
             _buildSection(context, 'المؤسسة', [
-              _buildSettingsTile(
-                context,
-                icon: Icons.business,
-                title: 'معلومات المؤسسة',
-                onTap: () => _showOrgInfoDialog(context),
-              ),
+              _buildOrgInfoTile(context, ref, orgAsync),
               _buildSettingsTile(
                 context,
                 icon: Icons.location_on,
                 title: 'الفروع',
-                onTap: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('إدارة الفروع قيد التطوير')),
-                  );
-                },
+                onTap: () => context.push('/settings/branches'),
               ),
               _buildSettingsTile(
                 context,
                 icon: Icons.people,
                 title: 'المستخدمون',
-                onTap: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('إدارة المستخدمين قيد التطوير')),
-                  );
-                },
+                onTap: () => context.push('/settings/users'),
               ),
             ]),
             Gap.xl,
@@ -165,7 +154,8 @@ class SettingsView extends ConsumerWidget {
     );
   }
 
-  Widget _buildProfileSection(BuildContext context, WidgetRef ref, dynamic user) {
+  Widget _buildProfileSection(
+      BuildContext context, WidgetRef ref, dynamic user) {
     return Card(
       child: Padding(
         padding: EdgeInsets.all(AppSpacing.l),
@@ -210,7 +200,36 @@ class SettingsView extends ConsumerWidget {
     );
   }
 
-  Widget _buildSection(BuildContext context, String title, List<Widget> children) {
+  Widget _buildOrgInfoTile(
+      BuildContext context, WidgetRef ref, AsyncValue<dynamic> orgAsync) {
+    return orgAsync.when(
+      loading: () => const ListTile(
+        leading: Icon(Icons.business, color: AppColors.primary),
+        title: Text('معلومات المؤسسة'),
+        subtitle: Text('جاري التحميل...'),
+        trailing: CircularProgressIndicator(strokeWidth: 2),
+      ),
+      error: (e, _) => ListTile(
+        leading: const Icon(Icons.business, color: AppColors.primary),
+        title: const Text('معلومات المؤسسة'),
+        subtitle: const Text('خطأ في تحميل البيانات'),
+        trailing: const Icon(Icons.chevron_left),
+        onTap: () => _showOrgInfoDialog(context, null),
+      ),
+      data: (org) => ListTile(
+        leading: const Icon(Icons.business, color: AppColors.primary),
+        title: Text(org?.name ?? 'معلومات المؤسسة'),
+        subtitle: org != null
+            ? Text(org.address ?? org.email ?? '', maxLines: 1)
+            : null,
+        trailing: const Icon(Icons.chevron_left),
+        onTap: () => _showOrgInfoDialog(context, org),
+      ),
+    );
+  }
+
+  Widget _buildSection(
+      BuildContext context, String title, List<Widget> children) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -326,22 +345,22 @@ class SettingsView extends ConsumerWidget {
     );
   }
 
-  void _showOrgInfoDialog(BuildContext context) {
+  void _showOrgInfoDialog(BuildContext context, dynamic org) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('معلومات المؤسسة'),
-        content: const Column(
+        content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('اسم المؤسسة: إدارة القرآن الكريم'),
+            Text('اسم المؤسسة: ${org?.name ?? 'غير محدد'}'),
             Gap.s,
-            Text('العنوان: الرياض، المملكة العربية السعودية'),
+            Text('العنوان: ${org?.address ?? 'غير محدد'}'),
             Gap.s,
-            Text('الهاتف: 0500000000'),
+            Text('الهاتف: ${org?.phone ?? 'غير محدد'}'),
             Gap.s,
-            Text('البريد: info@hafiz.com'),
+            Text('البريد: ${org?.email ?? 'غير محدد'}'),
           ],
         ),
         actions: [
@@ -359,7 +378,8 @@ class SettingsView extends ConsumerWidget {
       context: context,
       applicationName: 'Hafiz',
       applicationVersion: '1.0.0',
-      applicationIcon: const Icon(Icons.book, size: 48, color: AppColors.primary),
+      applicationIcon:
+          const Icon(Icons.book, size: 48, color: AppColors.primary),
       children: const [
         Text('تطبيق إدارة مدارس القرآن الكريم'),
         Gap.s,
@@ -428,7 +448,8 @@ class SettingsView extends ConsumerWidget {
     );
   }
 
-  void _showEditProfileDialog(BuildContext context, WidgetRef ref, dynamic user) {
+  void _showEditProfileDialog(
+      BuildContext context, WidgetRef ref, dynamic user) {
     final nameController = TextEditingController(text: user?.fullName ?? '');
     final phoneController = TextEditingController(text: user?.phone ?? '');
 

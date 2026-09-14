@@ -66,6 +66,68 @@ class ReportNotifier extends StateNotifier<AsyncValue<void>> {
   }
 }
 
+/// Date range state for reports.
+class ReportDateRange {
+  final DateTime startDate;
+  final DateTime endDate;
+
+  const ReportDateRange({
+    required this.startDate,
+    required this.endDate,
+  });
+}
+
+/// Default date range: last 30 days.
+final reportDateRangeProvider = StateProvider<ReportDateRange>((ref) {
+  final now = DateTime.now();
+  return ReportDateRange(
+    startDate: now.subtract(const Duration(days: 30)),
+    endDate: now,
+  );
+});
+
+/// Student progress report data.
+final studentProgressReportProvider =
+    FutureProvider.autoDispose<Map<String, dynamic>?>((ref) async {
+  final repo = ref.watch(reportRepositoryProvider);
+  final branchId = ref.watch(activeBranchIdProvider);
+  final dateRange = ref.watch(reportDateRangeProvider);
+  if (branchId == null) return null;
+  return repo.getMemorizationProgressData(
+    branchId: branchId,
+    startDate: dateRange.startDate,
+    endDate: dateRange.endDate,
+  );
+});
+
+/// Attendance report data.
+final attendanceReportProvider =
+    FutureProvider.autoDispose<Map<String, dynamic>?>((ref) async {
+  final repo = ref.watch(reportRepositoryProvider);
+  final branchId = ref.watch(activeBranchIdProvider);
+  final dateRange = ref.watch(reportDateRangeProvider);
+  if (branchId == null) return null;
+  return repo.getAttendanceReportData(
+    branchId: branchId,
+    startDate: dateRange.startDate,
+    endDate: dateRange.endDate,
+  );
+});
+
+/// Memorization report data.
+final memorizationReportProvider =
+    FutureProvider.autoDispose<Map<String, dynamic>?>((ref) async {
+  final repo = ref.watch(reportRepositoryProvider);
+  final branchId = ref.watch(activeBranchIdProvider);
+  final dateRange = ref.watch(reportDateRangeProvider);
+  if (branchId == null) return null;
+  return repo.getMemorizationProgressData(
+    branchId: branchId,
+    startDate: dateRange.startDate,
+    endDate: dateRange.endDate,
+  );
+});
+
 /// Report notifier provider.
 final reportNotifierProvider =
     StateNotifierProvider<ReportNotifier, AsyncValue<void>>((ref) {

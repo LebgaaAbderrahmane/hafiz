@@ -22,10 +22,7 @@ class OwnerDashboardView extends ConsumerWidget {
         title: const Text('لوحة التحكم'),
         leading: const DrawerIconButton(),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.notifications_outlined),
-            onPressed: () => context.push('/notifications'),
-          ),
+          _buildNotificationBadge(context, ref),
         ],
       ),
       body: SafeArea(
@@ -413,5 +410,46 @@ class OwnerDashboardView extends ConsumerWidget {
     if (diff.inHours < 24) return '${diff.inHours} س';
     if (diff.inDays < 7) return '${diff.inDays} ي';
     return '${(diff.inDays / 7).floor()} أ';
+  }
+
+  Widget _buildNotificationBadge(BuildContext context, WidgetRef ref) {
+    final user = ref.watch(currentUserProvider);
+    if (user == null) {
+      return IconButton(
+        icon: const Icon(Icons.notifications_outlined),
+        onPressed: () => context.push('/notifications'),
+      );
+    }
+
+    final unreadCountAsync = ref.watch(unreadNotificationCountProvider(user.id));
+
+    return unreadCountAsync.when(
+      data: (count) {
+        return IconButton(
+          icon: Badge(
+            isLabelVisible: count > 0,
+            label: Text(
+              count > 99 ? '99+' : '$count',
+              style: const TextStyle(
+                color: AppColors.white,
+                fontSize: 10,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            backgroundColor: AppColors.error,
+            child: const Icon(Icons.notifications_outlined),
+          ),
+          onPressed: () => context.push('/notifications'),
+        );
+      },
+      loading: () => IconButton(
+        icon: const Icon(Icons.notifications_outlined),
+        onPressed: () => context.push('/notifications'),
+      ),
+      error: (_, __) => IconButton(
+        icon: const Icon(Icons.notifications_outlined),
+        onPressed: () => context.push('/notifications'),
+      ),
+    );
   }
 }

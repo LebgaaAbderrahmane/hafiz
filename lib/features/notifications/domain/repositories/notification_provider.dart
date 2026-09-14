@@ -81,6 +81,36 @@ class NotificationNotifier extends StateNotifier<AsyncValue<void>> {
       rethrow;
     }
   }
+
+  Future<AppNotification> createNotification({
+    required String organizationId,
+    required String branchId,
+    required String userId,
+    required NotificationType type,
+    required String title,
+    required String body,
+    Map<String, dynamic>? data,
+    String? actionUrl,
+  }) async {
+    state = const AsyncValue.loading();
+    try {
+      final notification = await _repository.createNotification(
+        organizationId: organizationId,
+        branchId: branchId,
+        userId: userId,
+        type: type,
+        title: title,
+        body: body,
+        data: data,
+        actionUrl: actionUrl,
+      );
+      state = const AsyncValue.data(null);
+      return notification;
+    } catch (e, st) {
+      state = AsyncValue.error(e, st);
+      rethrow;
+    }
+  }
 }
 
 /// Notification notifier provider.
