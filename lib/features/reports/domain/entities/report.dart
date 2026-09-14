@@ -72,6 +72,59 @@ extension ReportTypeExtension on ReportType {
   }
 }
 
+/// Report category for grouping.
+enum ReportCategory {
+  students,
+  quran,
+  attendance,
+  teachers,
+  classes,
+}
+
+/// Extension for display names.
+extension ReportCategoryExtension on ReportCategory {
+  String get displayNameAr {
+    return switch (this) {
+      ReportCategory.students => 'الطلاب',
+      ReportCategory.quran => 'القرآن والحفظ',
+      ReportCategory.attendance => 'الحضور',
+      ReportCategory.teachers => 'المعلمون',
+      ReportCategory.classes => 'الفصول',
+    };
+  }
+
+  String get icon {
+    return switch (this) {
+      ReportCategory.students => '👨‍🎓',
+      ReportCategory.quran => '📖',
+      ReportCategory.attendance => '✓',
+      ReportCategory.teachers => '👨‍🏫',
+      ReportCategory.classes => '🏫',
+    };
+  }
+
+  List<ReportType> get reportTypes {
+    return switch (this) {
+      ReportCategory.students => [
+        ReportType.studentPerformance,
+      ],
+      ReportCategory.quran => [
+        ReportType.memorizationProgress,
+        ReportType.tasmiSummary,
+      ],
+      ReportCategory.attendance => [
+        ReportType.attendance,
+      ],
+      ReportCategory.teachers => [
+        ReportType.teacherPerformance,
+      ],
+      ReportCategory.classes => [
+        ReportType.classOverview,
+      ],
+    };
+  }
+}
+
 extension ReportFormatExtension on ReportFormat {
   String get displayNameAr {
     return switch (this) {
