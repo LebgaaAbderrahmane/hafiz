@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../theme/theme.dart';
+import '../localization/app_localizations.dart';
 
 /// Reusable error display widget.
 class AppErrorWidget extends StatelessWidget {
@@ -50,7 +51,7 @@ class AppErrorWidget extends StatelessWidget {
               ElevatedButton.icon(
                 onPressed: onRetry,
                 icon: const Icon(Icons.refresh),
-                label: const Text('إعادة المحاولة'),
+                label: Text(context.l.retry),
               ),
             ],
           ],

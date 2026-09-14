@@ -477,7 +477,10 @@ class _TasmiEvalViewState extends ConsumerState<TasmiEvalView> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('${context.l.error}: $e')),
+          SnackBar(
+            content: Text('${context.l.error}: ${e.toString().contains('Exception') ? context.l.errorGeneric : e}'),
+            backgroundColor: AppColors.error,
+          ),
         );
       }
     } finally {

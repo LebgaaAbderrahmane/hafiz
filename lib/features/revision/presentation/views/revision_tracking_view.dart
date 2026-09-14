@@ -413,7 +413,7 @@ class _RevisionTrackingViewState extends ConsumerState<RevisionTrackingView> {
             if (mounted) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text('${context.l.errorRegisteringRevision}: $e'),
+                  content: Text('${context.l.errorRegisteringRevision}: ${e.toString().contains('Exception') ? context.l.errorGeneric : e}'),
                   backgroundColor: AppColors.error,
                 ),
               );

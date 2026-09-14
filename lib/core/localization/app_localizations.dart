@@ -14,6 +14,16 @@ class AppLocalizations {
   static const LocalizationsDelegate<AppLocalizations> delegate =
       _AppLocalizationsDelegate();
 
+  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates = [
+    delegate,
+  ];
+
+  static const List<Locale> supportedLocales = [
+    Locale('ar'),
+    Locale('en'),
+    Locale('fr'),
+  ];
+
   // ── Common ──
   String get appTitle => 'حفيظ';
   String get save => 'حفظ';
@@ -317,6 +327,7 @@ class AppLocalizations {
   String get hifzListFilterByType => 'تصفية حسب النوع';
   String get hifzListOverdue => 'متأخر';
   String get hifzListTomorrow => 'غداً';
+  String get revisionDaysAgo => 'يوم';
 
   // ── Revision Tracking ──
   String get revisionTracking => 'تتبع المراجعات';
@@ -625,6 +636,7 @@ class AppLocalizations {
   String get dashboardHoursShort => 'س';
   String get dashboardDaysShort => 'ي';
   String get dashboardWeeksShort => 'أ';
+  String get dashboardNowShort => 'الآن';
 
   // ── Assessments ──
   String get assessmentTitle => 'تقييم جديد';
@@ -638,6 +650,43 @@ class AppLocalizations {
   String get assessmentDate => 'تاريخ التقييم';
   String get assessmentSubmit => 'إنشاء التقييم';
   String get assessmentSuccess => 'تم إنشاء التقييم بنجاح';
+
+  // ── Error Handling ──
+  String get errorLoadingData => 'خطأ في تحميل البيانات';
+  String get errorNetwork => 'تعذر الاتصال بالخادم';
+  String get errorOffline => 'لا يوجد اتصال بالإنترنت';
+  String get errorGeneric => 'حدث خطأ غير متوقع';
+  String get errorTryAgain => 'يرجى المحاولة مرة أخرى';
+  String get errorCouldNotLoad => 'تعذر تحميل البيانات';
+
+  // ── Confirmation Dialogs ──
+  String get confirmDelete => 'هل أنت متأكد من الحذف؟';
+  String get confirmDeleteStudent => 'هل أنت متأكد من حذف هذا الطالب؟';
+  String get confirmDeleteTeacher => 'هل أنت متأكد من حذف هذا المعلم؟';
+  String get confirmDeleteClass => 'هل أنت متأكد من حذف هذا الفصل؟';
+  String get confirmDeleteGuardian => 'هل أنت متأكد من حذف ولي الأمر؟';
+  String get confirmDeleteSession => 'هل أنت متأكد من حذف هذه الجلسة؟';
+  String get confirmDeleteNotification => 'هل أنت متأكد من حذف هذا الإشعار؟';
+  String get confirmDeleteAllNotifications => 'هل أنت متأكد من حذف جميع الإشعارات؟';
+  String get confirmRemove => 'إزالة';
+
+  // ── Pull to Refresh ──
+  String get pullToRefresh => 'اسحب للتحديث';
+
+  // ── Pagination ──
+  String get loadMore => 'تحميل المزيد';
+  String get noMoreData => 'لا توجد بيانات أخرى';
+  String get loadingMore => 'جار تحميل المزيد...';
+
+  // ── Skeleton Loading ──
+  String get skeletonLoading => 'جار التحميل...';
+
+  // ── Guardian ──
+  String get guardiansEmpty => 'لا يوجد أولياء أمور';
+  String get guardiansEmptyHint => 'اضغط على + لإضافة ولي أمر جديد';
+  String get guardianAdded => 'تمت إضافة ولي الأمر بنجاح';
+  String get guardianUpdated => 'تم تعديل بيانات ولي الأمر';
+  String get guardianDeleted => 'تم حذف ولي الأمر';
 }
 
 class _AppLocalizationsDelegate

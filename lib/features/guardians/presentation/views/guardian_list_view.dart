@@ -43,7 +43,7 @@ class _GuardianListViewState extends ConsumerState<GuardianListView> {
             padding: EdgeInsets.all(AppSpacing.m),
             child: TextField(
               decoration: InputDecoration(
-                hintText: 'بحث...',
+                hintText: l10n.searchHint,
                 prefixIcon: const Icon(Icons.search),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(AppBorderRadius.m),
@@ -74,7 +74,14 @@ class _GuardianListViewState extends ConsumerState<GuardianListView> {
                       children: [
                         Icon(Icons.people, size: 64, color: AppColors.textHint),
                         Gap.l,
-                        Text('لا يوجد أولياء أمور', style: AppTextStyles.bodyLarge),
+                        Text(l10n.guardiansEmpty, style: AppTextStyles.bodyLarge),
+                        Gap.s,
+                        Text(
+                          l10n.guardiansEmptyHint,
+                          style: AppTextStyles.bodySmall.copyWith(
+                            color: AppColors.textSecondary,
+                          ),
+                        ),
                       ],
                     ),
                   );
@@ -88,7 +95,7 @@ class _GuardianListViewState extends ConsumerState<GuardianListView> {
                 );
               },
               loading: () => const Center(child: CircularProgressIndicator()),
-              error: (e, st) => Center(child: Text('Error: $e')),
+              error: (e, st) => _buildErrorState(context, ref),
             ),
           ),
         ],
@@ -136,6 +143,45 @@ class _GuardianListViewState extends ConsumerState<GuardianListView> {
           ],
         ),
         onTap: () => context.push('/guardians/${guardian.id}'),
+      ),
+    );
+  }
+
+  Widget _buildErrorState(BuildContext context, WidgetRef ref) {
+    return Center(
+      child: Padding(
+        padding: EdgeInsets.all(AppSpacing.xxl),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.error_outline, size: 64, color: AppColors.error),
+            Gap.l,
+            Text(
+              context.l.errorLoadingData,
+              style: AppTextStyles.headlineSmall,
+              textAlign: TextAlign.center,
+            ),
+            Gap.s,
+            Text(
+              context.l.errorTryAgain,
+              style: AppTextStyles.bodySmall.copyWith(
+                color: AppColors.textSecondary,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            Gap.xl,
+            ElevatedButton.icon(
+              onPressed: () {
+                final branchId = ref.read(activeBranchIdProvider);
+                if (branchId != null) {
+                  ref.invalidate(branchGuardiansProvider(branchId));
+                }
+              },
+              icon: const Icon(Icons.refresh),
+              label: Text(context.l.retry),
+            ),
+          ],
+        ),
       ),
     );
   }

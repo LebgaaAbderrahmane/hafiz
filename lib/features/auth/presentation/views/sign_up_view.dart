@@ -204,7 +204,10 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('${context.l.error}: $e'), backgroundColor: AppColors.error),
+          SnackBar(
+            content: Text('${context.l.error}: ${e.toString().contains('Exception') ? context.l.errorGeneric : e}'),
+            backgroundColor: AppColors.error,
+          ),
         );
       }
     } finally {

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import "package:hafiz/core/localization/app_localizations.dart";
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hafiz/core/theme/theme.dart';
 import 'package:hafiz/core/widgets/badge.dart';
 import 'package:hafiz/core/widgets/card.dart';
 import 'package:hafiz/core/widgets/empty_state.dart';
@@ -20,13 +21,38 @@ class StudentListView extends ConsumerStatefulWidget {
 
 class _StudentListViewState extends ConsumerState<StudentListView> {
   final _searchController = TextEditingController();
+  final _scrollController = ScrollController();
   String _searchQuery = '';
   StudentStatus? _statusFilter;
+  bool _isLoadingMore = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+  }
 
   @override
   void dispose() {
     _searchController.dispose();
+    _scrollController.dispose();
     super.dispose();
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 200) {
+      _loadMore();
+    }
+  }
+
+  Future<void> _loadMore() async {
+    if (_isLoadingMore) return;
+    final students = ref.read(studentsProvider).valueOrNull;
+    if (students == null || students.length < 50) return;
+    setState(() => _isLoadingMore = true);
+    await ref.read(studentsProvider.notifier).loadMore();
+    if (mounted) setState(() => _isLoadingMore = false);
   }
 
   @override
@@ -50,7 +76,7 @@ class _StudentListViewState extends ConsumerState<StudentListView> {
             padding: const EdgeInsets.all(16),
             child: app.AppSearchBar(
               controller: _searchController,
-              hintText: context.l.searchHint,
+              hint: context.l.searchHint,
               onChanged: (value) {
                 setState(() => _searchQuery = value);
               },
@@ -60,7 +86,7 @@ class _StudentListViewState extends ConsumerState<StudentListView> {
           Expanded(
             child: studentsAsync.when(
               loading: () => const AppLoading(),
-              error: (e, _) => Center(child: Text(e.toString())),
+              error: (e, _) => _buildErrorState(context, ref),
               data: (students) {
                 final filtered = _filterStudents(students);
                 if (filtered.isEmpty) {
@@ -113,9 +139,16 @@ class _StudentListViewState extends ConsumerState<StudentListView> {
     return RefreshIndicator(
       onRefresh: () => ref.read(studentsProvider.notifier).refresh(),
       child: ListView.builder(
+        controller: _scrollController,
         padding: const EdgeInsets.all(16),
-        itemCount: students.length,
+        itemCount: students.length + (_isLoadingMore ? 1 : 0),
         itemBuilder: (context, index) {
+          if (index == students.length) {
+            return const Padding(
+              padding: EdgeInsets.all(16),
+              child: Center(child: CircularProgressIndicator()),
+            );
+          }
           final student = students[index];
           return _StudentCard(
             student: student,
@@ -138,6 +171,40 @@ class _StudentListViewState extends ConsumerState<StudentListView> {
           _statusFilter == null || student.status == _statusFilter;
       return matchesSearch && matchesStatus;
     }).toList();
+  }
+
+  Widget _buildErrorState(BuildContext context, WidgetRef ref) {
+    return Center(
+      child: Padding(
+        padding: EdgeInsets.all(AppSpacing.xxl),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.error_outline, size: 64, color: AppColors.error),
+            Gap.l,
+            Text(
+              context.l.errorLoadingData,
+              style: AppTextStyles.headlineSmall,
+              textAlign: TextAlign.center,
+            ),
+            Gap.s,
+            Text(
+              context.l.errorTryAgain,
+              style: AppTextStyles.bodyMedium.copyWith(
+                color: AppColors.textSecondary,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            Gap.xl,
+            ElevatedButton.icon(
+              onPressed: () => ref.invalidate(studentsProvider),
+              icon: const Icon(Icons.refresh),
+              label: Text(context.l.retry),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hafiz/core/localization/app_localizations.dart';
 import '../../../../core/theme/theme.dart';
 import '../../../auth/domain/repositories/user_role_provider.dart';
 import '../../domain/entities/teacher.dart';
@@ -33,7 +34,7 @@ class _TeacherListViewState extends ConsumerState<TeacherListView> {
     return Scaffold(
       appBar: AppBar(
         leading: const DrawerIconButton(),
-        title: const Text('المعلمون'),
+        title: Text(context.l.teachers),
         actions: [
           IconButton(
             icon: const Icon(Icons.add),
@@ -48,7 +49,7 @@ class _TeacherListViewState extends ConsumerState<TeacherListView> {
             child: TextField(
               controller: _searchController,
               decoration: InputDecoration(
-                hintText: 'بحث...',
+                hintText: context.l.searchHint,
                 prefixIcon: const Icon(Icons.search),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(AppBorderRadius.m),
@@ -63,7 +64,7 @@ class _TeacherListViewState extends ConsumerState<TeacherListView> {
           Expanded(
             child: teachersAsync.when(
               loading: () => const Center(child: CircularProgressIndicator()),
-              error: (e, _) => Center(child: Text(e.toString())),
+              error: (e, _) => _buildErrorState(context, ref),
               data: (teachers) {
                 final filtered = _filterTeachers(teachers);
                 if (filtered.isEmpty) {
@@ -73,7 +74,14 @@ class _TeacherListViewState extends ConsumerState<TeacherListView> {
                       children: [
                         Icon(Icons.person_outline, size: 64, color: AppColors.textHint),
                         Gap.l,
-                        Text('لا يوجد معلمون', style: AppTextStyles.bodyLarge),
+                        Text(context.l.teachers, style: AppTextStyles.bodyLarge),
+                        Gap.s,
+                        Text(
+                          context.l.noData,
+                          style: AppTextStyles.bodySmall.copyWith(
+                            color: AppColors.textSecondary,
+                          ),
+                        ),
                       ],
                     ),
                   );
@@ -95,7 +103,7 @@ class _TeacherListViewState extends ConsumerState<TeacherListView> {
         padding: EdgeInsets.symmetric(horizontal: AppSpacing.m),
         children: [
           FilterChip(
-            label: const Text('الكل'),
+            label: Text(context.l.all),
             selected: _statusFilter == null,
             onSelected: (_) => setState(() => _statusFilter = null),
           ),
@@ -111,6 +119,45 @@ class _TeacherListViewState extends ConsumerState<TeacherListView> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildErrorState(BuildContext context, WidgetRef ref) {
+    return Center(
+      child: Padding(
+        padding: EdgeInsets.all(AppSpacing.xxl),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.error_outline, size: 64, color: AppColors.error),
+            Gap.l,
+            Text(
+              context.l.errorLoadingData,
+              style: AppTextStyles.headlineSmall,
+              textAlign: TextAlign.center,
+            ),
+            Gap.s,
+            Text(
+              context.l.errorTryAgain,
+              style: AppTextStyles.bodyMedium.copyWith(
+                color: AppColors.textSecondary,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            Gap.xl,
+            ElevatedButton.icon(
+              onPressed: () {
+                final branchId = ref.read(activeBranchIdProvider);
+                if (branchId != null) {
+                  ref.invalidate(branchTeachersProvider(branchId));
+                }
+              },
+              icon: const Icon(Icons.refresh),
+              label: Text(context.l.retry),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -504,7 +504,7 @@ class SettingsView extends ConsumerWidget {
                 if (context.mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text('${context.l.error}: $e'),
+                      content: Text('${context.l.error}: ${e.toString().contains('Exception') ? context.l.errorGeneric : e}'),
                       backgroundColor: AppColors.error,
                     ),
                   );

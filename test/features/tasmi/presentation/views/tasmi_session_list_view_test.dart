@@ -13,7 +13,27 @@ import 'package:hafiz/features/auth/domain/repositories/auth_repository.dart';
 import 'package:hafiz/features/auth/domain/repositories/auth_provider.dart';
 import 'package:hafiz/features/auth/domain/repositories/user_role_provider.dart';
 import 'package:hafiz/features/auth/domain/entities/user.dart';
+import 'package:hafiz/core/localization/app_localizations.dart';
 import '../../../../helpers/test_helpers.dart';
+
+class FakeTasmiSessionsNotifier extends AutoDisposeAsyncNotifier<List<TasmiSession>>
+    implements TasmiSessionsNotifier {
+  final List<TasmiSession> _sessions;
+  final Object? _error;
+
+  FakeTasmiSessionsNotifier({List<TasmiSession> sessions = const [], Object? error})
+      : _sessions = sessions,
+        _error = error;
+
+  @override
+  Future<List<TasmiSession>> build() async {
+    if (_error != null) throw _error!;
+    return _sessions;
+  }
+
+  @override
+  Future<void> loadMore() async {}
+}
 
 void main() {
   late MockTasmiRepository mockTasmiRepo;
@@ -49,6 +69,8 @@ void main() {
         ...overrides,
       ],
       child: MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         home: Directionality(
           textDirection: TextDirection.rtl,
           child: const TasmiSessionListView(),
@@ -61,7 +83,9 @@ void main() {
     testWidgets('renders app bar with title', (tester) async {
       await tester.pumpWidget(buildTasmiSessionListView(
         overrides: [
-          branchTasmiSessionsProvider.overrideWith((ref) async => []),
+          branchTasmiSessionsProvider.overrideWith(
+            () => FakeTasmiSessionsNotifier(sessions: []),
+          ),
         ],
       ));
       await tester.pumpAndSettle();
@@ -72,7 +96,9 @@ void main() {
     testWidgets('renders add session button in app bar', (tester) async {
       await tester.pumpWidget(buildTasmiSessionListView(
         overrides: [
-          branchTasmiSessionsProvider.overrideWith((ref) async => []),
+          branchTasmiSessionsProvider.overrideWith(
+            () => FakeTasmiSessionsNotifier(sessions: []),
+          ),
         ],
       ));
       await tester.pumpAndSettle();
@@ -85,7 +111,9 @@ void main() {
     testWidgets('shows empty state when no sessions', (tester) async {
       await tester.pumpWidget(buildTasmiSessionListView(
         overrides: [
-          branchTasmiSessionsProvider.overrideWith((ref) async => []),
+          branchTasmiSessionsProvider.overrideWith(
+            () => FakeTasmiSessionsNotifier(sessions: []),
+          ),
         ],
       ));
       await tester.pumpAndSettle();
@@ -100,8 +128,9 @@ void main() {
 
       await tester.pumpWidget(buildTasmiSessionListView(
         overrides: [
-          branchTasmiSessionsProvider
-              .overrideWith((ref) => completer.future),
+          branchTasmiSessionsProvider.overrideWith(
+            () => FakeTasmiSessionsNotifier(),
+          ),
         ],
       ));
       await tester.pump();
@@ -114,19 +143,21 @@ void main() {
       await tester.pumpWidget(buildTasmiSessionListView(
         overrides: [
           branchTasmiSessionsProvider.overrideWith(
-            (ref) async => throw Exception('Network error'),
+            () => FakeTasmiSessionsNotifier(error: Exception('Network error')),
           ),
         ],
       ));
       await tester.pumpAndSettle();
 
-      expect(find.textContaining('Network error'), findsOneWidget);
+      expect(find.text('خطأ في تحميل البيانات'), findsOneWidget);
     });
 
     testWidgets('renders filter chips', (tester) async {
       await tester.pumpWidget(buildTasmiSessionListView(
         overrides: [
-          branchTasmiSessionsProvider.overrideWith((ref) async => []),
+          branchTasmiSessionsProvider.overrideWith(
+            () => FakeTasmiSessionsNotifier(sessions: []),
+          ),
         ],
       ));
       await tester.pumpAndSettle();
@@ -151,8 +182,9 @@ void main() {
 
       await tester.pumpWidget(buildTasmiSessionListView(
         overrides: [
-          branchTasmiSessionsProvider
-              .overrideWith((ref) async => sessions),
+          branchTasmiSessionsProvider.overrideWith(
+            () => FakeTasmiSessionsNotifier(sessions: sessions),
+          ),
         ],
       ));
       await tester.pumpAndSettle();
@@ -178,8 +210,9 @@ void main() {
 
       await tester.pumpWidget(buildTasmiSessionListView(
         overrides: [
-          branchTasmiSessionsProvider
-              .overrideWith((ref) async => sessions),
+          branchTasmiSessionsProvider.overrideWith(
+            () => FakeTasmiSessionsNotifier(sessions: sessions),
+          ),
         ],
       ));
       await tester.pumpAndSettle();

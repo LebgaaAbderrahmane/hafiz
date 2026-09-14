@@ -315,7 +315,7 @@ class _CreateNotificationViewState
       }
     } catch (e) {
       if (mounted) {
-        _showSnackBar('${context.l.createNotificationSendError}: $e');
+        _showSnackBar('${context.l.createNotificationSendError}: ${e.toString().contains('Exception') ? context.l.errorGeneric : e}');
       }
     } finally {
       if (mounted) {

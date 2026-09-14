@@ -101,15 +101,23 @@ class _HifzAssignmentListViewState extends ConsumerState<HifzAssignmentListView>
             );
           }
 
-          return ListView.builder(
-            padding: EdgeInsets.symmetric(vertical: AppSpacing.s),
-            itemCount: filtered.length,
-            itemBuilder: (context, index) =>
-                _buildAssignmentCard(context, ref, filtered[index]),
+          return RefreshIndicator(
+            onRefresh: () async {
+              final branchId = ref.read(activeBranchIdProvider);
+              if (branchId != null) {
+                ref.invalidate(branchHifzAssignmentsProvider(branchId));
+              }
+            },
+            child: ListView.builder(
+              padding: EdgeInsets.symmetric(vertical: AppSpacing.s),
+              itemCount: filtered.length,
+              itemBuilder: (context, index) =>
+                  _buildAssignmentCard(context, ref, filtered[index]),
+            ),
           );
         },
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, st) => Center(child: Text('${context.l.error}: $e')),
+        error: (e, st) => _buildErrorState(context, ref),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => context.push('/hifz/assignments/create'),
@@ -224,10 +232,49 @@ class _HifzAssignmentListViewState extends ConsumerState<HifzAssignmentListView>
     final now = DateTime.now();
     final diff = date.difference(now);
 
-    if (diff.inDays < 0) return 'متأخر ${-diff.inDays} يوم';
-    if (diff.inDays == 0) return 'اليوم';
-    if (diff.inDays == 1) return 'غداً';
+    if (diff.inDays < 0) return '${context.l.hifzListOverdue} ${-diff.inDays} ${context.l.revisionDaysAgo}';
+    if (diff.inDays == 0) return context.l.today;
+    if (diff.inDays == 1) return context.l.hifzListTomorrow;
     return DateFormat('dd/MM').format(date);
+  }
+
+  Widget _buildErrorState(BuildContext context, WidgetRef ref) {
+    return Center(
+      child: Padding(
+        padding: EdgeInsets.all(AppSpacing.xxl),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.error_outline, size: 64, color: AppColors.error),
+            Gap.l,
+            Text(
+              context.l.errorLoadingData,
+              style: AppTextStyles.headlineSmall,
+              textAlign: TextAlign.center,
+            ),
+            Gap.s,
+            Text(
+              context.l.errorTryAgain,
+              style: AppTextStyles.bodySmall.copyWith(
+                color: AppColors.textSecondary,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            Gap.xl,
+            ElevatedButton.icon(
+              onPressed: () {
+                final branchId = ref.read(activeBranchIdProvider);
+                if (branchId != null) {
+                  ref.invalidate(branchHifzAssignmentsProvider(branchId));
+                }
+              },
+              icon: const Icon(Icons.refresh),
+              label: Text(context.l.retry),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   String _getSurahName(int surahNumber) {

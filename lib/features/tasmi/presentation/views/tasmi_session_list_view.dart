@@ -25,6 +25,36 @@ class TasmiSessionListView extends ConsumerStatefulWidget {
 
 class _TasmiSessionListViewState extends ConsumerState<TasmiSessionListView> {
   _FilterOption _filter = _FilterOption.all;
+  final _scrollController = ScrollController();
+  bool _isLoadingMore = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 200) {
+      _loadMore();
+    }
+  }
+
+  Future<void> _loadMore() async {
+    if (_isLoadingMore) return;
+    final sessions = ref.read(branchTasmiSessionsProvider).valueOrNull;
+    if (sessions == null || sessions.length < 50) return;
+    setState(() => _isLoadingMore = true);
+    await ref.read(branchTasmiSessionsProvider.notifier).loadMore();
+    if (mounted) setState(() => _isLoadingMore = false);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +77,7 @@ class _TasmiSessionListViewState extends ConsumerState<TasmiSessionListView> {
           Expanded(
             child: sessionsAsync.when(
               loading: () => const AppLoading(),
-              error: (e, _) => Center(child: Text(e.toString())),
+              error: (e, _) => _buildErrorState(context, ref),
               data: (sessions) {
                 final filtered = _applyFilter(sessions);
                 if (filtered.isEmpty) {
@@ -97,9 +127,16 @@ class _TasmiSessionListViewState extends ConsumerState<TasmiSessionListView> {
         ref.invalidate(branchTasmiSessionsProvider);
       },
       child: ListView.builder(
+        controller: _scrollController,
         padding: const EdgeInsets.all(AppSpacing.l),
-        itemCount: sessions.length,
+        itemCount: sessions.length + (_isLoadingMore ? 1 : 0),
         itemBuilder: (context, index) {
+          if (index == sessions.length) {
+            return const Padding(
+              padding: EdgeInsets.all(AppSpacing.l),
+              child: Center(child: CircularProgressIndicator()),
+            );
+          }
           final session = sessions[index];
           return _TasmiSessionCard(
             session: session,
@@ -128,6 +165,40 @@ class _TasmiSessionListViewState extends ConsumerState<TasmiSessionListView> {
               session.recordedAt.isAtSameMomentAs(startOfWeek),
       };
     }).toList();
+  }
+
+  Widget _buildErrorState(BuildContext context, WidgetRef ref) {
+    return Center(
+      child: Padding(
+        padding: EdgeInsets.all(AppSpacing.xxl),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.error_outline, size: 64, color: AppColors.error),
+            Gap.l,
+            Text(
+              context.l.errorLoadingData,
+              style: AppTextStyles.headlineSmall,
+              textAlign: TextAlign.center,
+            ),
+            Gap.s,
+            Text(
+              context.l.errorTryAgain,
+              style: AppTextStyles.bodyMedium.copyWith(
+                color: AppColors.textSecondary,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            Gap.xl,
+            ElevatedButton.icon(
+              onPressed: () => ref.invalidate(branchTasmiSessionsProvider),
+              icon: const Icon(Icons.refresh),
+              label: Text(context.l.retry),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 

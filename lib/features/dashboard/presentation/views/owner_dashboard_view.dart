@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/localization/app_localizations.dart';
 import '../../../../core/theme/theme.dart';
 import '../../../../core/widgets/drawer_icon_button.dart';
+import '../../../../core/widgets/app_skeleton.dart';
 import '../../../../core/utils/app_logger.dart';
 import '../../../auth/domain/repositories/auth_provider.dart';
 import '../../domain/repositories/dashboard_provider.dart';
@@ -125,14 +126,40 @@ class OwnerDashboardView extends ConsumerWidget {
               ),
             ],
           ),
-          loading: () => const Center(child: CircularProgressIndicator()),
+          loading: () => _buildStatsSkeleton(),
           error: (e, _) {
             final isConnectionError = e.toString().contains('Connection refused') ||
                 e.toString().contains('SocketException');
             return Center(
-              child: Text(
-                isConnectionError ? context.l.dashboardConnectionError : context.l.dashboardStatsError,
-                style: TextStyle(color: AppColors.error),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    isConnectionError ? Icons.wifi_off : Icons.error_outline,
+                    size: 48,
+                    color: AppColors.error,
+                  ),
+                  Gap.m,
+                  Text(
+                    isConnectionError ? context.l.dashboardConnectionError : context.l.dashboardStatsError,
+                    style: AppTextStyles.bodyMedium.copyWith(color: AppColors.error),
+                    textAlign: TextAlign.center,
+                  ),
+                  if (isConnectionError) ...[
+                    Gap.s,
+                    Text(
+                      context.l.dashboardCheckConnection,
+                      style: AppTextStyles.bodySmall.copyWith(color: AppColors.textSecondary),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                  Gap.l,
+                  ElevatedButton.icon(
+                    onPressed: () => ref.invalidate(dashboardStatsProvider),
+                    icon: const Icon(Icons.refresh),
+                    label: Text(context.l.retry),
+                  ),
+                ],
               ),
             );
           },
@@ -168,6 +195,46 @@ class OwnerDashboardView extends ConsumerWidget {
                 color: AppColors.textSecondary,
               ),
             ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildStatsSkeleton() {
+    return Column(
+      children: [
+        Row(
+          children: [
+            Expanded(child: _buildStatSkeleton()),
+            SizedBox(width: AppSpacing.m),
+            Expanded(child: _buildStatSkeleton()),
+          ],
+        ),
+        SizedBox(height: AppSpacing.m),
+        Row(
+          children: [
+            Expanded(child: _buildStatSkeleton()),
+            SizedBox(width: AppSpacing.m),
+            Expanded(child: _buildStatSkeleton()),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildStatSkeleton() {
+    return Card(
+      child: Padding(
+        padding: EdgeInsets.all(AppSpacing.m),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            AppSkeleton(width: 40, height: 40, borderRadius: BorderRadius.circular(AppBorderRadius.s)),
+            Gap.m,
+            AppSkeleton(width: 60, height: 24),
+            Gap.xs,
+            AppSkeleton(width: 80, height: 14),
           ],
         ),
       ),
@@ -372,7 +439,7 @@ class OwnerDashboardView extends ConsumerWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                     trailing: Text(
-                      _formatTimeAgo(notification.createdAt),
+                      _formatTimeAgo(context, notification.createdAt),
                       style: AppTextStyles.bodySmall.copyWith(
                         color: AppColors.textHint,
                       ),
@@ -404,13 +471,13 @@ class OwnerDashboardView extends ConsumerWidget {
     };
   }
 
-  String _formatTimeAgo(DateTime dateTime) {
+  String _formatTimeAgo(BuildContext context, DateTime dateTime) {
     final diff = DateTime.now().difference(dateTime);
-    if (diff.inMinutes < 1) return 'الآن';
-    if (diff.inMinutes < 60) return '${diff.inMinutes} د';
-    if (diff.inHours < 24) return '${diff.inHours} س';
-    if (diff.inDays < 7) return '${diff.inDays} ي';
-    return '${(diff.inDays / 7).floor()} أ';
+    if (diff.inMinutes < 1) return context.l.dashboardNowShort;
+    if (diff.inMinutes < 60) return '${diff.inMinutes} ${context.l.dashboardMinutesShort}';
+    if (diff.inHours < 24) return '${diff.inHours} ${context.l.dashboardHoursShort}';
+    if (diff.inDays < 7) return '${diff.inDays} ${context.l.dashboardDaysShort}';
+    return '${(diff.inDays / 7).floor()} ${context.l.dashboardWeeksShort}';
   }
 
   Widget _buildNotificationBadge(BuildContext context, WidgetRef ref) {
